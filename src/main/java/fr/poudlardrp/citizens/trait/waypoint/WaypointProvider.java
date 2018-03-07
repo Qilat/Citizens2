@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.trait.waypoint;
 
-import net.citizensnpcs.api.command.CommandContext;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.Persistable;
+import fr.poudlardrp.citizens.api.command.CommandContext;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.persistence.Persistable;
 import org.bukkit.command.CommandSender;
 
 public interface WaypointProvider extends Persistable {

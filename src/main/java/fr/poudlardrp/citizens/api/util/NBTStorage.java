@@ -6,7 +6,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
-import net.citizensnpcs.api.jnbt.*;
+import fr.poudlardrp.citizens.api.jnbt.*;
 
 import java.io.File;
 import java.io.FileInputStream;

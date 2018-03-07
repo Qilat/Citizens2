@@ -2,10 +2,10 @@ package fr.poudlardrp.citizens.api.ai;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.ai.event.NavigatorCallback;
-import net.citizensnpcs.api.astar.AStarMachine;
-import net.citizensnpcs.api.astar.pathfinder.BlockExaminer;
+import fr.poudlardrp.citizens.api.ai.event.CancelReason;
+import fr.poudlardrp.citizens.api.ai.event.NavigatorCallback;
+import fr.poudlardrp.citizens.api.astar.AStarMachine;
+import fr.poudlardrp.citizens.api.astar.pathfinder.BlockExaminer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 

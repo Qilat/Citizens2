@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.npc;
 
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.Storage;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Storage;
 import org.bukkit.entity.EntityType;
 
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.trait.text;
 
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import net.poudlardcitizens.util.Messages;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

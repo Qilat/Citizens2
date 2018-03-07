@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.trait;
 
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.event.Listener;
 
 /**

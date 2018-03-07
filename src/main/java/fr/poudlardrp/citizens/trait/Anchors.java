@@ -2,11 +2,11 @@ package fr.poudlardrp.citizens.trait;
 
 import fr.poudlardrp.citizens.util.Anchor;
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;

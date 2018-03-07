@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Primitives;
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;

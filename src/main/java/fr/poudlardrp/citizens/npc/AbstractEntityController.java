@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.npc;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import net.poudlardcitizens.util.NMS;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

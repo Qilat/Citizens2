@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.persistence.Persist;
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 

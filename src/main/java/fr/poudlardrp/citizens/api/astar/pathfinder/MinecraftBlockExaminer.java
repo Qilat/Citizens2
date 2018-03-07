@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.ai.event.NavigatorCallback;
-import net.citizensnpcs.api.astar.pathfinder.PathPoint.PathCallback;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.ai.event.CancelReason;
+import fr.poudlardrp.citizens.api.ai.event.NavigatorCallback;
+import fr.poudlardrp.citizens.api.astar.pathfinder.PathPoint.PathCallback;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

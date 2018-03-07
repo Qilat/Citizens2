@@ -1,11 +1,11 @@
 package fr.poudlardrp.citizens.api.ai.goals;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
-import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
-import net.citizensnpcs.api.ai.tree.BehaviorStatus;
-import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.event.NavigationCompleteEvent;
+import fr.poudlardrp.citizens.api.ai.tree.BehaviorGoalAdapter;
+import fr.poudlardrp.citizens.api.ai.tree.BehaviorStatus;
+import fr.poudlardrp.citizens.api.astar.pathfinder.MinecraftBlockExaminer;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

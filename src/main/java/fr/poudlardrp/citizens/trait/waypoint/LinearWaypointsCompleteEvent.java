@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.trait.waypoint;
 
-import net.citizensnpcs.api.event.CitizensEvent;
+import fr.poudlardrp.citizens.api.event.CitizensEvent;
 import org.bukkit.event.HandlerList;
 
 import java.util.Iterator;

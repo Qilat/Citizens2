@@ -1,10 +1,10 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.VocalChord;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
 
 /**
  * Represents the default speech settings of an NPC.

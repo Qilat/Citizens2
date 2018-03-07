@@ -2,11 +2,11 @@ package fr.poudlardrp.citizens.editor;
 
 import com.google.common.collect.Maps;
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Equipment;
-import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.trait.trait.Equipment;
+import fr.poudlardrp.citizens.api.trait.trait.Equipment.EquipmentSlot;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

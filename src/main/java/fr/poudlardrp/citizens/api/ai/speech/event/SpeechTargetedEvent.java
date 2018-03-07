@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.ai.speech.event;
 
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.ai.speech.Talkable;
-import net.citizensnpcs.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechContext;
+import fr.poudlardrp.citizens.api.ai.speech.Talkable;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
 
 /**
  * Represents an event where a Talkable entity speaks to another Talkable entity.

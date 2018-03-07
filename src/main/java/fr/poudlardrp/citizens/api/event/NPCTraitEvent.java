@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.api.event;
 
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.Trait;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.trait.Trait;
 
 public abstract class NPCTraitEvent extends NPCEvent {
     private final Trait trait;

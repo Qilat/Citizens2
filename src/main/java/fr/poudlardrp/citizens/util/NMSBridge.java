@@ -2,12 +2,12 @@ package fr.poudlardrp.citizens.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
-import net.citizensnpcs.api.ai.NavigatorParameters;
-import net.citizensnpcs.api.command.CommandManager;
-import net.citizensnpcs.api.npc.BlockBreaker;
-import net.citizensnpcs.api.npc.BlockBreaker.BlockBreakerConfiguration;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
+import fr.poudlardrp.citizens.api.ai.NavigatorParameters;
+import fr.poudlardrp.citizens.api.command.CommandManager;
+import fr.poudlardrp.citizens.api.npc.BlockBreaker;
+import fr.poudlardrp.citizens.api.npc.BlockBreaker.BlockBreakerConfiguration;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPCRegistry;
 import net.minecraft.server.v1_9_R2.CommandException;
 import net.poudlardcitizens.npc.ai.MCNavigationStrategy.MCNavigator;
 import net.poudlardcitizens.npc.ai.MCTargetStrategy.TargetNavigator;

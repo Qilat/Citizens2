@@ -1,10 +1,10 @@
 package fr.poudlardrp.citizens.api.ai.goals;
 
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.ai.event.NavigatorCallback;
-import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
-import net.citizensnpcs.api.ai.tree.BehaviorStatus;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.ai.event.CancelReason;
+import fr.poudlardrp.citizens.api.ai.event.NavigatorCallback;
+import fr.poudlardrp.citizens.api.ai.tree.BehaviorGoalAdapter;
+import fr.poudlardrp.citizens.api.ai.tree.BehaviorStatus;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 

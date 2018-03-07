@@ -1,14 +1,14 @@
 package fr.poudlardrp.citizens.api.command;
 
 import com.google.common.collect.Sets;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.command.exception.CommandException;
-import net.citizensnpcs.api.command.exception.RequirementMissingException;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.trait.MobType;
-import net.citizensnpcs.api.trait.trait.Owner;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.command.exception.CommandException;
+import fr.poudlardrp.citizens.api.command.exception.RequirementMissingException;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.trait.MobType;
+import fr.poudlardrp.citizens.api.trait.trait.Owner;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 

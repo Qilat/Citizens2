@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.ai.speech;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 
 /**
  * Represents the NPCs speech abilities using VocalChords registered with the {@link SpeechFactory}. Uses

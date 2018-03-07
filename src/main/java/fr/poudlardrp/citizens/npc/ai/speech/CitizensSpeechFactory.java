@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.npc.ai.speech;
 
 import com.google.common.base.Preconditions;
-import net.citizensnpcs.api.ai.speech.SpeechFactory;
-import net.citizensnpcs.api.ai.speech.Talkable;
-import net.citizensnpcs.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechFactory;
+import fr.poudlardrp.citizens.api.ai.speech.Talkable;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 

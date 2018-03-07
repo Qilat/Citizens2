@@ -1,12 +1,12 @@
 package fr.poudlardrp.citizens.api;
 
-import net.citizensnpcs.api.ai.speech.SpeechFactory;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCDataStore;
-import net.citizensnpcs.api.npc.NPCRegistry;
-import net.citizensnpcs.api.npc.NPCSelector;
-import net.citizensnpcs.api.scripting.ScriptCompiler;
-import net.citizensnpcs.api.trait.TraitFactory;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechFactory;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPCDataStore;
+import fr.poudlardrp.citizens.api.npc.NPCRegistry;
+import fr.poudlardrp.citizens.api.npc.NPCSelector;
+import fr.poudlardrp.citizens.api.scripting.ScriptCompiler;
+import fr.poudlardrp.citizens.api.trait.TraitFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -28,7 +28,7 @@ public final class CitizensAPI {
      * Citizens plugin.
      *
      * @param store The {@link NPCDataStore} to use with the registry
-     * @return A new anonymous NPCRegistry that is not accessible via {@link #getPluginNPCRegistry(String)}
+     * @return A new anonymous NPCRegistry
      * @since 2.0.8
      */
     public static NPCRegistry createAnonymousNPCRegistry(NPCDataStore store) {
@@ -41,7 +41,7 @@ public final class CitizensAPI {
      *
      * @param name  The plugin name
      * @param store The {@link NPCDataStore} to use with the registry
-     * @return A new NPCRegistry, that can also be retrieved via {@link #getPluginNPCRegistry(String)}
+     * @return A new NPCRegistry
      * @since 2.0.8
      */
     public static NPCRegistry createNamedNPCRegistry(String name, NPCDataStore store) {
@@ -82,11 +82,11 @@ public final class CitizensAPI {
     }
 
     /**
-     * Retrieves the {@link NPCRegistry} previously created via {@link #createNamedNPCRegistry(String)} with the given
+     * Retrieves the {@link NPCRegistry} previously created via {@link #createNamedNPCRegistry(String, NPCDataStore)} with the given
      * name, or null if not found.
      *
      * @param name The registry name
-     * @return A NPCRegistry previously created via {@link #createNamedNPCRegistry(String)}, or null if not found
+     * @return A NPCRegistry previously created via {@link #createNamedNPCRegistry(String, NPCDataStore)}, or null if not found
      * @since 2.0.8
      */
     public static NPCRegistry getNamedNPCRegistry(String name) {
@@ -171,7 +171,7 @@ public final class CitizensAPI {
     /**
      * Removes any previously created {@link NPCRegistry} stored under the given name.
      *
-     * @param name The name previously given to {@link #createNamedNPCRegistry(String)}
+     * @param name The name previously given to {@link #createNamedNPCRegistry(String, NPCDataStore)}
      * @since 2.0.8
      */
     public static void removeNamedNPCRegistry(String name) {

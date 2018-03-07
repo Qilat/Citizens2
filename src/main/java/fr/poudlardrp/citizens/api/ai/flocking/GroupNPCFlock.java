@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.ai.flocking;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 
 import java.util.ArrayList;
 import java.util.Collection;

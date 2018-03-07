@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 

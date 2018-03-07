@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.event;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 
 /**
  * Represents an event thrown by an NPC.

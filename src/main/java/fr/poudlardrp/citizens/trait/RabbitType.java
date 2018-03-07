@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.trait;
 
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
 import org.bukkit.entity.Rabbit;
 
 @TraitName("rabbittype")

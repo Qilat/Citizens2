@@ -1,11 +1,11 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
 import com.google.common.collect.Maps;
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.ItemStorage;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.ItemStorage;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;

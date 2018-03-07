@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
 import fr.poudlardrp.citizens.trait.waypoint.WaypointProvider;
 import fr.poudlardrp.citizens.trait.waypoint.Waypoints;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.persistence.Persist;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.npc.profile;
 
 import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
-import net.citizensnpcs.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.CitizensAPI;
 import org.bukkit.Bukkit;
 
 import javax.annotation.Nullable;

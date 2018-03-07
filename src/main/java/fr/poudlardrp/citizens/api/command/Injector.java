@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.command;
 
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Messaging;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

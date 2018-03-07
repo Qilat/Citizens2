@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.npc.ai;
 
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.astar.pathfinder.BlockSource;
-import net.citizensnpcs.api.astar.pathfinder.NeighbourGeneratorBlockExaminer;
-import net.citizensnpcs.api.astar.pathfinder.PathPoint;
+import fr.poudlardrp.citizens.api.astar.pathfinder.BlockSource;
+import fr.poudlardrp.citizens.api.astar.pathfinder.NeighbourGeneratorBlockExaminer;
+import fr.poudlardrp.citizens.api.astar.pathfinder.PathPoint;
 import org.bukkit.util.Vector;
 
 import java.util.List;

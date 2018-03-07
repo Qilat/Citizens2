@@ -1,73 +1,73 @@
 package fr.poudlardrp.citizens.api;
 
-import net.citizensnpcs.api.ai.speech.SpeechFactory;
-import net.citizensnpcs.api.npc.NPCDataStore;
-import net.citizensnpcs.api.npc.NPCRegistry;
-import net.citizensnpcs.api.npc.NPCSelector;
-import net.citizensnpcs.api.trait.TraitFactory;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechFactory;
+import fr.poudlardrp.citizens.api.npc.NPCDataStore;
+import fr.poudlardrp.citizens.api.npc.NPCRegistry;
+import fr.poudlardrp.citizens.api.trait.TraitFactory;
+import fr.poudlardrp.citizens.npc.NPCSelector;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
 public interface CitizensPlugin extends Plugin {
     /**
-     * @param The data store of the registry
+     * @param store The data store of the registry
      * @return A new anonymous NPCRegistry that is not accessible via {@link #getNamedNPCRegistry(String)}
      */
-    public NPCRegistry createAnonymousNPCRegistry(NPCDataStore store);
+    NPCRegistry createAnonymousNPCRegistry(NPCDataStore store);
 
     /**
      * @param pluginName The plugin name
      * @param store      The data store for the registry
      * @return A new NPCRegistry, that can also be retrieved via {@link #getNamedNPCRegistry(String)}
      */
-    public NPCRegistry createNamedNPCRegistry(String name, NPCDataStore store);
+    NPCRegistry createNamedNPCRegistry(String pluginName, NPCDataStore store);
 
-    public NPCSelector getDefaultNPCSelector();
+    NPCSelector getDefaultNPCSelector();
 
     /**
      * @param pluginName The plugin name
-     * @return A NPCRegistry previously created via {@link #createNamedNPCRegistry(String)}, or null if not found
+     * @return A NPCRegistry previously created via {@link #createNamedNPCRegistry(String, NPCDataStore)}, or null if not found
      */
-    public NPCRegistry getNamedNPCRegistry(String name);
+    NPCRegistry getNamedNPCRegistry(String pluginName);
 
-    public Iterable<NPCRegistry> getNPCRegistries();
+    Iterable<NPCRegistry> getNPCRegistries();
 
     /**
      * Gets the <em>default</em> {@link NPCRegistry}.
      *
      * @return The NPC registry
      */
-    public NPCRegistry getNPCRegistry();
+    NPCRegistry getNPCRegistry();
 
-    public ClassLoader getOwningClassLoader();
+    ClassLoader getOwningClassLoader();
 
     /**
      * @return The folder for storing scripts
      */
-    public File getScriptFolder();
+    File getScriptFolder();
 
     /**
      * Gets the SpeechFactory.
      *
      * @return Citizens speech factory
      */
-    public SpeechFactory getSpeechFactory();
+    SpeechFactory getSpeechFactory();
 
     /**
      * Gets the TraitFactory.
      *
      * @return Citizens trait factory
      */
-    public TraitFactory getTraitFactory();
+    TraitFactory getTraitFactory();
 
     /**
      * Called when the current Citizens implementation is changed
      */
-    public void onImplementationChanged();
+    void onImplementationChanged();
 
     /**
      * Removes the named NPCRegistry with the given name.
      */
-    public void removeNamedNPCRegistry(String name);
+    void removeNamedNPCRegistry(String name);
 }

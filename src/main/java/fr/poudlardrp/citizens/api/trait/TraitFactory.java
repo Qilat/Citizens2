@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.trait;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 
 public interface TraitFactory {
 

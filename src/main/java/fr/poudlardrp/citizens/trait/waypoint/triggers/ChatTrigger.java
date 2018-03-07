@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

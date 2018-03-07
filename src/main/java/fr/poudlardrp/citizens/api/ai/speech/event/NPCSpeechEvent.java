@@ -1,8 +1,9 @@
 package fr.poudlardrp.citizens.api.ai.speech.event;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.event.NPCEvent;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechContext;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.event.NPCEvent;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
@@ -61,7 +62,7 @@ public class NPCSpeechEvent extends NPCEvent implements Cancellable {
     /**
      * Sets the name of the {@link VocalChord} to be used.
      *
-     * @param vocalChordName A valid registered VocalChord name
+     * @param name A valid registered VocalChord name
      */
     public void setVocalChord(String name) {
         this.vocalChordName = name;

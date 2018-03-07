@@ -1,13 +1,13 @@
 package fr.poudlardrp.citizens.npc.ai.speech;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.ai.speech.Talkable;
-import net.citizensnpcs.api.ai.speech.VocalChord;
-import net.citizensnpcs.api.ai.speech.event.SpeechBystanderEvent;
-import net.citizensnpcs.api.ai.speech.event.SpeechTargetedEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechContext;
+import fr.poudlardrp.citizens.api.ai.speech.Talkable;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.ai.speech.event.SpeechBystanderEvent;
+import fr.poudlardrp.citizens.api.ai.speech.event.SpeechTargetedEvent;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

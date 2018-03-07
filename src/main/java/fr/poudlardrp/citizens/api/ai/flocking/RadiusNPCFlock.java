@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.ai.flocking;
 
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.entity.Entity;
 
 import java.util.Collection;

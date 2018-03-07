@@ -1,15 +1,15 @@
 package fr.poudlardrp.citizens.trait.text;
 
 import com.google.common.collect.Maps;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.Paginator;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechContext;
+import fr.poudlardrp.citizens.api.event.NPCRightClickEvent;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Paginator;
 import net.poudlardcitizens.Settings.Setting;
 import net.poudlardcitizens.editor.Editor;
 import net.poudlardcitizens.trait.Toggleable;

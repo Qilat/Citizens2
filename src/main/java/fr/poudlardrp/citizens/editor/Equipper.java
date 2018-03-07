@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.editor;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.entity.Player;
 
 public interface Equipper {

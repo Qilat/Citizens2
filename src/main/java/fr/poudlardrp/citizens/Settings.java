@@ -1,11 +1,11 @@
 package fr.poudlardrp.citizens;
 
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.Storage;
-import net.citizensnpcs.api.util.YamlStorage;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Storage;
+import fr.poudlardrp.citizens.api.util.YamlStorage;
 
 import java.io.File;
 import java.util.ArrayList;

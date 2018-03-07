@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.trait;
 
 import com.google.common.collect.Lists;
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BossBar;

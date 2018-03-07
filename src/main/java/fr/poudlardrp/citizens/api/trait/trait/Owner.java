@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -29,6 +29,13 @@ public class Owner extends Trait {
      */
     public String getOwner() {
         return owner;
+    }
+
+    public void setOwner(CommandSender sender) {
+        this.owner = sender.getName();
+        if (sender instanceof Player) {
+            this.uuid = ((Player) sender).getUniqueId();
+        }
     }
 
     /**
@@ -99,13 +106,6 @@ public class Owner extends Trait {
         }
         key.setString("owner", owner);
         key.setString("uuid", uuid == null ? "" : uuid.toString());
-    }
-
-    public void setOwner(CommandSender sender) {
-        this.owner = sender.getName();
-        if (sender instanceof Player) {
-            this.uuid = ((Player) sender).getUniqueId();
-        }
     }
 
     /**

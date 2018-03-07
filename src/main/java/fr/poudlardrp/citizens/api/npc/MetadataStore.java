@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.npc;
 
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.DataKey;
 
 /**
  * Represents a metadata

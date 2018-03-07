@@ -1,12 +1,12 @@
 package fr.poudlardrp.citizens.npc.ai.speech;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.ai.speech.Talkable;
-import net.citizensnpcs.api.ai.speech.VocalChord;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.Settings.Setting;
+import fr.poudlardrp.citizens.Settings.Setting;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechContext;
+import fr.poudlardrp.citizens.api.ai.speech.Talkable;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;

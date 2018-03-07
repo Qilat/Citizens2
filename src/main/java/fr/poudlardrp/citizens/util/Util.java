@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.util;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import net.citizensnpcs.api.event.NPCCollisionEvent;
-import net.citizensnpcs.api.event.NPCPushEvent;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.event.NPCCollisionEvent;
+import fr.poudlardrp.citizens.api.event.NPCPushEvent;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.editor;
 
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;

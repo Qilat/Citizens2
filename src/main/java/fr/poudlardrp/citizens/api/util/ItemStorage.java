@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.util;
 
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.event.CitizensDeserialiseMetaEvent;
-import net.citizensnpcs.api.event.CitizensSerialiseMetaEvent;
+import fr.poudlardrp.citizens.api.event.CitizensDeserialiseMetaEvent;
+import fr.poudlardrp.citizens.api.event.CitizensSerialiseMetaEvent;
 import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.BlockState;

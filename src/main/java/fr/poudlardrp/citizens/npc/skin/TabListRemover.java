@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.npc.skin;
 
 import com.google.common.base.Preconditions;
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.CitizensAPI;
 import net.poudlardcitizens.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

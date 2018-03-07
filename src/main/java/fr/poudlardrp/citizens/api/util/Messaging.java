@@ -2,8 +2,8 @@ package fr.poudlardrp.citizens.api.util;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Owner;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.trait.trait.Owner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -1,14 +1,14 @@
 package fr.poudlardrp.citizens.trait;
 
 import fr.poudlardrp.citizens.Citizens;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.scripting.CompileCallback;
-import net.citizensnpcs.api.scripting.Script;
-import net.citizensnpcs.api.scripting.ScriptFactory;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.scripting.CompileCallback;
+import fr.poudlardrp.citizens.api.scripting.Script;
+import fr.poudlardrp.citizens.api.scripting.ScriptFactory;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

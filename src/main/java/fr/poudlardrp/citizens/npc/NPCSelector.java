@@ -1,16 +1,16 @@
 package fr.poudlardrp.citizens.npc;
 
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.event.NPCRemoveEvent;
-import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.citizensnpcs.api.event.NPCSelectEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Owner;
-import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.Settings.Setting;
-import net.poudlardcitizens.editor.Editor;
-import net.poudlardcitizens.util.Util;
+import fr.poudlardrp.citizens.Settings;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.event.NPCRemoveEvent;
+import fr.poudlardrp.citizens.api.event.NPCRightClickEvent;
+import fr.poudlardrp.citizens.api.event.NPCSelectEvent;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.trait.trait.Owner;
+import fr.poudlardrp.citizens.api.util.Messaging;
+import fr.poudlardrp.citizens.editor.Editor;
+import fr.poudlardrp.citizens.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -28,7 +28,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.List;
 import java.util.UUID;
 
-public class NPCSelector implements Listener, net.citizensnpcs.api.npc.NPCSelector {
+public class NPCSelector implements Listener, fr.poudlardrp.citizens.api.npc.NPCSelector {
     private final Plugin plugin;
     private UUID consoleSelectedNPC;
 
@@ -89,12 +89,12 @@ public class NPCSelector implements Listener, net.citizensnpcs.api.npc.NPCSelect
         NPC npc = event.getNPC();
         List<MetadataValue> selected = player.getMetadata("selected");
         if (selected == null || selected.size() == 0 || selected.get(0).asInt() != npc.getId()) {
-            if (Util.matchesItemInHand(player, Setting.SELECTION_ITEM.asString())
+            if (Util.matchesItemInHand(player, Settings.Setting.SELECTION_ITEM.asString())
                     && npc.getTrait(Owner.class).isOwnedBy(player)) {
                 player.removeMetadata("selected", plugin);
                 select(player, npc);
-                Messaging.sendWithNPC(player, Setting.SELECTION_MESSAGE.asString(), npc);
-                if (!Setting.QUICK_SELECT.asBoolean())
+                Messaging.sendWithNPC(player, Settings.Setting.SELECTION_MESSAGE.asString(), npc);
+                if (!Settings.Setting.QUICK_SELECT.asBoolean())
                     return;
             }
         }

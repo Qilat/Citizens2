@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.event;
 
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;

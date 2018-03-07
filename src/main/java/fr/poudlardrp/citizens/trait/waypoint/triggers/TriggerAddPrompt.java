@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
 import fr.poudlardrp.citizens.trait.waypoint.WaypointEditor;
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.ai.tree;
 
-import net.citizensnpcs.api.ai.Goal;
+import fr.poudlardrp.citizens.api.ai.Goal;
 
 /**
  * The base class for the second iteration of the {@link Goal} API, which can be made backwards compatible by extending

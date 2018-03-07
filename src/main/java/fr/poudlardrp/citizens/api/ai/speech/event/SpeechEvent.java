@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.ai.speech.event;
 
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.ai.speech.Talkable;
-import net.citizensnpcs.api.ai.speech.VocalChord;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechContext;
+import fr.poudlardrp.citizens.api.ai.speech.Talkable;
+import fr.poudlardrp.citizens.api.ai.speech.VocalChord;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

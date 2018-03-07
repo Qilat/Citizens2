@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.api.ai;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.ai.tree.Behavior;
-import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
-import net.citizensnpcs.api.ai.tree.ForwardingBehaviorGoalAdapter;
+import fr.poudlardrp.citizens.api.ai.tree.Behavior;
+import fr.poudlardrp.citizens.api.ai.tree.BehaviorGoalAdapter;
+import fr.poudlardrp.citizens.api.ai.tree.ForwardingBehaviorGoalAdapter;
 
 import java.util.Collections;
 import java.util.Iterator;

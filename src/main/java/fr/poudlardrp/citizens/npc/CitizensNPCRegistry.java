@@ -2,20 +2,20 @@ package fr.poudlardrp.citizens.npc;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import fr.poudlardrp.citizens.Settings;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.event.DespawnReason;
+import fr.poudlardrp.citizens.api.event.NPCCreateEvent;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPCDataStore;
+import fr.poudlardrp.citizens.api.npc.NPCRegistry;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.trait.ArmorStandTrait;
+import fr.poudlardrp.citizens.trait.LookClose;
+import fr.poudlardrp.citizens.trait.MountTrait;
+import fr.poudlardrp.citizens.util.NMS;
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.event.DespawnReason;
-import net.citizensnpcs.api.event.NPCCreateEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCDataStore;
-import net.citizensnpcs.api.npc.NPCRegistry;
-import net.citizensnpcs.api.trait.Trait;
-import net.poudlardcitizens.Settings.Setting;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.trait.ArmorStandTrait;
-import net.poudlardcitizens.trait.LookClose;
-import net.poudlardcitizens.trait.MountTrait;
-import net.poudlardcitizens.util.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -65,7 +65,7 @@ public class CitizensNPCRegistry implements NPCRegistry {
         if (type == EntityType.ARMOR_STAND && !npc.hasTrait(ArmorStandTrait.class)) {
             npc.addTrait(ArmorStandTrait.class);
         }
-        if (Setting.DEFAULT_LOOK_CLOSE.asBoolean()) {
+        if (Settings.Setting.DEFAULT_LOOK_CLOSE.asBoolean()) {
             npc.addTrait(LookClose.class);
         }
         npc.addTrait(MountTrait.class);

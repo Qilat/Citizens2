@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.ai.speech;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.event.NPCSpeechEvent;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.event.NPCSpeechEvent;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
@@ -107,6 +107,15 @@ public class SpeechContext implements Iterable<Talkable> {
         return talker;
     }
 
+    /**
+     * Sets the talker.
+     *
+     * @param entity NPC doing the talking
+     */
+    public void setTalker(Entity entity) {
+        this.talker = CitizensAPI.getSpeechFactory().newTalkableEntity(entity);
+    }
+
     @Deprecated
     public void setTalker(LivingEntity entity) {
         setTalker((Entity) entity);
@@ -130,15 +139,6 @@ public class SpeechContext implements Iterable<Talkable> {
     public Iterator<Talkable> iterator() {
         final Iterator<Talkable> itr = recipients.iterator();
         return itr;
-    }
-
-    /**
-     * Sets the talker.
-     *
-     * @param entity NPC doing the talking
-     */
-    public void setTalker(Entity entity) {
-        this.talker = CitizensAPI.getSpeechFactory().newTalkableEntity(entity);
     }
 
     /**

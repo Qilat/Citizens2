@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.npc.ai;
 
 import fr.poudlardrp.citizens.util.BoundingBox;
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.ai.*;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.ai.*;
+import fr.poudlardrp.citizens.api.ai.event.CancelReason;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

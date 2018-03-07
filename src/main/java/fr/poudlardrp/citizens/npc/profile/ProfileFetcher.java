@@ -7,8 +7,8 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.ProfileLookupCallback;
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 

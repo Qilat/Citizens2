@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.entity.EntityType;
 
 /**

@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.api.ai.event;
 
-import net.citizensnpcs.api.ai.Navigator;
-import net.citizensnpcs.api.ai.StuckAction;
+import fr.poudlardrp.citizens.api.ai.Navigator;
+import fr.poudlardrp.citizens.api.ai.StuckAction;
 import org.bukkit.event.HandlerList;
 
 public class NavigationStuckEvent extends NavigationEvent {

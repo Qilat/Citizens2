@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.util;
 
-import net.citizensnpcs.api.util.Translator.TranslationProvider;
+import fr.poudlardrp.citizens.api.util.Translator.TranslationProvider;
 
 import java.io.InputStream;
 

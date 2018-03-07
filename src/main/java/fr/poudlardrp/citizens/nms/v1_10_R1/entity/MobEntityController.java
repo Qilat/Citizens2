@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.nms.v1_10_R1.entity;
 
 import com.google.common.collect.Maps;
 import fr.poudlardrp.citizens.npc.AbstractEntityController;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import net.minecraft.server.v1_10_R1.World;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;

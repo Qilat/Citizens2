@@ -3,7 +3,7 @@ package fr.poudlardrp.citizens.trait.waypoint.triggers;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

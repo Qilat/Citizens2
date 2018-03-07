@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.api.persistence;
 
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.ItemStorage;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.ItemStorage;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemStackPersister implements Persister<ItemStack> {

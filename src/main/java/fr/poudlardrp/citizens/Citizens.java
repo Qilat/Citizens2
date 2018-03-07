@@ -112,16 +112,16 @@ public class Citizens extends JavaPlugin implements CitizensPlugin {
         NMS.loadPlugins();
     }
 
-    public CommandInfo getCommandInfo(String rootCommand, String modifier) {
+    public CommandManager.CommandInfo getCommandInfo(String rootCommand, String modifier) {
         return commands.getCommand(rootCommand, modifier);
     }
 
-    public Iterable<CommandInfo> getCommands(String base) {
+    public Iterable<CommandManager.CommandInfo> getCommands(String base) {
         return commands.getCommands(base);
     }
 
     @Override
-    public net.citizensnpcs.api.npc.NPCSelector getDefaultNPCSelector() {
+    public NPCSelector getDefaultNPCSelector() {
         return selector;
     }
 

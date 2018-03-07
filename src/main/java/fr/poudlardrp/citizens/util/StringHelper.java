@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.util;
 
-import net.citizensnpcs.api.util.Colorizer;
+import fr.poudlardrp.citizens.api.util.Colorizer;
 import net.poudlardcitizens.Settings.Setting;
 import org.bukkit.ChatColor;
 

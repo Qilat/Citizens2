@@ -2,11 +2,11 @@ package fr.poudlardrp.citizens.npc.ai;
 
 import com.google.common.collect.Lists;
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.ai.AbstractPathStrategy;
-import net.citizensnpcs.api.ai.NavigatorParameters;
-import net.citizensnpcs.api.ai.TargetType;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.ai.AbstractPathStrategy;
+import fr.poudlardrp.citizens.api.ai.NavigatorParameters;
+import fr.poudlardrp.citizens.api.ai.TargetType;
+import fr.poudlardrp.citizens.api.ai.event.CancelReason;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;

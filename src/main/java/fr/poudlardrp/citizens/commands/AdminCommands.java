@@ -3,13 +3,13 @@ package fr.poudlardrp.citizens.commands;
 import fr.poudlardrp.citizens.Citizens;
 import fr.poudlardrp.citizens.util.Messages;
 import fr.poudlardrp.citizens.util.StringHelper;
-import net.citizensnpcs.api.command.Command;
-import net.citizensnpcs.api.command.CommandContext;
-import net.citizensnpcs.api.command.Requirements;
-import net.citizensnpcs.api.command.exception.CommandException;
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.command.Command;
+import fr.poudlardrp.citizens.api.command.CommandContext;
+import fr.poudlardrp.citizens.api.command.Requirements;
+import fr.poudlardrp.citizens.api.command.exception.CommandException;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.command.CommandSender;
 
 @Requirements

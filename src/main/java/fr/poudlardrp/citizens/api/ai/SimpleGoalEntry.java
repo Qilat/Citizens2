@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import net.citizensnpcs.api.ai.GoalController.GoalEntry;
-import net.citizensnpcs.api.ai.tree.Behavior;
-import net.citizensnpcs.api.ai.tree.ForwardingBehaviorGoalAdapter;
+import fr.poudlardrp.citizens.api.ai.GoalController.GoalEntry;
+import fr.poudlardrp.citizens.api.ai.tree.Behavior;
+import fr.poudlardrp.citizens.api.ai.tree.ForwardingBehaviorGoalAdapter;
 
 public class SimpleGoalEntry implements GoalEntry {
     final Goal goal;

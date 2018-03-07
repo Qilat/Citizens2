@@ -2,8 +2,8 @@ package fr.poudlardrp.citizens;
 
 import com.google.common.base.Preconditions;
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.event.PlayerCreateNPCEvent;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.event.PlayerCreateNPCEvent;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.poudlardcitizens.Settings.Setting;

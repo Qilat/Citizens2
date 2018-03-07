@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.command;
 
-import net.citizensnpcs.api.command.exception.CommandException;
+import fr.poudlardrp.citizens.api.command.exception.CommandException;
 import org.bukkit.command.CommandSender;
 
 import java.lang.annotation.Annotation;

@@ -2,11 +2,11 @@ package fr.poudlardrp.citizens.trait;
 
 import fr.poudlardrp.citizens.npc.ai.NPCHolder;
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
 import org.bukkit.entity.Entity;
 
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.event;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.astar.pathfinder.MinecraftBlockExaminer;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

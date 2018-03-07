@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.npc;
 
-import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
+import fr.poudlardrp.citizens.api.ai.tree.BehaviorGoalAdapter;
 
 public abstract class BlockBreaker extends BehaviorGoalAdapter {
     public static final BlockBreakerConfiguration EMPTY_CONFIG = new BlockBreakerConfiguration();

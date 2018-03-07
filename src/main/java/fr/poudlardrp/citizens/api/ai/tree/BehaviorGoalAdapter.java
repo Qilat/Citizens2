@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.api.ai.tree;
 
-import net.citizensnpcs.api.ai.Goal;
-import net.citizensnpcs.api.ai.GoalSelector;
+import fr.poudlardrp.citizens.api.ai.Goal;
+import fr.poudlardrp.citizens.api.ai.GoalSelector;
 
 /**
  * An adapter between {@link Goal} and {@link Behavior}, forwarding the calls correctly.

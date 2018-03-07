@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
 import com.google.common.collect.Lists;
-import net.citizensnpcs.api.astar.AStarNode;
-import net.citizensnpcs.api.astar.Plan;
-import net.citizensnpcs.api.astar.pathfinder.BlockExaminer.PassableState;
+import fr.poudlardrp.citizens.api.astar.AStarNode;
+import fr.poudlardrp.citizens.api.astar.Plan;
+import fr.poudlardrp.citizens.api.astar.pathfinder.BlockExaminer.PassableState;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 

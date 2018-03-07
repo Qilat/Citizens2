@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.editor;
 
 import fr.poudlardrp.citizens.util.NMS;
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 

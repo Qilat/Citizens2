@@ -1,14 +1,14 @@
 package fr.poudlardrp.citizens.trait.waypoint;
 
 import fr.poudlardrp.citizens.util.Messages;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.Goal;
-import net.citizensnpcs.api.ai.goals.WanderGoal;
-import net.citizensnpcs.api.command.CommandContext;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.Goal;
+import fr.poudlardrp.citizens.api.ai.goals.WanderGoal;
+import fr.poudlardrp.citizens.api.command.CommandContext;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.util.DataKey;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;

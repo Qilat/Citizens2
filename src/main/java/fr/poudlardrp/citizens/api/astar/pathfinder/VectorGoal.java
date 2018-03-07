@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import net.citizensnpcs.api.astar.AStarGoal;
+import fr.poudlardrp.citizens.api.astar.AStarGoal;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 

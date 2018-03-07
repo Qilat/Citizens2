@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import net.citizensnpcs.api.persistence.PersistenceLoader;
-import net.citizensnpcs.api.persistence.Persister;
-import net.citizensnpcs.api.util.DataKey;
+import fr.poudlardrp.citizens.api.persistence.PersistenceLoader;
+import fr.poudlardrp.citizens.api.persistence.Persister;
+import fr.poudlardrp.citizens.api.util.DataKey;
 import org.bukkit.conversations.Prompt;
 
 import java.util.Map;

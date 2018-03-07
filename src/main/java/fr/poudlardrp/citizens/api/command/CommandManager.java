@@ -2,9 +2,9 @@ package fr.poudlardrp.citizens.api.command;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.*;
-import net.citizensnpcs.api.command.exception.*;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.Paginator;
+import fr.poudlardrp.citizens.api.command.exception.*;
+import fr.poudlardrp.citizens.api.util.Messaging;
+import fr.poudlardrp.citizens.api.util.Paginator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;

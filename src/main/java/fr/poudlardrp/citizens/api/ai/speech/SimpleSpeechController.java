@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.api.ai.speech;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.event.NPCSpeechEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Speech;
+import fr.poudlardrp.citizens.api.CitizensAPI;
+import fr.poudlardrp.citizens.api.ai.speech.event.NPCSpeechEvent;
+import fr.poudlardrp.citizens.api.npc.NPC;
+import fr.poudlardrp.citizens.api.trait.trait.Speech;
 import org.bukkit.Bukkit;
 
 /**

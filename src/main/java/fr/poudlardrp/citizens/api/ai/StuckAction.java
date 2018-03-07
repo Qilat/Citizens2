@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 
 public interface StuckAction {
     /**

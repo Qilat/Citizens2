@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import net.citizensnpcs.api.npc.NPC;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 
 public interface WaypointTrigger {

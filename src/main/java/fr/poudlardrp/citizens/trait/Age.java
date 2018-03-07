@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.trait;
 
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.Messaging;
+import fr.poudlardrp.citizens.api.persistence.Persist;
+import fr.poudlardrp.citizens.api.trait.Trait;
+import fr.poudlardrp.citizens.api.trait.TraitName;
+import fr.poudlardrp.citizens.api.util.Messaging;
 import net.poudlardcitizens.util.Messages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Ageable;

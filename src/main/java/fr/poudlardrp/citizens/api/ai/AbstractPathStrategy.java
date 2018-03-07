@@ -1,6 +1,6 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import net.citizensnpcs.api.ai.event.CancelReason;
+import fr.poudlardrp.citizens.api.ai.event.CancelReason;
 
 public abstract class AbstractPathStrategy implements PathStrategy {
     private final TargetType type;
