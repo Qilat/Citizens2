@@ -5,14 +5,13 @@ import net.citizensnpcs.api.ai.event.NavigatorCallback;
 import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
 import net.citizensnpcs.api.ai.tree.BehaviorStatus;
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.Location;
 
 public class MoveToGoal extends BehaviorGoalAdapter {
-    private boolean finished;
     private final NPC npc;
-    private CancelReason reason;
     private final Location target;
+    private boolean finished;
+    private CancelReason reason;
 
     public MoveToGoal(NPC npc, Location target) {
         this.npc = npc;

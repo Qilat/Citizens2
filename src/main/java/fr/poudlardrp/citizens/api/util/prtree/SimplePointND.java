@@ -8,9 +8,8 @@ public class SimplePointND implements PointND {
 
     /**
      * Create a new SimplePointND using the given ordinates.
-     * 
-     * @param ords
-     *            the ordinates
+     *
+     * @param ords the ordinates
      */
     public SimplePointND(double... ords) {
         this.ords = ords;

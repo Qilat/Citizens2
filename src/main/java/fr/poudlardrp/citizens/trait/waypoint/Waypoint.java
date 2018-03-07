@@ -1,22 +1,24 @@
-package net.poudlardcitizens.trait.waypoint;
-
-import java.util.Collections;
-import java.util.List;
-
-import net.poudlardcitizens.trait.waypoint.triggers.DelayTrigger;
-import net.poudlardcitizens.trait.waypoint.triggers.WaypointTrigger;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+package fr.poudlardrp.citizens.trait.waypoint;
 
 import com.google.common.collect.Lists;
-
+import fr.poudlardrp.citizens.trait.waypoint.triggers.DelayTrigger;
+import fr.poudlardrp.citizens.trait.waypoint.triggers.WaypointTrigger;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.persistence.PersistenceLoader;
 import net.poudlardcitizens.trait.waypoint.triggers.WaypointTriggerRegistry;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+
+import java.util.Collections;
+import java.util.List;
 
 public class Waypoint {
+    static {
+        PersistenceLoader.registerPersistDelegate(WaypointTrigger.class, WaypointTriggerRegistry.class);
+    }
+
     @Persist(required = true)
     private Location location;
     @Persist
@@ -70,7 +72,7 @@ public class Waypoint {
     }
 
     public List<WaypointTrigger> getTriggers() {
-        return triggers == null ? Collections.<WaypointTrigger> emptyList() : triggers;
+        return triggers == null ? Collections.<WaypointTrigger>emptyList() : triggers;
     }
 
     @Override
@@ -104,9 +106,5 @@ public class Waypoint {
             }, delay);
             break;
         }
-    }
-
-    static {
-        PersistenceLoader.registerPersistDelegate(WaypointTrigger.class, WaypointTriggerRegistry.class);
     }
 }

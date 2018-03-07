@@ -1,23 +1,31 @@
 package fr.poudlardrp.citizens.api.ai.flocking;
 
+import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.util.Vector;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.npc.NPC;
-
 public class Flocker implements Runnable {
+    public static double HIGH_INFLUENCE = 1.0 / 20.0;
+    public static double LOW_INFLUENCE = 1.0 / 200.0;
     private final List<FlockBehavior> behaviors;
     private final NPCFlock flock;
-    private double maxForce = 1.5;
     private final NPC npc;
+    private double maxForce = 1.5;
 
     public Flocker(NPC npc, NPCFlock flock, FlockBehavior... behaviors) {
         this.npc = npc;
         this.flock = flock;
         this.behaviors = Arrays.asList(behaviors);
+    }
+
+    private static Vector clip(double max, Vector vector) {
+        if (vector.length() > max) {
+            return vector.normalize().multiply(max);
+        }
+        return vector;
     }
 
     @Override
@@ -36,14 +44,4 @@ public class Flocker implements Runnable {
     public void setMaxForce(double maxForce) {
         this.maxForce = maxForce;
     }
-
-    private static Vector clip(double max, Vector vector) {
-        if (vector.length() > max) {
-            return vector.normalize().multiply(max);
-        }
-        return vector;
-    }
-
-    public static double HIGH_INFLUENCE = 1.0 / 20.0;
-    public static double LOW_INFLUENCE = 1.0 / 200.0;
 }

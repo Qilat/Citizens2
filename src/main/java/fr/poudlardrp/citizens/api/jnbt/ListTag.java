@@ -38,9 +38,8 @@ import java.util.List;
 
 /**
  * The <code>TAG_List</code> tag.
- * 
+ *
  * @author Graham Edgecombe
- * 
  */
 public final class ListTag extends Tag {
 
@@ -56,13 +55,10 @@ public final class ListTag extends Tag {
 
     /**
      * Creates the tag.
-     * 
-     * @param name
-     *            The name.
-     * @param type
-     *            The type of item in the list.
-     * @param value
-     *            The value.
+     *
+     * @param name  The name.
+     * @param type  The type of item in the list.
+     * @param value The value.
      */
     public ListTag(String name, Class<? extends Tag> type, List<? extends Tag> value) {
         super(name);
@@ -72,7 +68,7 @@ public final class ListTag extends Tag {
 
     /**
      * Gets the type of item in this list.
-     * 
+     *
      * @return The type of item in this list.
      */
     public Class<? extends Tag> getType() {

@@ -1,22 +1,8 @@
-package net.poudlardcitizens.npc;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+package fr.poudlardrp.citizens.npc;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
-
 import gnu.trove.map.hash.TIntObjectHashMap;
-import net.poudlardcitizens.Settings.Setting;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.event.NPCCreateEvent;
@@ -24,13 +10,36 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCDataStore;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.Trait;
+import net.poudlardcitizens.Settings.Setting;
 import net.poudlardcitizens.npc.ai.NPCHolder;
 import net.poudlardcitizens.trait.ArmorStandTrait;
 import net.poudlardcitizens.trait.LookClose;
 import net.poudlardcitizens.trait.MountTrait;
 import net.poudlardcitizens.util.NMS;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+
+import java.util.*;
 
 public class CitizensNPCRegistry implements NPCRegistry {
+    private static final Comparator<NPC> NPC_COMPARATOR = new Comparator<NPC>() {
+        @Override
+        public int compare(NPC o1, NPC o2) {
+            return o1.getId() - o2.getId();
+        }
+    };
+    private static boolean TROVE_EXISTS = false;
+
+    static {
+        // allow trove dependency to be optional for debugging purposes
+        try {
+            Class.forName("gnu.trove.map.hash.TIntObjectHashMap").newInstance();
+            TROVE_EXISTS = true;
+        } catch (Exception e) {
+        }
+    }
+
     private final NPCCollection npcs = TROVE_EXISTS ? new TroveNPCCollection() : new MapNPCCollection();
     private final NPCDataStore saves;
 
@@ -148,6 +157,18 @@ public class CitizensNPCRegistry implements NPCRegistry {
         return npcs.sorted();
     }
 
+    public static interface NPCCollection extends Iterable<NPC> {
+        public NPC get(int id);
+
+        public NPC get(UUID uuid);
+
+        public void put(int id, NPC npc);
+
+        public void remove(NPC npc);
+
+        public Iterable<NPC> sorted();
+    }
+
     public static class MapNPCCollection implements NPCCollection {
         private final Map<Integer, NPC> npcs = Maps.newHashMap();
         private final Map<UUID, NPC> uniqueNPCs = Maps.newHashMap();
@@ -187,18 +208,6 @@ public class CitizensNPCRegistry implements NPCRegistry {
         }
     }
 
-    public static interface NPCCollection extends Iterable<NPC> {
-        public NPC get(int id);
-
-        public NPC get(UUID uuid);
-
-        public void put(int id, NPC npc);
-
-        public void remove(NPC npc);
-
-        public Iterable<NPC> sorted();
-    }
-
     public static class TroveNPCCollection implements NPCCollection {
         private final TIntObjectHashMap<NPC> npcs = new TIntObjectHashMap<NPC>();
         private final Map<UUID, NPC> uniqueNPCs = Maps.newHashMap();
@@ -235,24 +244,6 @@ public class CitizensNPCRegistry implements NPCRegistry {
             List<NPC> vals = new ArrayList<NPC>(npcs.valueCollection());
             Collections.sort(vals, NPC_COMPARATOR);
             return vals;
-        }
-    }
-
-    private static final Comparator<NPC> NPC_COMPARATOR = new Comparator<NPC>() {
-        @Override
-        public int compare(NPC o1, NPC o2) {
-            return o1.getId() - o2.getId();
-        }
-    };
-
-    private static boolean TROVE_EXISTS = false;
-
-    static {
-        // allow trove dependency to be optional for debugging purposes
-        try {
-            Class.forName("gnu.trove.map.hash.TIntObjectHashMap").newInstance();
-            TROVE_EXISTS = true;
-        } catch (Exception e) {
         }
     }
 }

@@ -1,15 +1,19 @@
 package fr.poudlardrp.citizens.api.ai.event;
 
 import net.citizensnpcs.api.ai.Navigator;
-
 import org.bukkit.event.HandlerList;
 
 public class NavigationCancelEvent extends NavigationCompleteEvent {
+    private static final HandlerList handlers = new HandlerList();
     private final CancelReason reason;
 
     public NavigationCancelEvent(Navigator navigator, CancelReason reason) {
         super(navigator);
         this.reason = reason;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -21,12 +25,6 @@ public class NavigationCancelEvent extends NavigationCompleteEvent {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

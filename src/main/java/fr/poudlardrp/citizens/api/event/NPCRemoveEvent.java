@@ -1,23 +1,22 @@
 package fr.poudlardrp.citizens.api.event;
 
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.event.HandlerList;
 
 public class NPCRemoveEvent extends NPCEvent {
+
+    private static final HandlerList handlers = new HandlerList();
 
     public NPCRemoveEvent(NPC npc) {
         super(npc);
     }
 
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    private static final HandlerList handlers = new HandlerList();
-
-    public static HandlerList getHandlerList() {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

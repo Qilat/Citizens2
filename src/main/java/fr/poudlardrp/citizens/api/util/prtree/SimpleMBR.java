@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.api.util.prtree;
 
 /**
  * An implementation of MBRND that keeps a double array with the max and min values
- *
+ * <p>
  * <p>
  * Please note that you should not normally use this class when PRTree wants a MBR since this will actually use a lot of
  * extra memory.
@@ -13,9 +13,8 @@ public class SimpleMBR implements MBR {
     /**
      * Create a new SimpleMBR using the given double values for max and min. Note that the values should be stored as
      * min, max, min, max.
-     * 
-     * @param values
-     *            the min and max values for each dimension.
+     *
+     * @param values the min and max values for each dimension.
      */
     public SimpleMBR(double... values) {
         this.values = values.clone();
@@ -27,11 +26,9 @@ public class SimpleMBR implements MBR {
 
     /**
      * Create a new SimpleMBR from a given object and a MBRConverter
-     * 
-     * @param t
-     *            the object to create the bounding box for
-     * @param converter
-     *            the actual MBRConverter to use
+     *
+     * @param t         the object to create the bounding box for
+     * @param converter the actual MBRConverter to use
      */
     public <T> SimpleMBR(T t, MBRConverter<T> converter) {
         int dims = converter.getDimensions();

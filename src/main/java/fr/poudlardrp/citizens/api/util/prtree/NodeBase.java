@@ -1,10 +1,8 @@
 package fr.poudlardrp.citizens.api.util.prtree;
 
 /**
- * @param <N>
- *            the type of the child entries
- * @param <T>
- *            the type of the data entries
+ * @param <N> the type of the child entries
+ * @param <T> the type of the data entries
  */
 abstract class NodeBase<N, T> implements Node<T> {
     private Object[] data;

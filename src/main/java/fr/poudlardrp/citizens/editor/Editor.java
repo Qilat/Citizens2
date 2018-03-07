@@ -1,20 +1,17 @@
-package net.poudlardcitizens.editor;
+package fr.poudlardrp.citizens.editor;
+
+import fr.poudlardrp.citizens.util.Messages;
+import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.poudlardcitizens.util.Messages;
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-
-import net.citizensnpcs.api.util.Messaging;
-
 public abstract class Editor implements Listener {
-    public abstract void begin();
-
-    public abstract void end();
+    private static final Map<String, Editor> EDITING = new HashMap<String, Editor>();
 
     private static void enter(Player player, Editor editor) {
         editor.begin();
@@ -56,5 +53,7 @@ public abstract class Editor implements Listener {
         EDITING.clear();
     }
 
-    private static final Map<String, Editor> EDITING = new HashMap<String, Editor>();
+    public abstract void begin();
+
+    public abstract void end();
 }

@@ -1,20 +1,20 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import java.util.UUID;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.api.util.DataKey;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 /**
  * Represents the owner of an NPC.
  */
 @TraitName("owner")
 public class Owner extends Trait {
+    public static final String SERVER = "server";
     private String owner = SERVER;
     private UUID uuid = null;
 
@@ -32,8 +32,17 @@ public class Owner extends Trait {
     }
 
     /**
+     * Sets the owner of an NPC.
+     *
+     * @param owner Name of the player to set as owner of an NPC
+     */
+    public void setOwner(String owner) {
+        setOwner(owner, null);
+    }
+
+    /**
      * @return The owner's UUID, or <code>null</code> if the owner is the server or a UUID has not been collected for
-     *         the owner.
+     * the owner.
      */
     public UUID getOwnerId() {
         return uuid;
@@ -42,8 +51,7 @@ public class Owner extends Trait {
     /**
      * Gets if the given {@link CommandSender} is the owner of an NPC.
      *
-     * @param sender
-     *            Sender to check
+     * @param sender Sender to check
      * @return Whether the sender is the owner of an NPC
      */
     public boolean isOwnedBy(CommandSender sender) {
@@ -103,20 +111,8 @@ public class Owner extends Trait {
     /**
      * Sets the owner of an NPC.
      *
-     * @param owner
-     *            Name of the player to set as owner of an NPC
-     */
-    public void setOwner(String owner) {
-        setOwner(owner, null);
-    }
-
-    /**
-     * Sets the owner of an NPC.
-     * 
-     * @param owner
-     *            Name of the owner
-     * @param uuid
-     *            UUID of the owner
+     * @param owner Name of the owner
+     * @param uuid  UUID of the owner
      */
     public void setOwner(String owner, UUID uuid) {
         this.owner = owner;
@@ -127,6 +123,4 @@ public class Owner extends Trait {
     public String toString() {
         return "Owner{" + owner + "}";
     }
-
-    public static final String SERVER = "server";
 }

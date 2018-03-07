@@ -2,10 +2,10 @@ package fr.poudlardrp.citizens.api.ai.event;
 
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.ai.StuckAction;
-
 import org.bukkit.event.HandlerList;
 
 public class NavigationStuckEvent extends NavigationEvent {
+    private static final HandlerList handlers = new HandlerList();
     private StuckAction action;
 
     public NavigationStuckEvent(Navigator navigator, StuckAction action) {
@@ -13,22 +13,20 @@ public class NavigationStuckEvent extends NavigationEvent {
         this.action = action;
     }
 
-    public StuckAction getAction() {
-        return action;
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
+    public StuckAction getAction() {
+        return action;
     }
 
     public void setAction(StuckAction action) {
         this.action = action;
     }
 
-    public static HandlerList getHandlerList() {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
-
-    private static final HandlerList handlers = new HandlerList();
 }

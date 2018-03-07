@@ -18,12 +18,11 @@
 
 package fr.poudlardrp.citizens.api.command;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import net.citizensnpcs.api.command.exception.CommandException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -31,19 +30,21 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import net.citizensnpcs.api.command.exception.CommandException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class CommandContext {
-    protected String[] args;
+    private static final Pattern FLAG = Pattern.compile("^-[a-zA-Z]+$");
+    private static final Splitter LOCATION_SPLITTER = Splitter.on(Pattern.compile("[,]|[:]")).omitEmptyStrings();
+    private static final Pattern VALUE_FLAG = Pattern.compile("^--[a-zA-Z0-9-]+$");
     protected final Set<Character> flags = new HashSet<Character>();
-    private Location location = null;
-    private final CommandSender sender;
     protected final Map<String, String> valueFlags = Maps.newHashMap();
+    private final CommandSender sender;
+    protected String[] args;
+    private Location location = null;
 
     public CommandContext(CommandSender sender, String[] args) {
         this.sender = sender;
@@ -115,6 +116,49 @@ public class CommandContext {
 
     public CommandContext(String[] args) {
         this(null, args);
+    }
+
+    public static Location parseLocation(Location currentLocation, String flag) throws CommandException {
+        boolean denizen = flag.startsWith("l@");
+        String[] parts = Iterables.toArray(LOCATION_SPLITTER.split(flag.replaceFirst("l@", "")), String.class);
+        if (parts.length > 0) {
+            String worldName = currentLocation != null ? currentLocation.getWorld().getName() : "";
+            double x = 0, y = 0, z = 0;
+            float yaw = 0F, pitch = 0F;
+            switch (parts.length) {
+                case 6:
+                    if (denizen) {
+                        worldName = parts[5].replaceFirst("w@", "");
+                    } else
+                        pitch = Float.parseFloat(parts[5]);
+                case 5:
+                    if (denizen) {
+                        pitch = Float.parseFloat(parts[4]);
+                    } else
+                        yaw = Float.parseFloat(parts[4]);
+                case 4:
+                    if (denizen && parts.length > 4) {
+                        yaw = Float.parseFloat(parts[3]);
+                    } else
+                        worldName = parts[3].replaceFirst("w@", "");
+                case 3:
+                    x = Double.parseDouble(parts[0]);
+                    y = Double.parseDouble(parts[1]);
+                    z = Double.parseDouble(parts[2]);
+                    break;
+                default:
+                    throw new CommandException(CommandMessages.INVALID_SPAWN_LOCATION);
+            }
+            World world = Bukkit.getWorld(worldName);
+            if (world == null)
+                throw new CommandException(CommandMessages.INVALID_SPAWN_LOCATION);
+            return new Location(world, x, y, z, yaw, pitch);
+        } else {
+            Player search = Bukkit.getPlayerExact(flag);
+            if (search == null)
+                throw new CommandException(CommandMessages.PLAYER_NOT_FOUND_FOR_SPAWN);
+            return search.getLocation();
+        }
     }
 
     public int argsLength() {
@@ -264,51 +308,4 @@ public class CommandContext {
     public boolean matches(String command) {
         return args[0].equalsIgnoreCase(command);
     }
-
-    public static Location parseLocation(Location currentLocation, String flag) throws CommandException {
-        boolean denizen = flag.startsWith("l@");
-        String[] parts = Iterables.toArray(LOCATION_SPLITTER.split(flag.replaceFirst("l@", "")), String.class);
-        if (parts.length > 0) {
-            String worldName = currentLocation != null ? currentLocation.getWorld().getName() : "";
-            double x = 0, y = 0, z = 0;
-            float yaw = 0F, pitch = 0F;
-            switch (parts.length) {
-                case 6:
-                    if (denizen) {
-                        worldName = parts[5].replaceFirst("w@", "");
-                    } else
-                        pitch = Float.parseFloat(parts[5]);
-                case 5:
-                    if (denizen) {
-                        pitch = Float.parseFloat(parts[4]);
-                    } else
-                        yaw = Float.parseFloat(parts[4]);
-                case 4:
-                    if (denizen && parts.length > 4) {
-                        yaw = Float.parseFloat(parts[3]);
-                    } else
-                        worldName = parts[3].replaceFirst("w@", "");
-                case 3:
-                    x = Double.parseDouble(parts[0]);
-                    y = Double.parseDouble(parts[1]);
-                    z = Double.parseDouble(parts[2]);
-                    break;
-                default:
-                    throw new CommandException(CommandMessages.INVALID_SPAWN_LOCATION);
-            }
-            World world = Bukkit.getWorld(worldName);
-            if (world == null)
-                throw new CommandException(CommandMessages.INVALID_SPAWN_LOCATION);
-            return new Location(world, x, y, z, yaw, pitch);
-        } else {
-            Player search = Bukkit.getPlayerExact(flag);
-            if (search == null)
-                throw new CommandException(CommandMessages.PLAYER_NOT_FOUND_FOR_SPAWN);
-            return search.getLocation();
-        }
-    }
-
-    private static final Pattern FLAG = Pattern.compile("^-[a-zA-Z]+$");
-    private static final Splitter LOCATION_SPLITTER = Splitter.on(Pattern.compile("[,]|[:]")).omitEmptyStrings();
-    private static final Pattern VALUE_FLAG = Pattern.compile("^--[a-zA-Z0-9-]+$");
 }

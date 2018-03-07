@@ -1,16 +1,16 @@
 package fr.poudlardrp.citizens.api.ai.tree;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * A decorator is a wrapper over a {@link Behavior}, which can add functionality such as filtering
  * {@link BehaviorStatus}es, conditions, timer loops and more without knowing the internals of the behavior it wraps.
- * 
+ * <p>
  * Note that there are often simpler alternatives to a full-blown decorator, which has to be generic for many different
  * scenarios.
  */
@@ -22,13 +22,17 @@ public class Decorator extends BehaviorGoalAdapter {
     private final Behavior wrapping;
 
     private Decorator(Behavior toWrap, Collection<Runnable> runCallbacks,
-            Collection<Function<BehaviorStatus, BehaviorStatus>> statusTransformers,
-            Collection<Predicate<Boolean>> shouldExecutePredicates, Collection<Runnable> resetCallbacks) {
+                      Collection<Function<BehaviorStatus, BehaviorStatus>> statusTransformers,
+                      Collection<Predicate<Boolean>> shouldExecutePredicates, Collection<Runnable> resetCallbacks) {
         this.wrapping = toWrap;
         this.runCallbacks = runCallbacks;
         this.statusTransformers = statusTransformers;
         this.shouldExecutePredicates = shouldExecutePredicates;
         this.resetCallbacks = resetCallbacks;
+    }
+
+    public static Builder wrapping(Behavior toWrap) {
+        return new Builder(toWrap);
     }
 
     @Override
@@ -61,11 +65,11 @@ public class Decorator extends BehaviorGoalAdapter {
     }
 
     public static class Builder {
+        private final Behavior toWrap;
         private Collection<Runnable> resetCallbacks = Collections.emptyList();
         private Collection<Runnable> runCallbacks = Collections.emptyList();
         private Collection<Predicate<Boolean>> shouldExecutePredicates = Collections.emptyList();
         private Collection<Function<BehaviorStatus, BehaviorStatus>> statusTransformers = Collections.emptyList();
-        private final Behavior toWrap;
 
         private Builder(Behavior toWrap) {
             this.toWrap = toWrap;
@@ -102,9 +106,5 @@ public class Decorator extends BehaviorGoalAdapter {
             statusTransformers.add(transformer);
             return this;
         }
-    }
-
-    public static Builder wrapping(Behavior toWrap) {
-        return new Builder(toWrap);
     }
 }

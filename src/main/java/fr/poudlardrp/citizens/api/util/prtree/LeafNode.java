@@ -7,6 +7,12 @@ import java.util.PriorityQueue;
 
 class LeafNode<T> extends NodeBase<T, T> {
 
+    private static final Comparator<DistanceResult<?>> comp = new Comparator<DistanceResult<?>>() {
+        public int compare(DistanceResult<?> d1, DistanceResult<?> d2) {
+            return Double.compare(d1.getDistance(), d2.getDistance());
+        }
+    };
+
     public LeafNode(Object[] data) {
         super(data);
     }
@@ -48,7 +54,7 @@ class LeafNode<T> extends NodeBase<T, T> {
     }
 
     public void nnExpand(DistanceCalculator<T> dc, NodeFilter<T> filter, List<DistanceResult<T>> drs, int maxHits,
-            PriorityQueue<Node<T>> queue, MinDistComparator<T, Node<T>> mdc) {
+                         PriorityQueue<Node<T>> queue, MinDistComparator<T, Node<T>> mdc) {
         for (int i = 0, s = size(); i < s; i++) {
             T t = get(i);
             if (filter.accept(t)) {
@@ -60,10 +66,4 @@ class LeafNode<T> extends NodeBase<T, T> {
             }
         }
     }
-
-    private static final Comparator<DistanceResult<?>> comp = new Comparator<DistanceResult<?>>() {
-        public int compare(DistanceResult<?> d1, DistanceResult<?> d2) {
-            return Double.compare(d1.getDistance(), d2.getDistance());
-        }
-    };
 }

@@ -1,18 +1,17 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.google.common.collect.Maps;
+import java.util.Map;
 
 public abstract class CachingChunkBlockSource<T> extends BlockSource {
+    protected final World world;
     private final Map<ChunkCoord, ChunkCache> chunkCache = Maps.newHashMap();
     private final Object[][] chunks;
     private final int chunkX;
     private final int chunkZ;
-    protected final World world;
 
     protected CachingChunkBlockSource(Location location, float radius) {
         this(location.getWorld(), location.getBlockX(), location.getBlockZ(), radius);
@@ -77,11 +76,6 @@ public abstract class CachingChunkBlockSource<T> extends BlockSource {
         return world;
     }
 
-    private class ChunkCache {
-        int hitCount;
-        T obj;
-    }
-
     private static class ChunkCoord {
         int x, z;
 
@@ -107,5 +101,10 @@ public abstract class CachingChunkBlockSource<T> extends BlockSource {
             int result = 31 * x;
             return 31 * result + z;
         }
+    }
+
+    private class ChunkCache {
+        int hitCount;
+        T obj;
     }
 }

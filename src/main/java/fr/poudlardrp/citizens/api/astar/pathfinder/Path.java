@@ -1,11 +1,12 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import net.citizensnpcs.api.astar.Agent;
+import net.citizensnpcs.api.astar.Plan;
+import net.citizensnpcs.api.astar.pathfinder.PathPoint.PathCallback;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,25 +14,18 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import net.citizensnpcs.api.astar.Agent;
-import net.citizensnpcs.api.astar.Plan;
-import net.citizensnpcs.api.astar.pathfinder.PathPoint.PathCallback;
-import net.citizensnpcs.api.npc.NPC;
+import java.util.*;
 
 public class Path implements Plan {
+    private final PathEntry[] path;
     private List<Block> blockList;
     private int index = 0;
-    private final PathEntry[] path;
 
     public Path(Collection<Vector> vector) {
         this.path = Iterables.toArray(Iterables.transform(vector, new Function<Vector, PathEntry>() {
             @Override
             public PathEntry apply(Vector input) {
-                return new PathEntry(input, Collections.<PathCallback> emptyList());
+                return new PathEntry(input, Collections.<PathCallback>emptyList());
             }
         }), PathEntry.class);
     }

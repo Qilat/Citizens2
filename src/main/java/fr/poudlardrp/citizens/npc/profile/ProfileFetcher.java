@@ -1,12 +1,4 @@
-package net.poudlardcitizens.npc.profile;
-
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
-import net.poudlardcitizens.util.NMS;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
+package fr.poudlardrp.citizens.npc.profile;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
@@ -14,9 +6,14 @@ import com.mojang.authlib.Agent;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.GameProfileRepository;
 import com.mojang.authlib.ProfileLookupCallback;
-
+import fr.poudlardrp.citizens.util.NMS;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 /**
  * Fetches game profiles that include skin data from Mojang servers.
@@ -24,85 +21,17 @@ import net.citizensnpcs.api.util.Messaging;
  * @see ProfileFetchThread
  */
 public class ProfileFetcher {
+    private static ProfileFetchThread PROFILE_THREAD;
+    private static BukkitTask THREAD_TASK;
+
     ProfileFetcher() {
-    }
-
-    /**
-     * Fetch one or more profiles.
-     *
-     * @param requests
-     *            The profile requests.
-     */
-    void fetchRequests(final Collection<ProfileRequest> requests) {
-        Preconditions.checkNotNull(requests);
-
-        final GameProfileRepository repo = NMS.getGameProfileRepository();
-
-        String[] playerNames = new String[requests.size()];
-
-        int i = 0;
-        for (ProfileRequest request : requests) {
-            playerNames[i++] = request.getPlayerName();
-        }
-
-        repo.findProfilesByNames(playerNames, Agent.MINECRAFT, new ProfileLookupCallback() {
-            @Override
-            public void onProfileLookupFailed(GameProfile profile, Exception e) {
-                if (Messaging.isDebugging()) {
-                    Messaging.debug(
-                            "Profile lookup for player '" + profile.getName() + "' failed2: " + getExceptionMsg(e));
-                    Messaging.debug(Throwables.getStackTraceAsString(e));
-                }
-
-                ProfileRequest request = findRequest(profile.getName(), requests);
-                if (request == null)
-                    return;
-
-                if (isProfileNotFound(e)) {
-                    request.setResult(null, ProfileFetchResult.NOT_FOUND);
-                } else if (isTooManyRequests(e)) {
-                    request.setResult(null, ProfileFetchResult.TOO_MANY_REQUESTS);
-                } else {
-                    request.setResult(null, ProfileFetchResult.FAILED);
-                }
-            }
-
-            @Override
-            public void onProfileLookupSucceeded(final GameProfile profile) {
-                if (Messaging.isDebugging()) {
-                    Messaging.debug("Fetched profile " + profile.getId() + " for player " + profile.getName());
-                }
-
-                ProfileRequest request = findRequest(profile.getName(), requests);
-                if (request == null)
-                    return;
-
-                try {
-                    request.setResult(NMS.fillProfileProperties(profile, true), ProfileFetchResult.SUCCESS);
-                } catch (Exception e) {
-                    if (Messaging.isDebugging()) {
-                        Messaging.debug("Profile lookup for player '" + profile.getName() + "' failed: "
-                                + getExceptionMsg(e) + " " + isTooManyRequests(e));
-                        Messaging.debug(Throwables.getStackTraceAsString(e));
-                    }
-
-                    if (isTooManyRequests(e)) {
-                        request.setResult(null, ProfileFetchResult.TOO_MANY_REQUESTS);
-                    } else {
-                        request.setResult(null, ProfileFetchResult.FAILED);
-                    }
-                }
-            }
-        });
     }
 
     /**
      * Fetch a profile.
      *
-     * @param name
-     *            The name of the player the profile belongs to.
-     * @param handler
-     *            Optional handler to handle the result. Handler always invoked from the main thread.
+     * @param name    The name of the player the profile belongs to.
+     * @param handler Optional handler to handle the result. Handler always invoked from the main thread.
      */
     public static void fetch(String name, @Nullable ProfileFetchHandler handler) {
         Preconditions.checkNotNull(name);
@@ -171,6 +100,71 @@ public class ProfileFetcher {
         initThread();
     }
 
-    private static ProfileFetchThread PROFILE_THREAD;
-    private static BukkitTask THREAD_TASK;
+    /**
+     * Fetch one or more profiles.
+     *
+     * @param requests The profile requests.
+     */
+    void fetchRequests(final Collection<ProfileRequest> requests) {
+        Preconditions.checkNotNull(requests);
+
+        final GameProfileRepository repo = NMS.getGameProfileRepository();
+
+        String[] playerNames = new String[requests.size()];
+
+        int i = 0;
+        for (ProfileRequest request : requests) {
+            playerNames[i++] = request.getPlayerName();
+        }
+
+        repo.findProfilesByNames(playerNames, Agent.MINECRAFT, new ProfileLookupCallback() {
+            @Override
+            public void onProfileLookupFailed(GameProfile profile, Exception e) {
+                if (Messaging.isDebugging()) {
+                    Messaging.debug(
+                            "Profile lookup for player '" + profile.getName() + "' failed2: " + getExceptionMsg(e));
+                    Messaging.debug(Throwables.getStackTraceAsString(e));
+                }
+
+                ProfileRequest request = findRequest(profile.getName(), requests);
+                if (request == null)
+                    return;
+
+                if (isProfileNotFound(e)) {
+                    request.setResult(null, ProfileFetchResult.NOT_FOUND);
+                } else if (isTooManyRequests(e)) {
+                    request.setResult(null, ProfileFetchResult.TOO_MANY_REQUESTS);
+                } else {
+                    request.setResult(null, ProfileFetchResult.FAILED);
+                }
+            }
+
+            @Override
+            public void onProfileLookupSucceeded(final GameProfile profile) {
+                if (Messaging.isDebugging()) {
+                    Messaging.debug("Fetched profile " + profile.getId() + " for player " + profile.getName());
+                }
+
+                ProfileRequest request = findRequest(profile.getName(), requests);
+                if (request == null)
+                    return;
+
+                try {
+                    request.setResult(NMS.fillProfileProperties(profile, true), ProfileFetchResult.SUCCESS);
+                } catch (Exception e) {
+                    if (Messaging.isDebugging()) {
+                        Messaging.debug("Profile lookup for player '" + profile.getName() + "' failed: "
+                                + getExceptionMsg(e) + " " + isTooManyRequests(e));
+                        Messaging.debug(Throwables.getStackTraceAsString(e));
+                    }
+
+                    if (isTooManyRequests(e)) {
+                        request.setResult(null, ProfileFetchResult.TOO_MANY_REQUESTS);
+                    } else {
+                        request.setResult(null, ProfileFetchResult.FAILED);
+                    }
+                }
+            }
+        });
+    }
 }

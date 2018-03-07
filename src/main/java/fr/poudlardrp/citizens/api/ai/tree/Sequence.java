@@ -18,6 +18,22 @@ public class Sequence extends Composite {
         this.continueRunning = retryChildren;
     }
 
+    public static Sequence createRetryingSequence(Behavior... behaviors) {
+        return createRetryingSequence(Arrays.asList(behaviors));
+    }
+
+    public static Sequence createRetryingSequence(Collection<Behavior> behaviors) {
+        return new Sequence(true, behaviors);
+    }
+
+    public static Sequence createSequence(Behavior... behaviors) {
+        return createSequence(Arrays.asList(behaviors));
+    }
+
+    public static Sequence createSequence(Collection<Behavior> behaviors) {
+        return new Sequence(false, behaviors);
+    }
+
     private BehaviorStatus getContinuationStatus() {
         resetCurrent();
         if (continueRunning) {
@@ -89,21 +105,5 @@ public class Sequence extends Composite {
     public String toString() {
         return "Sequence [executing=" + executing + ", executingIndex=" + executingIndex + ", retryChildren="
                 + continueRunning + ", getBehaviors()=" + getBehaviors() + "]";
-    }
-
-    public static Sequence createRetryingSequence(Behavior... behaviors) {
-        return createRetryingSequence(Arrays.asList(behaviors));
-    }
-
-    public static Sequence createRetryingSequence(Collection<Behavior> behaviors) {
-        return new Sequence(true, behaviors);
-    }
-
-    public static Sequence createSequence(Behavior... behaviors) {
-        return createSequence(Arrays.asList(behaviors));
-    }
-
-    public static Sequence createSequence(Collection<Behavior> behaviors) {
-        return new Sequence(false, behaviors);
     }
 }

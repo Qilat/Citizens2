@@ -1,16 +1,15 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity.nonliving;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving;
 
+import fr.poudlardrp.citizens.npc.AbstractEntityController;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
 import net.citizensnpcs.api.event.NPCPushEvent;
 import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.npc.AbstractEntityController;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
 import net.minecraft.server.v1_10_R1.EntityEgg;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.World;
 import net.minecraft.server.v1_10_R1.WorldServer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
@@ -64,14 +63,14 @@ public class EggController extends AbstractEntityController {
             this.npc = (CitizensNPC) npc;
         }
 
-        @Override
-        public boolean d(NBTTagCompound save) {
-            return npc == null ? super.d(save) : false;
-        }
-
         public EntityEggNPC(World world, NPC npc, double d0, double d1, double d2) {
             super(world, d0, d1, d2);
             this.npc = (CitizensNPC) npc;
+        }
+
+        @Override
+        public boolean d(NBTTagCompound save) {
+            return npc == null ? super.d(save) : false;
         }
 
         @Override

@@ -1,11 +1,27 @@
 package fr.poudlardrp.citizens.api.util;
 
-import java.util.Map;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
+import java.util.Map;
+
 public abstract class DataKey {
+    private static final Predicate<DataKey> SIMPLE_INTEGER_FILTER = new Predicate<DataKey>() {
+        @Override
+        public boolean apply(DataKey key) {
+            try {
+                Integer.parseInt(key.name());
+                return true;
+            } catch (NumberFormatException ex) {
+                return false;
+            }
+        }
+
+        @Override
+        public boolean test(DataKey key) {
+            return apply(key);
+        }
+    };
     protected final String path;
 
     protected DataKey(String path) {
@@ -136,21 +152,4 @@ public abstract class DataKey {
     public abstract void setRaw(String key, Object value);
 
     public abstract void setString(String key, String value);
-
-    private static final Predicate<DataKey> SIMPLE_INTEGER_FILTER = new Predicate<DataKey>() {
-        @Override
-        public boolean apply(DataKey key) {
-            try {
-                Integer.parseInt(key.name());
-                return true;
-            } catch (NumberFormatException ex) {
-                return false;
-            }
-        }
-
-        @Override
-        public boolean test(DataKey key) {
-            return apply(key);
-        }
-    };
 }

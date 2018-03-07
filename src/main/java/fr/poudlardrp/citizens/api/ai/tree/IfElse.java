@@ -2,13 +2,17 @@ package fr.poudlardrp.citizens.api.ai.tree;
 
 public class IfElse extends BehaviorGoalAdapter {
     private final Condition condition;
-    private Behavior executing;
     private final Behavior ifBehavior, elseBehavior;
+    private Behavior executing;
 
     public IfElse(Condition condition, Behavior ifBehavior, Behavior elseBehavior) {
         this.condition = condition;
         this.ifBehavior = ifBehavior;
         this.elseBehavior = elseBehavior;
+    }
+
+    public static IfElse create(Condition condition, Behavior ifBehavior, Behavior elseBehavior) {
+        return new IfElse(condition, ifBehavior, elseBehavior);
     }
 
     @Override
@@ -37,9 +41,5 @@ public class IfElse extends BehaviorGoalAdapter {
             return false;
         }
         return true;
-    }
-
-    public static IfElse create(Condition condition, Behavior ifBehavior, Behavior elseBehavior) {
-        return new IfElse(condition, ifBehavior, elseBehavior);
     }
 }

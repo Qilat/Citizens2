@@ -30,8 +30,7 @@ public class Spawned extends Trait {
     /**
      * Sets whether an NPC should spawn during server starts or reloads.
      *
-     * @param shouldSpawn
-     *            Whether an NPC should spawn
+     * @param shouldSpawn Whether an NPC should spawn
      */
     public void setSpawned(boolean shouldSpawn) {
         this.shouldSpawn = shouldSpawn;

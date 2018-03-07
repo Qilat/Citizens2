@@ -7,6 +7,10 @@ import net.citizensnpcs.api.ai.GoalSelector;
  * An adapter between {@link Goal} and {@link Behavior}, forwarding the calls correctly.
  */
 public abstract class BehaviorGoalAdapter implements Goal, Behavior {
+    public static Goal create(Behavior behavior) {
+        return new ForwardingBehaviorGoalAdapter(behavior);
+    }
+
     @Override
     public void run(GoalSelector selector) {
         BehaviorStatus status = run();
@@ -20,9 +24,5 @@ public abstract class BehaviorGoalAdapter implements Goal, Behavior {
     @Override
     public boolean shouldExecute(GoalSelector selector) {
         return shouldExecute();
-    }
-
-    public static Goal create(Behavior behavior) {
-        return new ForwardingBehaviorGoalAdapter(behavior);
     }
 }

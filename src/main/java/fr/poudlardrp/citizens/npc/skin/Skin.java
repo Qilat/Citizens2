@@ -1,50 +1,44 @@
-package net.poudlardcitizens.npc.skin;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.WeakHashMap;
-
-import javax.annotation.Nullable;
-
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
+package fr.poudlardrp.citizens.npc.skin;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-
-import net.poudlardcitizens.Settings.Setting;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
+import net.poudlardcitizens.Settings.Setting;
 import net.poudlardcitizens.npc.profile.ProfileFetchHandler;
 import net.poudlardcitizens.npc.profile.ProfileFetcher;
 import net.poudlardcitizens.npc.profile.ProfileRequest;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Stores data for a single skin.
  */
 public class Skin {
+    public static final String CACHED_SKIN_UUID_METADATA = "cached-skin-uuid";
+    public static final String CACHED_SKIN_UUID_NAME_METADATA = "cached-skin-uuid-name";
+    private static final Map<String, Skin> CACHE = new HashMap<String, Skin>(20);
+    private final Map<SkinnableEntity, Void> pending = new WeakHashMap<SkinnableEntity, Void>(15);
+    private final String skinName;
     private boolean fetching;
     private int fetchRetries = -1;
     private boolean hasFetched;
     private volatile boolean isValid = true;
-    private final Map<SkinnableEntity, Void> pending = new WeakHashMap<SkinnableEntity, Void>(15);
     private BukkitTask retryTask;
     private volatile Property skinData;
     private volatile UUID skinId;
-    private final String skinName;
 
     /**
      * Constructor.
      *
-     * @param skinName
-     *            The name of the player the skin belongs to.
+     * @param skinName    The name of the player the skin belongs to.
      * @param forceUpdate
      */
     Skin(String skinName) {
@@ -61,16 +55,122 @@ public class Skin {
     }
 
     /**
-     * Apply the skin data to the specified skinnable entity.
+     * Clear all cached skins.
+     */
+    public static void clearCache() {
+        synchronized (CACHE) {
+            for (Skin skin : CACHE.values()) {
+                skin.pending.clear();
+                if (skin.retryTask != null) {
+                    skin.retryTask.cancel();
+                }
+            }
+            CACHE.clear();
+        }
+    }
+
+    /**
+     * Get a skin for a skinnable entity.
+     * <p>
+     * <p>
+     * If a Skin instance does not exist, a new one is created and the skin data is automatically fetched.
+     * </p>
      *
+     * @param entity The skinnable entity.
+     */
+    public static Skin get(SkinnableEntity entity) {
+        return get(entity, false);
+    }
+
+    /**
+     * Get a skin for a skinnable entity.
+     * <p>
+     * <p>
+     * If a Skin instance does not exist, a new one is created and the skin data is automatically fetched.
+     * </p>
+     *
+     * @param entity      The skinnable entity.
+     * @param forceUpdate if the skin should be checked via the cache
+     */
+    public static Skin get(SkinnableEntity entity, boolean forceUpdate) {
+        Preconditions.checkNotNull(entity);
+
+        String skinName = entity.getSkinName().toLowerCase();
+        return get(skinName, forceUpdate);
+    }
+
+    /**
+     * Get a player skin.
+     * <p>
+     * <p>
+     * If a Skin instance does not exist, a new one is created and the skin data is automatically fetched.
+     * </p>
+     *
+     * @param skinName The name of the skin.
+     */
+    public static Skin get(String skinName, boolean forceUpdate) {
+        Preconditions.checkNotNull(skinName);
+
+        skinName = skinName.toLowerCase();
+
+        Skin skin;
+        synchronized (CACHE) {
+            skin = CACHE.get(skinName);
+        }
+        if (skin == null) {
+            skin = new Skin(skinName);
+        } else if (forceUpdate) {
+            skin.fetchForced();
+        }
+
+        return skin;
+    }
+
+    private static void setNPCSkinData(SkinnableEntity entity, String skinName, UUID skinId, Property skinProperty) {
+        NPC npc = entity.getNPC();
+
+        // cache skins for faster initial skin availability and
+        // for use when the latest skin is not required.
+        npc.data().setPersistent(CACHED_SKIN_UUID_NAME_METADATA, skinName);
+        npc.data().setPersistent(CACHED_SKIN_UUID_METADATA, skinId.toString());
+        if (skinProperty.getValue() != null) {
+            npc.data().setPersistent(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_METADATA, skinProperty.getValue());
+            if (skinProperty.getSignature() == null) {
+                npc.data().setPersistent(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA, "");
+            } else {
+                npc.data().setPersistent(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA, skinProperty.getSignature());
+            }
+            setNPCTexture(entity, skinProperty);
+        } else {
+            npc.data().remove(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_METADATA);
+            npc.data().remove(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA);
+        }
+    }
+
+    private static void setNPCTexture(SkinnableEntity entity, Property skinProperty) {
+        GameProfile profile = entity.getProfile();
+
+        // don't set property if already set since this sometimes causes
+        // packet errors that disconnect the client.
+        Property current = Iterables.getFirst(profile.getProperties().get("textures"), null);
+        if (current != null && current.getValue().equals(skinProperty.getValue())
+                && (current.getSignature() != null && current.getSignature().equals(skinProperty.getSignature()))) {
+            return;
+        }
+
+        profile.getProperties().removeAll("textures"); // ensure client does not crash due to duplicate properties.
+        profile.getProperties().put("textures", skinProperty);
+    }
+
+    /**
+     * Apply the skin data to the specified skinnable entity.
+     * <p>
      * <p>
      * If invoked before the skin data is ready, the skin is retrieved and the skin is automatically applied to the
      * entity at a later time.
      * </p>
      *
-     * @param entity
-     *            The skinnable entity.
-     *
+     * @param entity The skinnable entity.
      * @return True if skin was applied, false if the data is being retrieved.
      */
     public boolean apply(SkinnableEntity entity) {
@@ -85,7 +185,7 @@ public class Skin {
         String texture = npc.data().get(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_METADATA, "cache");
         if (this.skinName.equals(cachedName) && !texture.equals("cache")) {
             Property localData = new Property("textures", texture,
-                    npc.data().<String> get(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA));
+                    npc.data().<String>get(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA));
             setNPCTexture(entity, localData);
 
             // check if NPC prefers to use cached skin over the latest skin.
@@ -115,8 +215,7 @@ public class Skin {
     /**
      * Apply the skin data to the specified skinnable entity and respawn the NPC.
      *
-     * @param entity
-     *            The skinnable entity.
+     * @param entity The skinnable entity.
      */
     public void applyAndRespawn(SkinnableEntity entity) {
         Preconditions.checkNotNull(entity);
@@ -277,120 +376,4 @@ public class Skin {
         }
         pending.clear();
     }
-
-    /**
-     * Clear all cached skins.
-     */
-    public static void clearCache() {
-        synchronized (CACHE) {
-            for (Skin skin : CACHE.values()) {
-                skin.pending.clear();
-                if (skin.retryTask != null) {
-                    skin.retryTask.cancel();
-                }
-            }
-            CACHE.clear();
-        }
-    }
-
-    /**
-     * Get a skin for a skinnable entity.
-     *
-     * <p>
-     * If a Skin instance does not exist, a new one is created and the skin data is automatically fetched.
-     * </p>
-     *
-     * @param entity
-     *            The skinnable entity.
-     */
-    public static Skin get(SkinnableEntity entity) {
-        return get(entity, false);
-    }
-
-    /**
-     * Get a skin for a skinnable entity.
-     *
-     * <p>
-     * If a Skin instance does not exist, a new one is created and the skin data is automatically fetched.
-     * </p>
-     *
-     * @param entity
-     *            The skinnable entity.
-     * @param forceUpdate
-     *            if the skin should be checked via the cache
-     */
-    public static Skin get(SkinnableEntity entity, boolean forceUpdate) {
-        Preconditions.checkNotNull(entity);
-
-        String skinName = entity.getSkinName().toLowerCase();
-        return get(skinName, forceUpdate);
-    }
-
-    /**
-     * Get a player skin.
-     *
-     * <p>
-     * If a Skin instance does not exist, a new one is created and the skin data is automatically fetched.
-     * </p>
-     *
-     * @param skinName
-     *            The name of the skin.
-     */
-    public static Skin get(String skinName, boolean forceUpdate) {
-        Preconditions.checkNotNull(skinName);
-
-        skinName = skinName.toLowerCase();
-
-        Skin skin;
-        synchronized (CACHE) {
-            skin = CACHE.get(skinName);
-        }
-        if (skin == null) {
-            skin = new Skin(skinName);
-        } else if (forceUpdate) {
-            skin.fetchForced();
-        }
-
-        return skin;
-    }
-
-    private static void setNPCSkinData(SkinnableEntity entity, String skinName, UUID skinId, Property skinProperty) {
-        NPC npc = entity.getNPC();
-
-        // cache skins for faster initial skin availability and
-        // for use when the latest skin is not required.
-        npc.data().setPersistent(CACHED_SKIN_UUID_NAME_METADATA, skinName);
-        npc.data().setPersistent(CACHED_SKIN_UUID_METADATA, skinId.toString());
-        if (skinProperty.getValue() != null) {
-            npc.data().setPersistent(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_METADATA, skinProperty.getValue());
-            if (skinProperty.getSignature() == null) {
-                npc.data().setPersistent(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA, "");
-            } else {
-                npc.data().setPersistent(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA, skinProperty.getSignature());
-            }
-            setNPCTexture(entity, skinProperty);
-        } else {
-            npc.data().remove(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_METADATA);
-            npc.data().remove(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA);
-        }
-    }
-
-    private static void setNPCTexture(SkinnableEntity entity, Property skinProperty) {
-        GameProfile profile = entity.getProfile();
-
-        // don't set property if already set since this sometimes causes
-        // packet errors that disconnect the client.
-        Property current = Iterables.getFirst(profile.getProperties().get("textures"), null);
-        if (current != null && current.getValue().equals(skinProperty.getValue())
-                && (current.getSignature() != null && current.getSignature().equals(skinProperty.getSignature()))) {
-            return;
-        }
-
-        profile.getProperties().removeAll("textures"); // ensure client does not crash due to duplicate properties.
-        profile.getProperties().put("textures", skinProperty);
-    }
-
-    private static final Map<String, Skin> CACHE = new HashMap<String, Skin>(20);
-    public static final String CACHED_SKIN_UUID_METADATA = "cached-skin-uuid";
-    public static final String CACHED_SKIN_UUID_NAME_METADATA = "cached-skin-uuid-name";
 }

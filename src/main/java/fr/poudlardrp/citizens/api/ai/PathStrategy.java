@@ -1,9 +1,8 @@
 package fr.poudlardrp.citizens.api.ai;
 
+import net.citizensnpcs.api.ai.event.CancelReason;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.ai.event.CancelReason;
 
 /**
  * A pathfinding strategy directed at a target. Has two states: pathfinding -> cancelled represented by

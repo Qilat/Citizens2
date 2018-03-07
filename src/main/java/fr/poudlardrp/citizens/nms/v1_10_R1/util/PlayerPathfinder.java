@@ -1,15 +1,10 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
+
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.EntityHumanNPC;
+import net.minecraft.server.v1_10_R1.*;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.Entity;
-import net.minecraft.server.v1_10_R1.IBlockAccess;
-import net.minecraft.server.v1_10_R1.Path;
-import net.minecraft.server.v1_10_R1.PathEntity;
-import net.minecraft.server.v1_10_R1.PathPoint;
 
 public class PlayerPathfinder {
     private final Path a = new Path();
@@ -22,13 +17,13 @@ public class PlayerPathfinder {
     }
 
     public PathEntity a(IBlockAccess paramIBlockAccess, EntityHumanNPC paramEntityInsentient,
-            BlockPosition paramBlockPosition, float paramFloat) {
+                        BlockPosition paramBlockPosition, float paramFloat) {
         return a(paramIBlockAccess, paramEntityInsentient, paramBlockPosition.getX() + 0.5F,
                 paramBlockPosition.getY() + 0.5F, paramBlockPosition.getZ() + 0.5F, paramFloat);
     }
 
     private PathEntity a(IBlockAccess paramIBlockAccess, EntityHumanNPC paramEntityInsentient, double paramDouble1,
-            double paramDouble2, double paramDouble3, float paramFloat) {
+                         double paramDouble2, double paramDouble3, float paramFloat) {
         this.a.a();
         this.d.a(paramIBlockAccess, paramEntityInsentient);
         PathPoint localPathPoint1 = this.d.b();
@@ -41,7 +36,7 @@ public class PlayerPathfinder {
     }
 
     public PathEntity a(IBlockAccess paramIBlockAccess, EntityHumanNPC paramEntityInsentient, Entity paramEntity,
-            float paramFloat) {
+                        float paramFloat) {
         return a(paramIBlockAccess, paramEntityInsentient, paramEntity.locX, paramEntity.getBoundingBox().b,
                 paramEntity.locZ, paramFloat);
     }

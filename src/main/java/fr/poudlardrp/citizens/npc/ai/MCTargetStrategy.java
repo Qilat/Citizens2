@@ -1,29 +1,33 @@
-package net.poudlardcitizens.npc.ai;
+package fr.poudlardrp.citizens.npc.ai;
 
-import net.poudlardcitizens.util.BoundingBox;
-import net.poudlardcitizens.util.NMS;
+import fr.poudlardrp.citizens.util.BoundingBox;
+import fr.poudlardrp.citizens.util.NMS;
+import net.citizensnpcs.api.ai.*;
+import net.citizensnpcs.api.ai.event.CancelReason;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
-import net.citizensnpcs.api.ai.AttackStrategy;
-import net.citizensnpcs.api.ai.EntityTarget;
-import net.citizensnpcs.api.ai.NavigatorParameters;
-import net.citizensnpcs.api.ai.PathStrategy;
-import net.citizensnpcs.api.ai.TargetType;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.npc.NPC;
-
 public class MCTargetStrategy implements PathStrategy, EntityTarget {
+    static final AttackStrategy DEFAULT_ATTACK_STRATEGY = new AttackStrategy() {
+        @Override
+        public boolean handle(LivingEntity attacker, LivingEntity bukkitTarget) {
+            NMS.attack(attacker, bukkitTarget);
+            return false;
+        }
+    };
+    private static final Location HANDLE_LOCATION = new Location(null, 0, 0, 0);
+    private static final Location TARGET_LOCATION = new Location(null, 0, 0, 0);
     private final boolean aggro;
-    private int attackTicks;
-    private CancelReason cancelReason;
     private final Entity handle;
     private final NPC npc;
     private final NavigatorParameters parameters;
     private final Entity target;
     private final TargetNavigator targetNavigator;
+    private int attackTicks;
+    private CancelReason cancelReason;
     private int updateCounter = -1;
 
     public MCTargetStrategy(NPC npc, Entity target, boolean aggro, NavigatorParameters params) {
@@ -136,6 +140,15 @@ public class MCTargetStrategy implements PathStrategy, EntityTarget {
 
         return false;
     }
+    public static interface TargetNavigator {
+        Iterable<Vector> getPath();
+
+        void setPath();
+
+        void stop();
+
+        void update();
+    }
 
     private class AStarTargeter implements TargetNavigator {
         private int failureTimes = 0;
@@ -182,25 +195,4 @@ public class MCTargetStrategy implements PathStrategy, EntityTarget {
             strategy.update();
         }
     }
-
-    public static interface TargetNavigator {
-        Iterable<Vector> getPath();
-
-        void setPath();
-
-        void stop();
-
-        void update();
-    }
-
-    static final AttackStrategy DEFAULT_ATTACK_STRATEGY = new AttackStrategy() {
-        @Override
-        public boolean handle(LivingEntity attacker, LivingEntity bukkitTarget) {
-            NMS.attack(attacker, bukkitTarget);
-            return false;
-        }
-    };
-    private static final Location HANDLE_LOCATION = new Location(null, 0, 0, 0);
-
-    private static final Location TARGET_LOCATION = new Location(null, 0, 0, 0);
 }

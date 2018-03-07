@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.persistence;
 
-import java.util.UUID;
-
 import net.citizensnpcs.api.util.DataKey;
+
+import java.util.UUID;
 
 public class UUIDPersister implements Persister<UUID> {
     @Override

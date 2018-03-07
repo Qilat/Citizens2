@@ -1,14 +1,13 @@
-package net.poudlardcitizens.editor;
+package fr.poudlardrp.citizens.editor;
 
-import net.poudlardcitizens.util.Messages;
+import fr.poudlardrp.citizens.util.Messages;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.util.Messaging;
+import net.poudlardcitizens.trait.Saddle;
 import org.bukkit.Material;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.trait.Saddle;
 
 public class PigEquipper implements Equipper {
     @Override

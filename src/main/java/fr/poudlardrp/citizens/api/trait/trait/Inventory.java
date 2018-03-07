@@ -1,10 +1,10 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
+import net.citizensnpcs.api.exception.NPCLoadException;
+import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitName;
+import net.citizensnpcs.api.util.DataKey;
+import net.citizensnpcs.api.util.ItemStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
@@ -16,20 +16,19 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.ItemStorage;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Represents an NPC's inventory.
  */
 @TraitName("inventory")
 public class Inventory extends Trait {
+    private final Set<InventoryView> views = new HashSet<InventoryView>();
     private ItemStack[] contents;
     private org.bukkit.inventory.Inventory view;
-    private final Set<InventoryView> views = new HashSet<InventoryView>();
 
     public Inventory() {
         super("inventory");
@@ -49,6 +48,35 @@ public class Inventory extends Trait {
             return view.getContents();
         }
         return contents;
+    }
+
+    /**
+     * Sets the contents of an NPC's inventory.
+     *
+     * @param contents ItemStack array to set as the contents of an NPC's inventory
+     */
+    public void setContents(ItemStack[] contents) {
+        this.contents = Arrays.copyOf(contents, 72);
+        org.bukkit.inventory.Inventory dest = null;
+        int maxCopySize = -1;
+        if (npc.getEntity() instanceof Player) {
+            dest = ((Player) npc.getEntity()).getInventory();
+            maxCopySize = 36;
+        } else if (npc.getEntity() instanceof StorageMinecart) {
+            dest = ((StorageMinecart) npc.getEntity()).getInventory();
+        } else if (npc.getEntity() instanceof Horse) {
+            dest = ((Horse) npc.getEntity()).getInventory();
+        }
+
+        if (dest == null)
+            return;
+        if (maxCopySize == -1) {
+            maxCopySize = dest.getSize();
+        }
+
+        for (int i = 0; i < maxCopySize; i++) {
+            dest.setItem(i, contents[i]);
+        }
     }
 
     public org.bukkit.inventory.Inventory getInventoryView() {
@@ -88,8 +116,8 @@ public class Inventory extends Trait {
         setContents(contents);
         int size = npc.getEntity() instanceof Player ? 36
                 : npc.getEntity() instanceof InventoryHolder
-                        ? ((InventoryHolder) npc.getEntity()).getInventory().getSize()
-                        : contents.length;
+                ? ((InventoryHolder) npc.getEntity()).getInventory().getSize()
+                : contents.length;
         int rem = size % 9;
         if (rem != 0) {
             size += 9 - rem; // round up to nearest multiple of 9
@@ -144,36 +172,6 @@ public class Inventory extends Trait {
         if (entity instanceof Player) {
             contents = ((Player) entity).getInventory().getContents();
             npc.getTrait(Equipment.class).setItemInHand(contents[0]);
-        }
-    }
-
-    /**
-     * Sets the contents of an NPC's inventory.
-     *
-     * @param contents
-     *            ItemStack array to set as the contents of an NPC's inventory
-     */
-    public void setContents(ItemStack[] contents) {
-        this.contents = Arrays.copyOf(contents, 72);
-        org.bukkit.inventory.Inventory dest = null;
-        int maxCopySize = -1;
-        if (npc.getEntity() instanceof Player) {
-            dest = ((Player) npc.getEntity()).getInventory();
-            maxCopySize = 36;
-        } else if (npc.getEntity() instanceof StorageMinecart) {
-            dest = ((StorageMinecart) npc.getEntity()).getInventory();
-        } else if (npc.getEntity() instanceof Horse) {
-            dest = ((Horse) npc.getEntity()).getInventory();
-        }
-
-        if (dest == null)
-            return;
-        if (maxCopySize == -1) {
-            maxCopySize = dest.getSize();
-        }
-
-        for (int i = 0; i < maxCopySize; i++) {
-            dest.setItem(i, contents[i]);
         }
     }
 

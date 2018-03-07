@@ -1,13 +1,12 @@
 package fr.poudlardrp.citizens.api.npc;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import net.citizensnpcs.api.util.DataKey;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-
-import net.citizensnpcs.api.util.DataKey;
 
 public class SimpleMetadataStore implements MetadataStore {
     private final Map<String, MetadataObject> metadata = Maps.newHashMap();

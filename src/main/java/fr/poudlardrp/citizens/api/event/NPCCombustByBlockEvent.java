@@ -1,12 +1,12 @@
 package fr.poudlardrp.citizens.api.event;
 
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityCombustByBlockEvent;
 
 public class NPCCombustByBlockEvent extends NPCCombustEvent {
+    private static final HandlerList handlers = new HandlerList();
     private final EntityCombustByBlockEvent event;
 
     public NPCCombustByBlockEvent(EntityCombustByBlockEvent event, NPC npc) {
@@ -14,11 +14,15 @@ public class NPCCombustByBlockEvent extends NPCCombustEvent {
         this.event = event;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * The combuster can be lava or a block that is on fire.
-     * <p />
+     * <p/>
      * WARNING: block may be null.
-     * 
+     *
      * @return the Block that set the combustee alight.
      */
     public Block getCombuster() {
@@ -27,12 +31,6 @@ public class NPCCombustByBlockEvent extends NPCCombustEvent {
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

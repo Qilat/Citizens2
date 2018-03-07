@@ -1,19 +1,17 @@
 package fr.poudlardrp.citizens.api.ai.flocking;
 
-import java.util.Collection;
-
+import com.google.common.collect.Lists;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.entity.Entity;
 
-import com.google.common.collect.Lists;
+import java.util.Collection;
 
 public class RadiusNPCFlock implements NPCFlock {
-    private Collection<NPC> cached;
-    private int cacheTicks = 0;
     private final int maxCacheTicks;
     private final double radius;
+    private Collection<NPC> cached;
+    private int cacheTicks = 0;
 
     public RadiusNPCFlock(double radius) {
         this(radius, 30);

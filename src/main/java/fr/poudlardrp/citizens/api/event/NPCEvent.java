@@ -15,7 +15,7 @@ public abstract class NPCEvent extends CitizensEvent {
 
     /**
      * Get the npc involved in the event.
-     * 
+     *
      * @return the npc involved in the event
      */
     public NPC getNPC() {

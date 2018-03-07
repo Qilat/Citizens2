@@ -1,10 +1,12 @@
-package net.poudlardcitizens.commands;
+package fr.poudlardrp.citizens.commands;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.poudlardcitizens.Citizens;
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import fr.poudlardrp.citizens.Citizens;
+import fr.poudlardrp.citizens.npc.Template;
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.command.Command;
 import net.citizensnpcs.api.command.CommandContext;
@@ -12,15 +14,10 @@ import net.citizensnpcs.api.command.Requirements;
 import net.citizensnpcs.api.command.exception.CommandException;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.npc.Template;
-import net.poudlardcitizens.util.Messages;
-
 import org.bukkit.command.CommandSender;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import javax.annotation.Nullable;
+import java.util.List;
 
 @Requirements(selected = true, ownership = true)
 public class TemplateCommands {
@@ -28,10 +25,10 @@ public class TemplateCommands {
     }
 
     @Command(
-            aliases = { "template", "tpl" },
+            aliases = {"template", "tpl"},
             usage = "apply [template name] (id id2...)",
             desc = "Applies a template to the selected NPC",
-            modifiers = { "apply" },
+            modifiers = {"apply"},
             min = 2,
             permission = "citizens.templates.apply")
     @Requirements
@@ -69,10 +66,10 @@ public class TemplateCommands {
     }
 
     @Command(
-            aliases = { "template", "tpl" },
+            aliases = {"template", "tpl"},
             usage = "create [template name] (-o)",
             desc = "Creates a template from the selected NPC",
-            modifiers = { "create" },
+            modifiers = {"create"},
             min = 2,
             max = 2,
             flags = "o",
@@ -87,10 +84,10 @@ public class TemplateCommands {
     }
 
     @Command(
-            aliases = { "template", "tpl" },
+            aliases = {"template", "tpl"},
             usage = "delete [template name]",
             desc = "Deletes a template",
-            modifiers = { "delete" },
+            modifiers = {"delete"},
             min = 2,
             max = 2,
             permission = "citizens.templates.delete")
@@ -103,10 +100,10 @@ public class TemplateCommands {
     }
 
     @Command(
-            aliases = { "template", "tpl" },
+            aliases = {"template", "tpl"},
             usage = "list",
             desc = "Lists available templates",
-            modifiers = { "list" },
+            modifiers = {"list"},
             min = 1,
             max = 1,
             permission = "citizens.templates.list")

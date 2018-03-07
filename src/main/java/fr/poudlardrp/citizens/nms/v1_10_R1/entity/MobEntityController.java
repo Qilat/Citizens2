@@ -1,25 +1,35 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity;
 
-import java.lang.reflect.Constructor;
-import java.util.Map;
-
-import net.poudlardcitizens.npc.AbstractEntityController;
+import com.google.common.collect.Maps;
+import fr.poudlardrp.citizens.npc.AbstractEntityController;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.World;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.entity.Entity;
 
-import com.google.common.collect.Maps;
-
-import net.citizensnpcs.api.npc.NPC;
-import net.minecraft.server.v1_10_R1.World;
+import java.lang.reflect.Constructor;
+import java.util.Map;
 
 public abstract class MobEntityController extends AbstractEntityController {
+    private static final Map<Class<?>, Constructor<?>> CONSTRUCTOR_CACHE = Maps.newHashMap();
     private final Constructor<?> constructor;
 
     protected MobEntityController(Class<?> clazz) {
         super(clazz);
         this.constructor = getConstructor(clazz);
+    }
+
+    private static Constructor<?> getConstructor(Class<?> clazz) {
+        Constructor<?> constructor = CONSTRUCTOR_CACHE.get(clazz);
+        if (constructor != null)
+            return constructor;
+        try {
+            return clazz.getConstructor(World.class, NPC.class);
+        } catch (Exception ex) {
+            throw new IllegalStateException("unable to find an entity constructor");
+        }
     }
 
     @Override
@@ -45,17 +55,4 @@ public abstract class MobEntityController extends AbstractEntityController {
             return null;
         }
     }
-
-    private static Constructor<?> getConstructor(Class<?> clazz) {
-        Constructor<?> constructor = CONSTRUCTOR_CACHE.get(clazz);
-        if (constructor != null)
-            return constructor;
-        try {
-            return clazz.getConstructor(World.class, NPC.class);
-        } catch (Exception ex) {
-            throw new IllegalStateException("unable to find an entity constructor");
-        }
-    }
-
-    private static final Map<Class<?>, Constructor<?>> CONSTRUCTOR_CACHE = Maps.newHashMap();
 }

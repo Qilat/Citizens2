@@ -1,10 +1,26 @@
-package net.poudlardcitizens.trait.waypoint;
+package fr.poudlardrp.citizens.trait.waypoint;
 
-import java.util.Iterator;
-import java.util.List;
-
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.Util;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.ai.Goal;
+import net.citizensnpcs.api.ai.GoalSelector;
+import net.citizensnpcs.api.ai.event.CancelReason;
+import net.citizensnpcs.api.ai.event.NavigatorCallback;
+import net.citizensnpcs.api.astar.*;
+import net.citizensnpcs.api.command.CommandContext;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.persistence.PersistenceLoader;
+import net.citizensnpcs.api.util.DataKey;
+import net.citizensnpcs.api.util.Messaging;
+import net.citizensnpcs.api.util.prtree.DistanceResult;
+import net.citizensnpcs.api.util.prtree.PRTree;
+import net.citizensnpcs.api.util.prtree.Region3D;
+import net.citizensnpcs.api.util.prtree.SimplePointND;
+import net.poudlardcitizens.trait.waypoint.WaypointProvider.EnumerableWaypointProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -19,35 +35,14 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.Goal;
-import net.citizensnpcs.api.ai.GoalSelector;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.ai.event.NavigatorCallback;
-import net.citizensnpcs.api.astar.AStarGoal;
-import net.citizensnpcs.api.astar.AStarMachine;
-import net.citizensnpcs.api.astar.AStarNode;
-import net.citizensnpcs.api.astar.Agent;
-import net.citizensnpcs.api.astar.Plan;
-import net.citizensnpcs.api.command.CommandContext;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.persistence.PersistenceLoader;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.prtree.DistanceResult;
-import net.citizensnpcs.api.util.prtree.PRTree;
-import net.citizensnpcs.api.util.prtree.Region3D;
-import net.citizensnpcs.api.util.prtree.SimplePointND;
-import net.poudlardcitizens.trait.waypoint.WaypointProvider.EnumerableWaypointProvider;
+import java.util.Iterator;
+import java.util.List;
 
 public class GuidedWaypointProvider implements EnumerableWaypointProvider {
+    private static final AStarMachine<GuidedNode, GuidedPlan> ASTAR = AStarMachine.createWithDefaultStorage();
     private final List<Waypoint> available = Lists.newArrayList();
-    private GuidedAIGoal currentGoal;
     private final List<Waypoint> helpers = Lists.newArrayList();
+    private GuidedAIGoal currentGoal;
     private NPC npc;
     private boolean paused;
     private PRTree<Region3D<Waypoint>> tree = PRTree.create(new Region3D.Converter<Waypoint>(), 30);
@@ -173,6 +168,11 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
     }
 
     @Override
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    @Override
     public void load(DataKey key) {
         for (DataKey root : key.getRelative("availablewaypoints").getIntegerSubKeys()) {
             Waypoint waypoint = PersistenceLoader.load(Waypoint.class, root);
@@ -205,7 +205,7 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
 
     private void rebuildTree() {
         tree = PRTree.create(new Region3D.Converter<Waypoint>(), 30);
-        tree.load(Lists.newArrayList(Iterables.transform(Iterables.<Waypoint> concat(available, helpers),
+        tree.load(Lists.newArrayList(Iterables.transform(Iterables.<Waypoint>concat(available, helpers),
                 new Function<Waypoint, Region3D<Waypoint>>() {
                     @Override
                     public Region3D<Waypoint> apply(Waypoint arg0) {
@@ -231,13 +231,64 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
     }
 
     @Override
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    @Override
     public Iterable<Waypoint> waypoints() {
         return Iterables.concat(available, helpers);
+    }
+
+    private static class GuidedGoal implements AStarGoal<GuidedNode> {
+        private final Waypoint dest;
+
+        public GuidedGoal(Waypoint dest) {
+            this.dest = dest;
+        }
+
+        @Override
+        public float g(GuidedNode from, GuidedNode to) {
+            return (float) from.distance(to.waypoint);
+        }
+
+        @Override
+        public float getInitialCost(GuidedNode node) {
+            return h(node);
+        }
+
+        @Override
+        public float h(GuidedNode from) {
+            return (float) from.distance(dest);
+        }
+
+        @Override
+        public boolean isFinished(GuidedNode node) {
+            return node.waypoint.equals(dest);
+        }
+    }
+
+    private static class GuidedPlan implements Plan {
+        private final Waypoint[] path;
+        private int index = 0;
+
+        public GuidedPlan(Iterable<GuidedNode> path) {
+            this.path = Iterables.toArray(Iterables.transform(path, new Function<GuidedNode, Waypoint>() {
+                @Override
+                public Waypoint apply(GuidedNode to) {
+                    return to.waypoint;
+                }
+            }), Waypoint.class);
+        }
+
+        public Waypoint getCurrentWaypoint() {
+            return path[index];
+        }
+
+        @Override
+        public boolean isComplete() {
+            return index >= path.length;
+        }
+
+        @Override
+        public void update(Agent agent) {
+            index++;
+        }
     }
 
     private class GuidedAIGoal implements Goal {
@@ -278,34 +329,6 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
         }
     }
 
-    private static class GuidedGoal implements AStarGoal<GuidedNode> {
-        private final Waypoint dest;
-
-        public GuidedGoal(Waypoint dest) {
-            this.dest = dest;
-        }
-
-        @Override
-        public float g(GuidedNode from, GuidedNode to) {
-            return (float) from.distance(to.waypoint);
-        }
-
-        @Override
-        public float getInitialCost(GuidedNode node) {
-            return h(node);
-        }
-
-        @Override
-        public float h(GuidedNode from) {
-            return (float) from.distance(dest);
-        }
-
-        @Override
-        public boolean isFinished(GuidedNode node) {
-            return node.waypoint.equals(dest);
-        }
-    }
-
     private class GuidedNode extends AStarNode {
         private final Waypoint waypoint;
 
@@ -315,7 +338,7 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
 
         @Override
         public Plan buildPlan() {
-            return new GuidedPlan(this.<GuidedNode> getParents());
+            return new GuidedPlan(this.<GuidedNode>getParents());
         }
 
         public double distance(Waypoint dest) {
@@ -344,7 +367,7 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
         @Override
         public Iterable<AStarNode> getNeighbours() {
             List<DistanceResult<Region3D<Waypoint>>> res = tree.nearestNeighbour(
-                    Region3D.<Waypoint> distanceCalculator(), Region3D.<Waypoint> alwaysAcceptNodeFilter(), 15,
+                    Region3D.<Waypoint>distanceCalculator(), Region3D.<Waypoint>alwaysAcceptNodeFilter(), 15,
                     new SimplePointND(waypoint.getLocation().getBlockX(), waypoint.getLocation().getBlockY(),
                             waypoint.getLocation().getBlockZ()));
             return Iterables.transform(res, new Function<DistanceResult<Region3D<Waypoint>>, AStarNode>() {
@@ -360,34 +383,4 @@ public class GuidedWaypointProvider implements EnumerableWaypointProvider {
             return 31 + ((waypoint == null) ? 0 : waypoint.hashCode());
         }
     }
-
-    private static class GuidedPlan implements Plan {
-        private int index = 0;
-        private final Waypoint[] path;
-
-        public GuidedPlan(Iterable<GuidedNode> path) {
-            this.path = Iterables.toArray(Iterables.transform(path, new Function<GuidedNode, Waypoint>() {
-                @Override
-                public Waypoint apply(GuidedNode to) {
-                    return to.waypoint;
-                }
-            }), Waypoint.class);
-        }
-
-        public Waypoint getCurrentWaypoint() {
-            return path[index];
-        }
-
-        @Override
-        public boolean isComplete() {
-            return index >= path.length;
-        }
-
-        @Override
-        public void update(Agent agent) {
-            index++;
-        }
-    }
-
-    private static final AStarMachine<GuidedNode, GuidedPlan> ASTAR = AStarMachine.createWithDefaultStorage();
 }

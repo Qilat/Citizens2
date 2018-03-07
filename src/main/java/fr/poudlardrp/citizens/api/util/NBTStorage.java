@@ -1,37 +1,20 @@
 package fr.poudlardrp.citizens.api.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.zip.GZIPInputStream;
-
-import net.citizensnpcs.api.jnbt.ByteTag;
-import net.citizensnpcs.api.jnbt.CompoundTag;
-import net.citizensnpcs.api.jnbt.DoubleTag;
-import net.citizensnpcs.api.jnbt.FloatTag;
-import net.citizensnpcs.api.jnbt.IntTag;
-import net.citizensnpcs.api.jnbt.LongTag;
-import net.citizensnpcs.api.jnbt.NBTInputStream;
-import net.citizensnpcs.api.jnbt.NBTOutputStream;
-import net.citizensnpcs.api.jnbt.NBTUtils;
-import net.citizensnpcs.api.jnbt.ShortTag;
-import net.citizensnpcs.api.jnbt.StringTag;
-import net.citizensnpcs.api.jnbt.Tag;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.io.Closeables;
 import com.google.common.io.Files;
+import net.citizensnpcs.api.jnbt.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
 public class NBTStorage implements FileStorage {
     private final File file;
@@ -133,6 +116,20 @@ public class NBTStorage implements FileStorage {
     @Override
     public String toString() {
         return "NBTStorage {file=" + file + "}";
+    }
+
+    private static class Node {
+        final String parent;
+        final Map<String, Tag> values;
+
+        public Node(String parent, Tag tag) {
+            this.parent = parent;
+            values = ((CompoundTag) tag).getValue();
+        }
+
+        public Node(Tag tag) {
+            this("", tag);
+        }
     }
 
     public class NBTKey extends DataKey {
@@ -379,20 +376,6 @@ public class NBTStorage implements FileStorage {
         @Override
         public void setString(String key, String value) {
             putTag(key, new StringTag(getNameFor(key), value));
-        }
-    }
-
-    private static class Node {
-        final String parent;
-        final Map<String, Tag> values;
-
-        public Node(String parent, Tag tag) {
-            this.parent = parent;
-            values = ((CompoundTag) tag).getValue();
-        }
-
-        public Node(Tag tag) {
-            this("", tag);
         }
     }
 }

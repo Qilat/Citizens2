@@ -1,51 +1,31 @@
 package fr.poudlardrp.citizens.api.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
-
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.trait.Owner;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Owner;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.logging.*;
+import java.util.regex.Pattern;
 
 public class Messaging {
-    private static class DebugFormatter extends Formatter {
-        private final SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
-
-        @Override
-        public String format(LogRecord rec) {
-            Throwable exception = rec.getThrown();
-
-            String out = this.date.format(rec.getMillis());
-
-            out += "[" + rec.getLevel().getName().toUpperCase() + "] ";
-            out += rec.getMessage() + '\n';
-
-            if (exception != null) {
-                StringWriter writer = new StringWriter();
-                exception.printStackTrace(new PrintWriter(writer));
-
-                return out + writer;
-            }
-
-            return out;
-        }
-    }
+    private static final Pattern CHAT_NEWLINE = Pattern.compile("<br>|<n>|\\n", Pattern.MULTILINE);
+    private static final Splitter CHAT_NEWLINE_SPLITTER = Splitter.on(CHAT_NEWLINE);
+    private static final Joiner SPACE = Joiner.on(" ").useForNull("null");
+    private static boolean DEBUG = false;
+    private static Logger DEBUG_LOGGER;
+    private static String HIGHLIGHT_COLOUR = ChatColor.YELLOW.toString();
+    private static Logger LOGGER = Logger.getLogger("Citizens");
+    private static String MESSAGE_COLOUR = ChatColor.GREEN.toString();
 
     public static void configure(File debugFile, boolean debug, String messageColour, String highlightColour) {
         DEBUG = debug;
@@ -172,12 +152,26 @@ public class Messaging {
         return count >= 2 ? tr(message) : message;
     }
 
-    private static final Pattern CHAT_NEWLINE = Pattern.compile("<br>|<n>|\\n", Pattern.MULTILINE);
-    private static final Splitter CHAT_NEWLINE_SPLITTER = Splitter.on(CHAT_NEWLINE);
-    private static boolean DEBUG = false;
-    private static Logger DEBUG_LOGGER;
-    private static String HIGHLIGHT_COLOUR = ChatColor.YELLOW.toString();
-    private static Logger LOGGER = Logger.getLogger("Citizens");
-    private static String MESSAGE_COLOUR = ChatColor.GREEN.toString();
-    private static final Joiner SPACE = Joiner.on(" ").useForNull("null");
+    private static class DebugFormatter extends Formatter {
+        private final SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+
+        @Override
+        public String format(LogRecord rec) {
+            Throwable exception = rec.getThrown();
+
+            String out = this.date.format(rec.getMillis());
+
+            out += "[" + rec.getLevel().getName().toUpperCase() + "] ";
+            out += rec.getMessage() + '\n';
+
+            if (exception != null) {
+                StringWriter writer = new StringWriter();
+                exception.printStackTrace(new PrintWriter(writer));
+
+                return out + writer;
+            }
+
+            return out;
+        }
+    }
 }

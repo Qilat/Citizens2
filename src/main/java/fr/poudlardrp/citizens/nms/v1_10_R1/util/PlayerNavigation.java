@@ -1,31 +1,15 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
 
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
-import net.minecraft.server.v1_10_R1.AttributeInstance;
-import net.minecraft.server.v1_10_R1.AxisAlignedBB;
-import net.minecraft.server.v1_10_R1.Block;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.Blocks;
-import net.minecraft.server.v1_10_R1.ChunkCache;
-import net.minecraft.server.v1_10_R1.Entity;
-import net.minecraft.server.v1_10_R1.EntityInsentient;
-import net.minecraft.server.v1_10_R1.GenericAttributes;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.Material;
-import net.minecraft.server.v1_10_R1.MathHelper;
-import net.minecraft.server.v1_10_R1.NavigationAbstract;
-import net.minecraft.server.v1_10_R1.PathEntity;
-import net.minecraft.server.v1_10_R1.PathPoint;
-import net.minecraft.server.v1_10_R1.PathType;
-import net.minecraft.server.v1_10_R1.Pathfinder;
-import net.minecraft.server.v1_10_R1.Vec3D;
-import net.minecraft.server.v1_10_R1.World;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.EntityHumanNPC;
+import net.minecraft.server.v1_10_R1.*;
 
 public class PlayerNavigation extends NavigationAbstract {
+    private static int f = 20;
+    private final AttributeInstance g;
+    private final PlayerPathfinder s;
     protected EntityHumanNPC a;
     protected PlayerPathfinderNormal e;
     private boolean f2;
-    private final AttributeInstance g;
     private int h;
     private int i;
     private Vec3D j = Vec3D.a;
@@ -37,7 +21,6 @@ public class PlayerNavigation extends NavigationAbstract {
     private boolean p;
     private long q;
     private BlockPosition r;
-    private final PlayerPathfinder s;
 
     public PlayerNavigation(EntityHumanNPC entityinsentient, World world) {
         super(getDummyInsentient(entityinsentient, world), world);
@@ -49,6 +32,11 @@ public class PlayerNavigation extends NavigationAbstract {
         this.e.a(true);
         this.s = new PlayerPathfinder(this.e);
         // this.b.C().a(this);
+    }
+
+    private static EntityInsentient getDummyInsentient(EntityHumanNPC from, World world) {
+        return new EntityInsentient(world) {
+        };
     }
 
     @Override
@@ -117,7 +105,7 @@ public class PlayerNavigation extends NavigationAbstract {
     }
 
     private boolean a(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6,
-            Vec3D paramVec3D, double paramDouble1, double paramDouble2) {
+                      Vec3D paramVec3D, double paramDouble1, double paramDouble2) {
         int i = paramInt1 - paramInt4 / 2;
         int j = paramInt3 - paramInt6 / 2;
         if (!b(i, paramInt2, j, paramInt4, paramInt5, paramInt6, paramVec3D, paramDouble1, paramDouble2)) {
@@ -299,7 +287,7 @@ public class PlayerNavigation extends NavigationAbstract {
     }
 
     private boolean b(int paramInt1, int paramInt2, int paramInt3, int paramInt4, int paramInt5, int paramInt6,
-            Vec3D paramVec3D, double paramDouble1, double paramDouble2) {
+                      Vec3D paramVec3D, double paramDouble1, double paramDouble2) {
         for (BlockPosition localBlockPosition : BlockPosition.a(new BlockPosition(paramInt1, paramInt2, paramInt3),
                 new BlockPosition(paramInt1 + paramInt4 - 1, paramInt2 + paramInt5 - 1, paramInt3 + paramInt6 - 1))) {
             double d1 = localBlockPosition.getX() + 0.5D - paramVec3D.x;
@@ -516,11 +504,4 @@ public class PlayerNavigation extends NavigationAbstract {
         PathEntity localPathEntity = this.s.a(localChunkCache, this.a, this.r, f1);
         return localPathEntity;
     }
-
-    private static EntityInsentient getDummyInsentient(EntityHumanNPC from, World world) {
-        return new EntityInsentient(world) {
-        };
-    }
-
-    private static int f = 20;
 }

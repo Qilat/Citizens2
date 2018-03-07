@@ -1,13 +1,19 @@
 package fr.poudlardrp.citizens.api.astar;
 
+import com.google.common.base.Supplier;
+import com.google.common.collect.Maps;
+
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import com.google.common.base.Supplier;
-import com.google.common.collect.Maps;
-
 public class SimpleAStarStorage implements AStarStorage {
+    public static final Supplier<AStarStorage> FACTORY = new Supplier<AStarStorage>() {
+        @Override
+        public AStarStorage get() {
+            return new SimpleAStarStorage();
+        }
+    };
     private final Map<AStarNode, Float> closed = Maps.newHashMap();
     private final Map<AStarNode, Float> open = Maps.newHashMap();
     private final Queue<AStarNode> queue = new PriorityQueue<AStarNode>();
@@ -54,11 +60,4 @@ public class SimpleAStarStorage implements AStarStorage {
     public String toString() {
         return "SimpleAStarStorage [closed=" + closed + ", open=" + open + "]";
     }
-
-    public static final Supplier<AStarStorage> FACTORY = new Supplier<AStarStorage>() {
-        @Override
-        public AStarStorage get() {
-            return new SimpleAStarStorage();
-        }
-    };
 }

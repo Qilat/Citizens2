@@ -41,7 +41,7 @@ public class SimpleGoalEntry implements GoalEntry {
     public Behavior getBehavior() {
         return goal instanceof Behavior ? (Behavior) goal
                 : goal instanceof ForwardingBehaviorGoalAdapter ? ((ForwardingBehaviorGoalAdapter) goal).getWrapped()
-                        : null;
+                : null;
     }
 
     @Override

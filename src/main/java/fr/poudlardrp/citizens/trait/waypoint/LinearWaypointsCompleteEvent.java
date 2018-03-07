@@ -1,18 +1,22 @@
-package net.poudlardcitizens.trait.waypoint;
+package fr.poudlardrp.citizens.trait.waypoint;
+
+import net.citizensnpcs.api.event.CitizensEvent;
+import org.bukkit.event.HandlerList;
 
 import java.util.Iterator;
 
-import net.citizensnpcs.api.event.CitizensEvent;
-
-import org.bukkit.event.HandlerList;
-
 public class LinearWaypointsCompleteEvent extends CitizensEvent {
-    private Iterator<Waypoint> next;
+    private static final HandlerList handlers = new HandlerList();
     private final WaypointProvider provider;
+    private Iterator<Waypoint> next;
 
     public LinearWaypointsCompleteEvent(WaypointProvider provider, Iterator<Waypoint> next) {
         this.next = next;
         this.provider = provider;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override
@@ -24,17 +28,11 @@ public class LinearWaypointsCompleteEvent extends CitizensEvent {
         return next;
     }
 
-    public WaypointProvider getWaypointProvider() {
-        return provider;
-    }
-
     public void setNextWaypoints(Iterator<Waypoint> waypoints) {
         this.next = waypoints;
     }
 
-    private static final HandlerList handlers = new HandlerList();
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+    public WaypointProvider getWaypointProvider() {
+        return provider;
     }
 }

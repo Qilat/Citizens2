@@ -1,13 +1,12 @@
 package fr.poudlardrp.citizens.api.persistence;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
+import net.citizensnpcs.api.util.DataKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import net.citizensnpcs.api.util.DataKey;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class LocationPersister implements Persister<Location> {
     @Override

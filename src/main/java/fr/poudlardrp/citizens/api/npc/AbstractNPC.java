@@ -1,10 +1,25 @@
 package fr.poudlardrp.citizens.api.npc;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.ai.GoalController;
+import net.citizensnpcs.api.ai.SimpleGoalController;
+import net.citizensnpcs.api.ai.speech.SimpleSpeechController;
+import net.citizensnpcs.api.ai.speech.SpeechController;
+import net.citizensnpcs.api.event.*;
+import net.citizensnpcs.api.persistence.PersistenceLoader;
+import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.trait.MobType;
+import net.citizensnpcs.api.trait.trait.Speech;
+import net.citizensnpcs.api.util.Colorizer;
+import net.citizensnpcs.api.util.DataKey;
+import net.citizensnpcs.api.util.MemoryDataKey;
+import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -14,33 +29,13 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.GoalController;
-import net.citizensnpcs.api.ai.SimpleGoalController;
-import net.citizensnpcs.api.ai.speech.SimpleSpeechController;
-import net.citizensnpcs.api.ai.speech.SpeechController;
-import net.citizensnpcs.api.event.DespawnReason;
-import net.citizensnpcs.api.event.NPCAddTraitEvent;
-import net.citizensnpcs.api.event.NPCRemoveEvent;
-import net.citizensnpcs.api.event.NPCRemoveTraitEvent;
-import net.citizensnpcs.api.event.NPCTeleportEvent;
-import net.citizensnpcs.api.persistence.PersistenceLoader;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.trait.MobType;
-import net.citizensnpcs.api.trait.trait.Speech;
-import net.citizensnpcs.api.util.Colorizer;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.MemoryDataKey;
-import net.citizensnpcs.api.util.Messaging;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public abstract class AbstractNPC implements NPC {
+    protected final Map<Class<? extends Trait>, Trait> traits = Maps.newHashMap();
     private final GoalController goalController = new SimpleGoalController();
     private final int id;
     private final MetadataStore metadata = new SimpleMetadataStore() {
@@ -68,13 +63,12 @@ public abstract class AbstractNPC implements NPC {
             }
         }
     };
-    private String name;
     private final NPCRegistry registry;
     private final List<String> removedTraits = Lists.newArrayList();
     private final List<Runnable> runnables = Lists.newArrayList();
     private final SpeechController speechController = new SimpleSpeechController(this);
-    protected final Map<Class<? extends Trait>, Trait> traits = Maps.newHashMap();
     private final UUID uuid;
+    private String name;
 
     protected AbstractNPC(UUID uuid, int id, String name, NPCRegistry registry) {
         this.uuid = uuid;
@@ -214,6 +208,22 @@ public abstract class AbstractNPC implements NPC {
     }
 
     @Override
+    public void setName(String name) {
+        this.name = name;
+        if (!isSpawned())
+            return;
+        Entity bukkitEntity = getEntity();
+        if (bukkitEntity instanceof LivingEntity) {
+            ((LivingEntity) bukkitEntity).setCustomName(getFullName());
+        }
+        if (bukkitEntity.getType() == EntityType.PLAYER) {
+            Location old = bukkitEntity.getLocation();
+            despawn(DespawnReason.PENDING_RESPAWN);
+            spawn(old);
+        }
+    }
+
+    @Override
     public NPCRegistry getOwningRegistry() {
         return registry;
     }
@@ -259,8 +269,18 @@ public abstract class AbstractNPC implements NPC {
     }
 
     @Override
+    public void setFlyable(boolean flyable) {
+        data().setPersistent(NPC.FLYABLE_METADATA, flyable);
+    }
+
+    @Override
     public boolean isProtected() {
         return data().get(NPC.DEFAULT_PROTECTED_METADATA, true);
+    }
+
+    @Override
+    public void setProtected(boolean isProtected) {
+        data().setPersistent(NPC.DEFAULT_PROTECTED_METADATA, isProtected);
     }
 
     @Override
@@ -352,32 +372,6 @@ public abstract class AbstractNPC implements NPC {
             root.removeKey("traits." + name);
         }
         removedTraits.clear();
-    }
-
-    @Override
-    public void setFlyable(boolean flyable) {
-        data().setPersistent(NPC.FLYABLE_METADATA, flyable);
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-        if (!isSpawned())
-            return;
-        Entity bukkitEntity = getEntity();
-        if (bukkitEntity instanceof LivingEntity) {
-            ((LivingEntity) bukkitEntity).setCustomName(getFullName());
-        }
-        if (bukkitEntity.getType() == EntityType.PLAYER) {
-            Location old = bukkitEntity.getLocation();
-            despawn(DespawnReason.PENDING_RESPAWN);
-            spawn(old);
-        }
-    }
-
-    @Override
-    public void setProtected(boolean isProtected) {
-        data().setPersistent(NPC.DEFAULT_PROTECTED_METADATA, isProtected);
     }
 
     private void teleport(final Entity entity, Location location, int delay) {

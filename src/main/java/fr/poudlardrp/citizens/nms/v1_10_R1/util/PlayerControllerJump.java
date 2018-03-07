@@ -1,6 +1,6 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
 
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.EntityHumanNPC;
 
 public class PlayerControllerJump {
     private final EntityHumanNPC a;

@@ -1,51 +1,17 @@
-package net.poudlardcitizens.commands;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-
-import net.poudlardcitizens.Citizens;
-import net.poudlardcitizens.Settings;
-import net.poudlardcitizens.npc.EntityControllers;
-import net.poudlardcitizens.npc.NPCSelector;
-import net.poudlardcitizens.npc.Template;
-import net.poudlardcitizens.npc.skin.SkinnableEntity;
-import net.poudlardcitizens.trait.Age;
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse.Color;
-import org.bukkit.entity.Horse.Style;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Rabbit;
-import org.bukkit.entity.Villager.Profession;
-import org.bukkit.entity.Zombie;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+package fr.poudlardrp.citizens.commands;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
+import fr.poudlardrp.citizens.Citizens;
+import fr.poudlardrp.citizens.Settings;
+import fr.poudlardrp.citizens.npc.EntityControllers;
+import fr.poudlardrp.citizens.npc.NPCSelector;
+import fr.poudlardrp.citizens.npc.Template;
+import fr.poudlardrp.citizens.npc.skin.SkinnableEntity;
+import fr.poudlardrp.citizens.trait.Age;
+import fr.poudlardrp.citizens.util.*;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.speech.SpeechContext;
 import net.citizensnpcs.api.command.Command;
@@ -61,40 +27,26 @@ import net.citizensnpcs.api.event.PlayerCreateNPCEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.trait.Inventory;
-import net.citizensnpcs.api.trait.trait.MobType;
-import net.citizensnpcs.api.trait.trait.Owner;
-import net.citizensnpcs.api.trait.trait.Spawned;
-import net.citizensnpcs.api.trait.trait.Speech;
+import net.citizensnpcs.api.trait.trait.*;
 import net.citizensnpcs.api.util.Colorizer;
 import net.citizensnpcs.api.util.Messaging;
 import net.citizensnpcs.api.util.Paginator;
-import net.poudlardcitizens.trait.Anchors;
-import net.poudlardcitizens.trait.ArmorStandTrait;
-import net.poudlardcitizens.trait.BossBarTrait;
-import net.poudlardcitizens.trait.Controllable;
-import net.poudlardcitizens.trait.CurrentLocation;
-import net.poudlardcitizens.trait.Gravity;
-import net.poudlardcitizens.trait.HorseModifiers;
-import net.poudlardcitizens.trait.LookClose;
-import net.poudlardcitizens.trait.OcelotModifiers;
-import net.poudlardcitizens.trait.Poses;
-import net.poudlardcitizens.trait.Powered;
-import net.poudlardcitizens.trait.RabbitType;
-import net.poudlardcitizens.trait.ScriptTrait;
-import net.poudlardcitizens.trait.SheepTrait;
-import net.poudlardcitizens.trait.ShulkerTrait;
-import net.poudlardcitizens.trait.SkinLayers;
+import net.poudlardcitizens.trait.*;
 import net.poudlardcitizens.trait.SkinLayers.Layer;
-import net.poudlardcitizens.trait.SlimeSize;
-import net.poudlardcitizens.trait.VillagerProfession;
-import net.poudlardcitizens.trait.WitherTrait;
-import net.poudlardcitizens.trait.WolfModifiers;
-import net.poudlardcitizens.util.Anchor;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.NMS;
-import net.poudlardcitizens.util.StringHelper;
-import net.poudlardcitizens.util.Util;
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.*;
+import org.bukkit.entity.Horse.Color;
+import org.bukkit.entity.Horse.Style;
+import org.bukkit.entity.Villager.Profession;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
+import java.util.*;
 
 @Requirements(selected = true, ownership = true)
 public class NPCCommands {
@@ -107,12 +59,12 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "age [age] (-l)",
             desc = "Set the age of a NPC",
             help = Messages.COMMAND_AGE_HELP,
             flags = "l",
-            modifiers = { "age" },
+            modifiers = {"age"},
             min = 1,
             max = 2,
             permission = "citizens.npc.age")
@@ -152,11 +104,11 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "anchor (--save [name]|--assume [name]|--remove [name]) (-a)(-c)",
             desc = "Changes/Saves/Lists NPC's location anchor(s)",
             flags = "ac",
-            modifiers = { "anchor" },
+            modifiers = {"anchor"},
             min = 1,
             max = 3,
             permission = "citizens.npc.anchor")
@@ -228,10 +180,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "armorstand --visible [visible] --small [small] --gravity [gravity] --arms [arms] --baseplate [baseplate]",
             desc = "Edit armorstand properties",
-            modifiers = { "armorstand" },
+            modifiers = {"armorstand"},
             min = 1,
             max = 1)
     @Requirements(selected = true, ownership = true, types = EntityType.ARMOR_STAND)
@@ -255,13 +207,13 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "bossbar --color [color] --title [title] --visible [visible] --flags [flags]",
             desc = "Edit bossbar properties",
-            modifiers = { "bossbar" },
+            modifiers = {"bossbar"},
             min = 1,
             max = 1)
-    @Requirements(selected = true, ownership = true, types = { EntityType.WITHER, EntityType.ENDER_DRAGON })
+    @Requirements(selected = true, ownership = true, types = {EntityType.WITHER, EntityType.ENDER_DRAGON})
     public void bossbar(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         BossBarTrait trait = npc.getTrait(BossBarTrait.class);
         if (args.hasValueFlag("color")) {
@@ -287,14 +239,14 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "collidable",
             desc = "Toggles an NPC's collidability",
-            modifiers = { "collidable" },
+            modifiers = {"collidable"},
             min = 1,
             max = 1,
             permission = "citizens.npc.collidable")
-    @Requirements(ownership = true, selected = true, types = { EntityType.PLAYER })
+    @Requirements(ownership = true, selected = true, types = {EntityType.PLAYER})
     public void collidable(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         npc.data().setPersistent(NPC.COLLIDABLE_METADATA, !npc.data().get(NPC.COLLIDABLE_METADATA, true));
         Messaging.sendTr(sender,
@@ -303,10 +255,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "controllable|control (-m(ount),-y,-n,-o)",
             desc = "Toggles whether the NPC can be ridden and controlled",
-            modifiers = { "controllable", "control" },
+            modifiers = {"controllable", "control"},
             min = 1,
             max = 1,
             flags = "myno")
@@ -334,10 +286,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "copy (--name newname)",
             desc = "Copies an NPC",
-            modifiers = { "copy" },
+            modifiers = {"copy"},
             min = 1,
             max = 1,
             permission = "citizens.npc.copy")
@@ -371,11 +323,11 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "create [name] ((-b,u) --at (x:y:z:world) --type (type) --trait ('trait1, trait2...') --b (behaviours))",
             desc = "Create a new NPC",
             flags = "bu",
-            modifiers = { "create" },
+            modifiers = {"create"},
             min = 2,
             permission = "citizens.npc.create")
     @Requirements
@@ -494,10 +446,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "despawn (id)",
             desc = "Despawn a NPC",
-            modifiers = { "despawn" },
+            modifiers = {"despawn"},
             min = 1,
             max = 2,
             permission = "citizens.npc.despawn")
@@ -525,18 +477,18 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "flyable (true|false)",
             desc = "Toggles or sets an NPC's flyable status",
-            modifiers = { "flyable" },
+            modifiers = {"flyable"},
             min = 1,
             max = 2,
             permission = "citizens.npc.flyable")
     @Requirements(
             selected = true,
             ownership = true,
-            excludedTypes = { EntityType.BAT, EntityType.BLAZE, EntityType.ENDER_DRAGON, EntityType.GHAST,
-                    EntityType.WITHER })
+            excludedTypes = {EntityType.BAT, EntityType.BLAZE, EntityType.ENDER_DRAGON, EntityType.GHAST,
+                    EntityType.WITHER})
     public void flyable(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         boolean flyable = args.argsLength() == 2 ? args.getString(1).equals("true") : !npc.isFlyable();
         npc.setFlyable(flyable);
@@ -546,14 +498,14 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "gamemode [gamemode]",
             desc = "Changes the gamemode",
-            modifiers = { "gamemode" },
+            modifiers = {"gamemode"},
             min = 1,
             max = 2,
             permission = "citizens.npc.gravity")
-    @Requirements(selected = true, ownership = true, types = { EntityType.PLAYER })
+    @Requirements(selected = true, ownership = true, types = {EntityType.PLAYER})
     public void gamemode(CommandContext args, CommandSender sender, NPC npc) {
         Player player = (Player) npc.getEntity();
         if (args.argsLength() == 1) {
@@ -580,10 +532,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "glowing --color [minecraft chat color]",
             desc = "Toggles an NPC's glowing status",
-            modifiers = { "glowing" },
+            modifiers = {"glowing"},
             min = 1,
             max = 1,
             permission = "citizens.npc.glowing")
@@ -608,10 +560,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "gravity",
             desc = "Toggles gravity",
-            modifiers = { "gravity" },
+            modifiers = {"gravity"},
             min = 1,
             max = 1,
             permission = "citizens.npc.gravity")
@@ -622,11 +574,11 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "horse (--color color) (--type type) (--style style) (-cb)",
             desc = "Sets horse modifiers",
             help = "Use the -c flag to make the horse have a chest, or the -b flag to stop them from having a chest.",
-            modifiers = { "horse" },
+            modifiers = {"horse"},
             min = 1,
             max = 1,
             flags = "cb",
@@ -670,10 +622,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "id",
             desc = "Sends the selected NPC's ID to the sender",
-            modifiers = { "id" },
+            modifiers = {"id"},
             min = 1,
             max = 1,
             permission = "citizens.npc.id")
@@ -682,10 +634,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "inventory",
             desc = "Show's an NPC's inventory",
-            modifiers = { "inventory" },
+            modifiers = {"inventory"},
             min = 1,
             max = 1,
             permission = "citizens.npc.inventory")
@@ -694,10 +646,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "item [item] (data)",
             desc = "Sets the NPC's item",
-            modifiers = { "item", },
+            modifiers = {"item",},
             min = 2,
             max = 3,
             flags = "",
@@ -705,7 +657,7 @@ public class NPCCommands {
     @Requirements(
             selected = true,
             ownership = true,
-            types = { EntityType.DROPPED_ITEM, EntityType.ITEM_FRAME, EntityType.FALLING_BLOCK })
+            types = {EntityType.DROPPED_ITEM, EntityType.ITEM_FRAME, EntityType.FALLING_BLOCK})
     public void item(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         Material mat = Material.matchMaterial(args.getString(1));
         if (mat == null)
@@ -731,10 +683,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "leashable",
             desc = "Toggles leashability",
-            modifiers = { "leashable" },
+            modifiers = {"leashable"},
             min = 1,
             max = 1,
             flags = "t",
@@ -751,11 +703,11 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "list (page) ((-a) --owner (owner) --type (type) --char (char) --registry (name))",
             desc = "List NPCs",
             flags = "a",
-            modifiers = { "list" },
+            modifiers = {"list"},
             min = 1,
             max = 2,
             permission = "citizens.npc.list")
@@ -815,10 +767,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "lookclose",
             desc = "Toggle whether a NPC will look when a player is near",
-            modifiers = { "lookclose", "look", "rotate" },
+            modifiers = {"lookclose", "look", "rotate"},
             min = 1,
             max = 1,
             permission = "citizens.npc.lookclose")
@@ -829,10 +781,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "metadata set|get|remove [key] (value) (-t(emporary))",
             desc = "Manages NPC metadata",
-            modifiers = { "metadata" },
+            modifiers = {"metadata"},
             flags = "t",
             min = 2,
             max = 4,
@@ -864,10 +816,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "minecart (--item item_name(:data)) (--offset offset)",
             desc = "Sets minecart item",
-            modifiers = { "minecart" },
+            modifiers = {"minecart"},
             min = 1,
             max = 1,
             flags = "",
@@ -875,9 +827,9 @@ public class NPCCommands {
     @Requirements(
             selected = true,
             ownership = true,
-            types = { EntityType.MINECART, EntityType.MINECART_CHEST, EntityType.MINECART_COMMAND,
+            types = {EntityType.MINECART, EntityType.MINECART_CHEST, EntityType.MINECART_COMMAND,
                     EntityType.MINECART_FURNACE, EntityType.MINECART_HOPPER, EntityType.MINECART_MOB_SPAWNER,
-                    EntityType.MINECART_TNT })
+                    EntityType.MINECART_TNT})
     public void minecart(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         if (args.hasValueFlag("item")) {
             String raw = args.getFlag("item");
@@ -902,10 +854,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "mount (--onnpc <npc id>)",
             desc = "Mounts a controllable NPC",
-            modifiers = { "mount" },
+            modifiers = {"mount"},
             min = 1,
             max = 1,
             permission = "citizens.npc.controllable")
@@ -939,7 +891,7 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "moveto x:y:z:world | x y z world",
             desc = "Teleports a NPC to a given location",
             modifiers = "moveto",
@@ -991,8 +943,8 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
-            modifiers = { "name" },
+            aliases = {"npc"},
+            modifiers = {"name"},
             usage = "name",
             desc = "Toggle nameplate visibility",
             min = 1,
@@ -1001,7 +953,7 @@ public class NPCCommands {
             permission = "citizens.npc.name")
     @Requirements(selected = true, ownership = true, livingEntity = true)
     public void name(CommandContext args, CommandSender sender, NPC npc) {
-        String old = npc.data().<Object> get(NPC.NAMEPLATE_VISIBLE_METADATA, true).toString();
+        String old = npc.data().<Object>get(NPC.NAMEPLATE_VISIBLE_METADATA, true).toString();
         if (args.hasFlag('h')) {
             old = "hover";
         } else {
@@ -1011,7 +963,7 @@ public class NPCCommands {
         Messaging.sendTr(sender, Messages.NAMEPLATE_VISIBILITY_TOGGLED);
     }
 
-    @Command(aliases = { "npc" }, desc = "Show basic NPC information", max = 0, permission = "citizens.npc.info")
+    @Command(aliases = {"npc"}, desc = "Show basic NPC information", max = 0, permission = "citizens.npc.info")
     public void npc(CommandContext args, CommandSender sender, final NPC npc) {
         Messaging.send(sender, StringHelper.wrapHeader(npc.getName()));
         Messaging.send(sender, "    <a>ID: <e>" + npc.getId());
@@ -1032,15 +984,15 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "ocelot (--type type) (-s(itting), -n(ot sitting))",
             desc = "Set the ocelot type of an NPC and whether it is sitting",
-            modifiers = { "ocelot" },
+            modifiers = {"ocelot"},
             min = 1,
             max = 1,
             flags = "sn",
             permission = "citizens.npc.ocelot")
-    @Requirements(selected = true, ownership = true, types = { EntityType.OCELOT })
+    @Requirements(selected = true, ownership = true, types = {EntityType.OCELOT})
     public void ocelot(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         OcelotModifiers trait = npc.getTrait(OcelotModifiers.class);
         if (args.hasFlag('s')) {
@@ -1059,10 +1011,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "owner [name]",
             desc = "Set the owner of an NPC",
-            modifiers = { "owner" },
+            modifiers = {"owner"},
             min = 1,
             max = 2,
             permission = "citizens.npc.owner")
@@ -1081,10 +1033,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "passive (--set [true|false])",
             desc = "Sets whether an NPC damages other entities or not",
-            modifiers = { "passive" },
+            modifiers = {"passive"},
             min = 1,
             max = 1,
             permission = "citizens.npc.passive")
@@ -1096,10 +1048,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "pathopt --avoid-water|aw [true|false] --stationary-ticks [ticks] --attack-range [range] --distance-margin [margin]",
             desc = "Sets an NPC's pathfinding options",
-            modifiers = { "pathopt", "po", "patho" },
+            modifiers = {"pathopt", "po", "patho"},
             min = 1,
             max = 1,
             permission = "citizens.npc.pathfindingoptions")
@@ -1143,10 +1095,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "pathrange [range]",
             desc = "Sets an NPC's pathfinding range",
-            modifiers = { "pathrange", "pathfindingrange", "prange" },
+            modifiers = {"pathrange", "pathfindingrange", "prange"},
             min = 2,
             max = 2,
             permission = "citizens.npc.pathfindingrange")
@@ -1157,10 +1109,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "playerlist (-a,r)",
             desc = "Sets whether the NPC is put in the playerlist",
-            modifiers = { "playerlist" },
+            modifiers = {"playerlist"},
             min = 1,
             max = 1,
             flags = "ar",
@@ -1184,11 +1136,11 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "pose (--save [name]|--assume [name]|--remove [name]) (-a)",
             desc = "Changes/Saves/Lists NPC's head pose(s)",
             flags = "a",
-            modifiers = { "pose" },
+            modifiers = {"pose"},
             min = 1,
             max = 2,
             permission = "citizens.npc.pose")
@@ -1234,28 +1186,28 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "power",
             desc = "Toggle a creeper NPC as powered",
-            modifiers = { "power" },
+            modifiers = {"power"},
             min = 1,
             max = 1,
             permission = "citizens.npc.power")
-    @Requirements(selected = true, ownership = true, types = { EntityType.CREEPER })
+    @Requirements(selected = true, ownership = true, types = {EntityType.CREEPER})
     public void power(CommandContext args, CommandSender sender, NPC npc) {
         Messaging.sendTr(sender,
                 npc.getTrait(Powered.class).toggle() ? Messages.POWERED_SET : Messages.POWERED_STOPPED);
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "profession|prof [profession]",
             desc = "Set a NPC's profession",
-            modifiers = { "profession", "prof" },
+            modifiers = {"profession", "prof"},
             min = 2,
             max = 2,
             permission = "citizens.npc.profession")
-    @Requirements(selected = true, ownership = true, types = { EntityType.VILLAGER })
+    @Requirements(selected = true, ownership = true, types = {EntityType.VILLAGER})
     public void profession(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         String profession = args.getString(1);
         Profession parsed = Util.matchEnum(Profession.values(), profession.toUpperCase());
@@ -1268,13 +1220,13 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "rabbittype [type]",
             desc = "Set the Type of a Rabbit NPC",
-            modifiers = { "rabbittype", "rbtype" },
+            modifiers = {"rabbittype", "rbtype"},
             min = 2,
             permission = "citizens.npc.rabbittype")
-    @Requirements(selected = true, ownership = true, types = { EntityType.RABBIT })
+    @Requirements(selected = true, ownership = true, types = {EntityType.RABBIT})
     public void rabbitType(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         Rabbit.Type type;
         try {
@@ -1287,10 +1239,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "remove|rem (all|id|name|--owner [owner])",
             desc = "Remove a NPC",
-            modifiers = { "remove", "rem" },
+            modifiers = {"remove", "rem"},
             min = 1,
             max = 2)
     @Requirements
@@ -1342,10 +1294,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "rename [name]",
             desc = "Rename a NPC",
-            modifiers = { "rename" },
+            modifiers = {"rename"},
             min = 2,
             permission = "citizens.npc.rename")
     public void rename(CommandContext args, CommandSender sender, NPC npc) {
@@ -1367,10 +1319,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "respawn [delay in ticks]",
             desc = "Sets an NPC's respawn delay in ticks",
-            modifiers = { "respawn" },
+            modifiers = {"respawn"},
             min = 1,
             max = 2,
             permission = "citizens.npc.respawn")
@@ -1385,10 +1337,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "script --add [files] --remove [files]",
             desc = "Controls an NPC's scripts",
-            modifiers = { "script" },
+            modifiers = {"script"},
             min = 1,
             max = 1,
             permission = "citizens.npc.script")
@@ -1412,10 +1364,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "select|sel [id|name] (--r range)",
             desc = "Select a NPC with the given ID or name",
-            modifiers = { "select", "sel" },
+            modifiers = {"select", "sel"},
             min = 1,
             max = 2,
             permission = "citizens.npc.select")
@@ -1459,14 +1411,14 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "sheep (--color [color]) (--sheared [sheared])",
             desc = "Sets sheep modifiers",
-            modifiers = { "sheep" },
+            modifiers = {"sheep"},
             min = 1,
             max = 1,
             permission = "citizens.npc.sheep")
-    @Requirements(selected = true, ownership = true, types = { EntityType.SHEEP })
+    @Requirements(selected = true, ownership = true, types = {EntityType.SHEEP})
     public void sheep(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         SheepTrait trait = npc.getTrait(SheepTrait.class);
         boolean hasArg = false;
@@ -1490,14 +1442,14 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "shulker (--peek [peek])",
             desc = "Sets shulker modifiers.",
-            modifiers = { "shulker" },
+            modifiers = {"shulker"},
             min = 1,
             max = 1,
             permission = "citizens.npc.shulker")
-    @Requirements(selected = true, ownership = true, types = { EntityType.SHULKER })
+    @Requirements(selected = true, ownership = true, types = {EntityType.SHULKER})
     public void shulker(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         ShulkerTrait trait = npc.getTrait(ShulkerTrait.class);
         boolean hasArg = false;
@@ -1513,10 +1465,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "skin (-c -p -f) [name]",
             desc = "Sets an NPC's skin name. Use -p to save a skin snapshot that won't change",
-            modifiers = { "skin" },
+            modifiers = {"skin"},
             min = 1,
             max = 2,
             flags = "cp",
@@ -1546,10 +1498,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "skinlayers (--cape [true|false]) (--hat [true|false]) (--jacket [true|false]) (--sleeves [true|false]) (--pants [true|false])",
             desc = "Sets an NPC's skin layers visibility.",
-            modifiers = { "skinlayers" },
+            modifiers = {"skinlayers"},
             min = 1,
             max = 5,
             permission = "citizens.npc.skinlayers")
@@ -1583,14 +1535,14 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "size [size]",
             desc = "Sets the NPC's size",
-            modifiers = { "size" },
+            modifiers = {"size"},
             min = 1,
             max = 2,
             permission = "citizens.npc.size")
-    @Requirements(selected = true, ownership = true, types = { EntityType.MAGMA_CUBE, EntityType.SLIME })
+    @Requirements(selected = true, ownership = true, types = {EntityType.MAGMA_CUBE, EntityType.SLIME})
     public void slimeSize(CommandContext args, CommandSender sender, NPC npc) {
         SlimeSize trait = npc.getTrait(SlimeSize.class);
         if (args.argsLength() <= 1) {
@@ -1603,15 +1555,15 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "sound (--death [death sound|d]) (--ambient [ambient sound|d]) (--hurt [hurt sound|d]) (-n(one)) (-d(efault))",
             desc = "Sets an NPC's played sounds",
-            modifiers = { "sound" },
+            modifiers = {"sound"},
             flags = "dns",
             min = 1,
             max = 1,
             permission = "citizens.npc.sound")
-    @Requirements(selected = true, ownership = true, livingEntity = true, excludedTypes = { EntityType.PLAYER })
+    @Requirements(selected = true, ownership = true, livingEntity = true, excludedTypes = {EntityType.PLAYER})
     public void sound(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         String ambientSound = npc.data().get(NPC.AMBIENT_SOUND_METADATA);
         String deathSound = npc.data().get(NPC.DEATH_SOUND_METADATA);
@@ -1670,10 +1622,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "spawn (id|name) -l(oad chunks)",
             desc = "Spawn an existing NPC",
-            modifiers = { "spawn" },
+            modifiers = {"spawn"},
             min = 1,
             max = 2,
             flags = "l",
@@ -1717,10 +1669,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "speak message to speak --target npcid|player_name --type vocal_type",
             desc = "Uses the NPCs SpeechController to talk",
-            modifiers = { "speak" },
+            modifiers = {"speak"},
             min = 2,
             permission = "citizens.npc.speak")
     public void speak(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
@@ -1757,10 +1709,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "speed [speed]",
             desc = "Sets the movement speed of an NPC as a percentage",
-            modifiers = { "speed" },
+            modifiers = {"speed"},
             min = 2,
             max = 2,
             permission = "citizens.npc.speed")
@@ -1774,10 +1726,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "swim (--set [true|false])",
             desc = "Sets an NPC to swim or not",
-            modifiers = { "swim" },
+            modifiers = {"swim"},
             min = 1,
             max = 1,
             permission = "citizens.npc.swim")
@@ -1789,10 +1741,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "targetable",
             desc = "Toggles an NPC's targetability",
-            modifiers = { "targetable" },
+            modifiers = {"targetable"},
             min = 1,
             max = 1,
             permission = "citizens.npc.targetable")
@@ -1808,10 +1760,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "tp",
             desc = "Teleport to a NPC",
-            modifiers = { "tp", "teleport" },
+            modifiers = {"tp", "teleport"},
             min = 1,
             max = 1,
             permission = "citizens.npc.tp")
@@ -1826,10 +1778,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "tphere",
             desc = "Teleport a NPC to your location",
-            modifiers = { "tphere", "tph", "move" },
+            modifiers = {"tphere", "tph", "move"},
             min = 1,
             max = 1,
             permission = "citizens.npc.tphere")
@@ -1856,10 +1808,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "tpto [player name|npc id] [player name|npc id]",
             desc = "Teleport an NPC or player to another NPC or player",
-            modifiers = { "tpto" },
+            modifiers = {"tpto"},
             min = 3,
             max = 3,
             permission = "citizens.npc.tpto")
@@ -1900,10 +1852,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "type [type]",
             desc = "Sets an NPC's entity type",
-            modifiers = { "type" },
+            modifiers = {"type"},
             min = 2,
             max = 2,
             permission = "citizens.npc.type")
@@ -1916,10 +1868,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "vulnerable (-t)",
             desc = "Toggles an NPC's vulnerability",
-            modifiers = { "vulnerable" },
+            modifiers = {"vulnerable"},
             min = 1,
             max = 1,
             flags = "t",
@@ -1936,14 +1888,14 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "wither (--charged [charged])",
             desc = "Sets wither modifiers",
-            modifiers = { "wither" },
+            modifiers = {"wither"},
             min = 1,
             max = 1,
             permission = "citizens.npc.wither")
-    @Requirements(selected = true, ownership = true, types = { EntityType.WITHER })
+    @Requirements(selected = true, ownership = true, types = {EntityType.WITHER})
     public void wither(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         WitherTrait trait = npc.getTrait(WitherTrait.class);
         boolean hasArg = false;
@@ -1957,10 +1909,10 @@ public class NPCCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "wolf (-s(itting) a(ngry) t(amed)) --collar [hex rgb color|name]",
             desc = "Sets wolf modifiers",
-            modifiers = { "wolf" },
+            modifiers = {"wolf"},
             min = 1,
             max = 1,
             flags = "sat",

@@ -1,7 +1,6 @@
 package fr.poudlardrp.citizens.api.event;
 
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -10,12 +9,17 @@ import org.bukkit.event.HandlerList;
  * Represents an event where an NPC was clicked by a player.
  */
 public abstract class NPCClickEvent extends NPCEvent implements Cancellable {
-    private boolean cancelled = false;
+    private static final HandlerList handlers = new HandlerList();
     private final Player clicker;
+    private boolean cancelled = false;
 
     protected NPCClickEvent(NPC npc, Player clicker) {
         super(npc);
         this.clicker = clicker;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -41,10 +45,4 @@ public abstract class NPCClickEvent extends NPCEvent implements Cancellable {
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
 }

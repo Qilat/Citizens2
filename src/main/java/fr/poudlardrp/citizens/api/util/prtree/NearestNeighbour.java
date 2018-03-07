@@ -1,11 +1,8 @@
 package fr.poudlardrp.citizens.api.util.prtree;
 
-import java.util.PriorityQueue;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.citizensnpcs.api.util.prtree.DistanceResult;
-import net.citizensnpcs.api.util.prtree.NodeFilter;
+import java.util.PriorityQueue;
 
 class NearestNeighbour<T> {
 
@@ -17,7 +14,7 @@ class NearestNeighbour<T> {
     private final Node<T> root;
 
     public NearestNeighbour(MBRConverter<T> converter, NodeFilter<T> filter, int maxHits, Node<T> root,
-            DistanceCalculator<T> dc, PointND p) {
+                            DistanceCalculator<T> dc, PointND p) {
         this.converter = converter;
         this.filter = filter;
         this.maxHits = maxHits;

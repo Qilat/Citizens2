@@ -1,8 +1,7 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
-
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;

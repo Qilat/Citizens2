@@ -1,10 +1,8 @@
-package net.poudlardcitizens.commands;
+package fr.poudlardrp.citizens.commands;
 
-import net.poudlardcitizens.Citizens;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.StringHelper;
-import org.bukkit.command.CommandSender;
-
+import fr.poudlardrp.citizens.Citizens;
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.StringHelper;
 import net.citizensnpcs.api.command.Command;
 import net.citizensnpcs.api.command.CommandContext;
 import net.citizensnpcs.api.command.Requirements;
@@ -12,6 +10,7 @@ import net.citizensnpcs.api.command.exception.CommandException;
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.command.CommandSender;
 
 @Requirements
 public class AdminCommands {
@@ -21,7 +20,7 @@ public class AdminCommands {
         this.plugin = plugin;
     }
 
-    @Command(aliases = { "citizens" }, desc = "Show basic plugin information", max = 0, permission = "citizens.admin")
+    @Command(aliases = {"citizens"}, desc = "Show basic plugin information", max = 0, permission = "citizens.admin")
     public void citizens(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
         Messaging.send(sender,
                 "          " + StringHelper.wrapHeader("<e>Citizens v" + plugin.getDescription().getVersion()));
@@ -31,10 +30,10 @@ public class AdminCommands {
     }
 
     @Command(
-            aliases = { "citizens" },
+            aliases = {"citizens"},
             usage = "reload",
             desc = "Reload Citizens",
-            modifiers = { "reload" },
+            modifiers = {"reload"},
             min = 1,
             max = 1,
             permission = "citizens.admin")
@@ -50,11 +49,11 @@ public class AdminCommands {
     }
 
     @Command(
-            aliases = { "citizens" },
+            aliases = {"citizens"},
             usage = "save (-a)",
             desc = "Save NPCs",
             help = Messages.COMMAND_SAVE_HELP,
-            modifiers = { "save" },
+            modifiers = {"save"},
             min = 1,
             max = 1,
             flags = "a",

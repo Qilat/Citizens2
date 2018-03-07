@@ -1,24 +1,23 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-
 import net.citizensnpcs.api.ai.tree.Behavior;
 import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
 import net.citizensnpcs.api.ai.tree.ForwardingBehaviorGoalAdapter;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 public class SimpleGoalController implements GoalController {
     private final List<Goal> executingGoals = Lists.newArrayList();
+    private final List<GoalEntry> possibleGoals = Lists.newArrayList();
+    private final GoalSelector selector = new SimpleGoalSelector();
     private int executingPriority = -1;
     private Goal executingRootGoal;
     private boolean hasPrioritisableGoal;
     private volatile boolean paused;
-    private final List<GoalEntry> possibleGoals = Lists.newArrayList();
-    private final GoalSelector selector = new SimpleGoalSelector();
 
     @Override
     public void addBehavior(Behavior behavior, int priority) {
@@ -59,7 +58,7 @@ public class SimpleGoalController implements GoalController {
             public Behavior getBehavior() {
                 return goal instanceof Behavior ? (Behavior) goal
                         : goal instanceof ForwardingBehaviorGoalAdapter
-                                ? ((ForwardingBehaviorGoalAdapter) goal).getWrapped() : null;
+                        ? ((ForwardingBehaviorGoalAdapter) goal).getWrapped() : null;
             }
 
             @Override
@@ -103,6 +102,11 @@ public class SimpleGoalController implements GoalController {
     @Override
     public boolean isPaused() {
         return paused;
+    }
+
+    @Override
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
     @Override
@@ -184,11 +188,6 @@ public class SimpleGoalController implements GoalController {
             Goal goal = executingGoals.get(i);
             goal.run(selector);
         }
-    }
-
-    @Override
-    public void setPaused(boolean paused) {
-        this.paused = paused;
     }
 
     private void setupExecution(GoalEntry entry) {

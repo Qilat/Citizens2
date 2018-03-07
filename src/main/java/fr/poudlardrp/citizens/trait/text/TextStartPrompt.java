@@ -1,14 +1,13 @@
-package net.poudlardcitizens.trait.text;
+package fr.poudlardrp.citizens.trait.text;
 
+import net.citizensnpcs.api.util.Messaging;
+import net.poudlardcitizens.Settings.Setting;
+import net.poudlardcitizens.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
-
-import net.poudlardcitizens.Settings.Setting;
-import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
 
 public class TextStartPrompt extends StringPrompt {
     private final Text text;

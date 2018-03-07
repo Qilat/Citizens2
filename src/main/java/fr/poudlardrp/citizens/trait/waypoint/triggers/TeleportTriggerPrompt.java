@@ -1,10 +1,9 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import java.util.regex.Pattern;
-
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,10 +13,12 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.RegexPrompt;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
+import java.util.regex.Pattern;
 
 public class TeleportTriggerPrompt extends RegexPrompt implements WaypointTriggerPrompt {
+    private static final Pattern PATTERN = Pattern.compile("here|back|[\\p{L}]+?:[0-9]+?:[0-9]+?:[0-9]+?",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+
     public TeleportTriggerPrompt() {
         super(PATTERN);
     }
@@ -52,7 +53,4 @@ public class TeleportTriggerPrompt extends RegexPrompt implements WaypointTrigge
     public String getPromptText(ConversationContext context) {
         return Messaging.tr(Messages.WAYPOINT_TRIGGER_TELEPORT_PROMPT);
     }
-
-    private static final Pattern PATTERN = Pattern.compile("here|back|[\\p{L}]+?:[0-9]+?:[0-9]+?:[0-9]+?",
-            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 }

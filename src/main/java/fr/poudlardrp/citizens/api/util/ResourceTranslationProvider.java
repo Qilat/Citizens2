@@ -1,8 +1,8 @@
 package fr.poudlardrp.citizens.api.util;
 
-import java.io.InputStream;
-
 import net.citizensnpcs.api.util.Translator.TranslationProvider;
+
+import java.io.InputStream;
 
 public class ResourceTranslationProvider implements TranslationProvider {
     private final Class<?> clazz;

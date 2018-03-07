@@ -1,22 +1,16 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import java.util.Map;
-
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Enderman;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
-
 import com.google.common.collect.Maps;
-
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.ItemStorage;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Map;
 
 /**
  * Represents an NPC's equipment. This only is applicable to human and enderman NPCs.
@@ -39,8 +33,7 @@ public class Equipment extends Trait {
     /**
      * Get an NPC's equipment from the given slot.
      *
-     * @param slot
-     *            Slot where the armor is located (0-5)
+     * @param slot Slot where the armor is located (0-5)
      * @return ItemStack from the given armor slot
      */
     public ItemStack get(int slot) {
@@ -165,10 +158,8 @@ public class Equipment extends Trait {
     /**
      * Set the armor from the given slot as the given item.
      *
-     * @param slot
-     *            Slot of the armor (must be between 0 and 5)
-     * @param item
-     *            Item to set the armor as
+     * @param slot Slot of the armor (must be between 0 and 5)
+     * @param item Item to set the armor as
      */
     @SuppressWarnings("deprecation")
     public void set(int slot, ItemStack item) {
@@ -222,6 +213,24 @@ public class Equipment extends Trait {
                 + equipment[3] + ",boots=" + equipment[4] + ",offhand=" + equipment[5] + "}";
     }
 
+    public enum EquipmentSlot {
+        BOOTS(4),
+        CHESTPLATE(2),
+        HAND(0),
+        HELMET(1),
+        LEGGINGS(3),
+        OFF_HAND(5);
+        private int index;
+
+        EquipmentSlot(int index) {
+            this.index = index;
+        }
+
+        int getIndex() {
+            return index;
+        }
+    }
+
     private static class ArmorStandEquipmentWrapper implements EntityEquipment {
         private final ArmorStand entity;
 
@@ -240,8 +249,16 @@ public class Equipment extends Trait {
 
         @Override
         public ItemStack[] getArmorContents() {
-            return new ItemStack[] { entity.getHelmet(), entity.getChestplate(), entity.getLeggings(),
-                    entity.getBoots() };
+            return new ItemStack[]{entity.getHelmet(), entity.getChestplate(), entity.getLeggings(),
+                    entity.getBoots()};
+        }
+
+        @Override
+        public void setArmorContents(ItemStack[] arg0) {
+            entity.setHelmet(arg0[EquipmentSlot.HELMET.index - 1]);
+            entity.setChestplate(arg0[EquipmentSlot.CHESTPLATE.index - 1]);
+            entity.setLeggings(arg0[EquipmentSlot.LEGGINGS.index - 1]);
+            entity.setBoots(arg0[EquipmentSlot.BOOTS.index - 1]);
         }
 
         @Override
@@ -250,8 +267,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setBoots(ItemStack arg0) {
+            entity.setBoots(arg0);
+        }
+
+        @Override
         public float getBootsDropChance() {
             return 0;
+        }
+
+        @Override
+        public void setBootsDropChance(float arg0) {
         }
 
         @Override
@@ -260,8 +286,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setChestplate(ItemStack arg0) {
+            entity.setChestplate(arg0);
+        }
+
+        @Override
         public float getChestplateDropChance() {
             return 0;
+        }
+
+        @Override
+        public void setChestplateDropChance(float arg0) {
         }
 
         @Override
@@ -270,8 +305,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setHelmet(ItemStack arg0) {
+            entity.setHelmet(arg0);
+        }
+
+        @Override
         public float getHelmetDropChance() {
             return 0;
+        }
+
+        @Override
+        public void setHelmetDropChance(float arg0) {
         }
 
         @Override
@@ -285,8 +329,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setItemInHand(ItemStack arg0) {
+            entity.setItemInHand(arg0);
+        }
+
+        @Override
         public float getItemInHandDropChance() {
             return 0;
+        }
+
+        @Override
+        public void setItemInHandDropChance(float arg0) {
         }
 
         @Override
@@ -295,8 +348,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setItemInMainHand(ItemStack arg0) {
+            entity.setItemInHand(arg0);
+        }
+
+        @Override
         public float getItemInMainHandDropChance() {
             return 0;
+        }
+
+        @Override
+        public void setItemInMainHandDropChance(float arg0) {
         }
 
         @Override
@@ -305,8 +367,16 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setItemInOffHand(ItemStack arg0) {
+        }
+
+        @Override
         public float getItemInOffHandDropChance() {
             return 0;
+        }
+
+        @Override
+        public void setItemInOffHandDropChance(float arg0) {
         }
 
         @Override
@@ -315,96 +385,17 @@ public class Equipment extends Trait {
         }
 
         @Override
-        public float getLeggingsDropChance() {
-            return 0;
-        }
-
-        @Override
-        public void setArmorContents(ItemStack[] arg0) {
-            entity.setHelmet(arg0[EquipmentSlot.HELMET.index - 1]);
-            entity.setChestplate(arg0[EquipmentSlot.CHESTPLATE.index - 1]);
-            entity.setLeggings(arg0[EquipmentSlot.LEGGINGS.index - 1]);
-            entity.setBoots(arg0[EquipmentSlot.BOOTS.index - 1]);
-        }
-
-        @Override
-        public void setBoots(ItemStack arg0) {
-            entity.setBoots(arg0);
-        }
-
-        @Override
-        public void setBootsDropChance(float arg0) {
-        }
-
-        @Override
-        public void setChestplate(ItemStack arg0) {
-            entity.setChestplate(arg0);
-        }
-
-        @Override
-        public void setChestplateDropChance(float arg0) {
-        }
-
-        @Override
-        public void setHelmet(ItemStack arg0) {
-            entity.setHelmet(arg0);
-        }
-
-        @Override
-        public void setHelmetDropChance(float arg0) {
-        }
-
-        @Override
-        public void setItemInHand(ItemStack arg0) {
-            entity.setItemInHand(arg0);
-        }
-
-        @Override
-        public void setItemInHandDropChance(float arg0) {
-        }
-
-        @Override
-        public void setItemInMainHand(ItemStack arg0) {
-            entity.setItemInHand(arg0);
-        }
-
-        @Override
-        public void setItemInMainHandDropChance(float arg0) {
-        }
-
-        @Override
-        public void setItemInOffHand(ItemStack arg0) {
-        }
-
-        @Override
-        public void setItemInOffHandDropChance(float arg0) {
-        }
-
-        @Override
         public void setLeggings(ItemStack arg0) {
             entity.setLeggings(arg0);
         }
 
         @Override
+        public float getLeggingsDropChance() {
+            return 0;
+        }
+
+        @Override
         public void setLeggingsDropChance(float arg0) {
-        }
-    }
-
-    public enum EquipmentSlot {
-        BOOTS(4),
-        CHESTPLATE(2),
-        HAND(0),
-        HELMET(1),
-        LEGGINGS(3),
-        OFF_HAND(5);
-        private int index;
-
-        EquipmentSlot(int index) {
-            this.index = index;
-        }
-
-        int getIndex() {
-            return index;
         }
     }
 
@@ -426,12 +417,27 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setArmorContents(ItemStack[] items) {
+            player.getInventory().setArmorContents(items);
+        }
+
+        @Override
         public ItemStack getBoots() {
             return player.getInventory().getBoots();
         }
 
         @Override
+        public void setBoots(ItemStack boots) {
+            player.getInventory().setBoots(boots);
+        }
+
+        @Override
         public float getBootsDropChance() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setBootsDropChance(float chance) {
             throw new UnsupportedOperationException();
         }
 
@@ -441,7 +447,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setChestplate(ItemStack chestplate) {
+            player.getInventory().setChestplate(chestplate);
+        }
+
+        @Override
         public float getChestplateDropChance() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setChestplateDropChance(float chance) {
             throw new UnsupportedOperationException();
         }
 
@@ -451,7 +467,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setHelmet(ItemStack helmet) {
+            player.getInventory().setHelmet(helmet);
+        }
+
+        @Override
         public float getHelmetDropChance() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setHelmetDropChance(float chance) {
             throw new UnsupportedOperationException();
         }
 
@@ -466,7 +492,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setItemInHand(ItemStack stack) {
+            player.setItemInHand(stack);
+        }
+
+        @Override
         public float getItemInHandDropChance() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setItemInHandDropChance(float chance) {
             throw new UnsupportedOperationException();
         }
 
@@ -476,7 +512,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setItemInMainHand(ItemStack arg0) {
+            player.getInventory().setItemInMainHand(arg0);
+        }
+
+        @Override
         public float getItemInMainHandDropChance() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setItemInMainHandDropChance(float arg0) {
             throw new UnsupportedOperationException();
         }
 
@@ -486,7 +532,17 @@ public class Equipment extends Trait {
         }
 
         @Override
+        public void setItemInOffHand(ItemStack arg0) {
+            player.getInventory().setItemInOffHand(arg0);
+        }
+
+        @Override
         public float getItemInOffHandDropChance() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setItemInOffHandDropChance(float arg0) {
             throw new UnsupportedOperationException();
         }
 
@@ -496,78 +552,13 @@ public class Equipment extends Trait {
         }
 
         @Override
-        public float getLeggingsDropChance() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setArmorContents(ItemStack[] items) {
-            player.getInventory().setArmorContents(items);
-        }
-
-        @Override
-        public void setBoots(ItemStack boots) {
-            player.getInventory().setBoots(boots);
-        }
-
-        @Override
-        public void setBootsDropChance(float chance) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setChestplate(ItemStack chestplate) {
-            player.getInventory().setChestplate(chestplate);
-        }
-
-        @Override
-        public void setChestplateDropChance(float chance) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setHelmet(ItemStack helmet) {
-            player.getInventory().setHelmet(helmet);
-        }
-
-        @Override
-        public void setHelmetDropChance(float chance) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setItemInHand(ItemStack stack) {
-            player.setItemInHand(stack);
-        }
-
-        @Override
-        public void setItemInHandDropChance(float chance) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setItemInMainHand(ItemStack arg0) {
-            player.getInventory().setItemInMainHand(arg0);
-        }
-
-        @Override
-        public void setItemInMainHandDropChance(float arg0) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setItemInOffHand(ItemStack arg0) {
-            player.getInventory().setItemInOffHand(arg0);
-        }
-
-        @Override
-        public void setItemInOffHandDropChance(float arg0) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
         public void setLeggings(ItemStack leggings) {
             player.getInventory().setLeggings(leggings);
+        }
+
+        @Override
+        public float getLeggingsDropChance() {
+            throw new UnsupportedOperationException();
         }
 
         @Override

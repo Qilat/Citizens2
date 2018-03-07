@@ -1,16 +1,10 @@
-package net.poudlardcitizens.commands;
-
-import java.util.List;
-
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.StringHelper;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
+package fr.poudlardrp.citizens.commands;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.StringHelper;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.command.Command;
 import net.citizensnpcs.api.command.CommandConfigurable;
@@ -22,14 +16,18 @@ import net.citizensnpcs.api.event.NPCTraitCommandAttachEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+
+import java.util.List;
 
 @Requirements(selected = true, ownership = true)
 public class TraitCommands {
     @Command(
-            aliases = { "trait", "tr" },
+            aliases = {"trait", "tr"},
             usage = "add [trait name]...",
             desc = "Adds traits to the NPC",
-            modifiers = { "add", "a" },
+            modifiers = {"add", "a"},
             min = 2,
             permission = "citizens.npc.trait")
     public void add(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
@@ -66,10 +64,10 @@ public class TraitCommands {
     }
 
     @Command(
-            aliases = { "traitc", "trc" },
+            aliases = {"traitc", "trc"},
             usage = "[trait name] (flags)",
             desc = "Configures a trait",
-            modifiers = { "*" },
+            modifiers = {"*"},
             min = 1,
             flags = "*",
             permission = "citizens.npc.trait-configure")
@@ -90,10 +88,10 @@ public class TraitCommands {
     }
 
     @Command(
-            aliases = { "trait", "tr" },
+            aliases = {"trait", "tr"},
             usage = "remove [trait name]...",
             desc = "Removes traits on the NPC",
-            modifiers = { "remove", "rem", "r" },
+            modifiers = {"remove", "rem", "r"},
             min = 1,
             permission = "citizens.npc.trait")
     public void remove(CommandContext args, CommandSender sender, NPC npc) throws CommandException {
@@ -126,10 +124,10 @@ public class TraitCommands {
     }
 
     @Command(
-            aliases = { "trait", "tr" },
+            aliases = {"trait", "tr"},
             usage = "[trait name], [trait name]...",
             desc = "Toggles traits on the NPC",
-            modifiers = { "*" },
+            modifiers = {"*"},
             min = 1,
             permission = "citizens.npc.trait")
     public void toggle(CommandContext args, CommandSender sender, NPC npc) throws CommandException {

@@ -1,44 +1,29 @@
 package fr.poudlardrp.citizens.api.command;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.google.common.base.Joiner;
+import com.google.common.collect.*;
+import net.citizensnpcs.api.command.exception.*;
+import net.citizensnpcs.api.util.Messaging;
+import net.citizensnpcs.api.util.Paginator;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import net.citizensnpcs.api.command.exception.CommandException;
-import net.citizensnpcs.api.command.exception.CommandUsageException;
-import net.citizensnpcs.api.command.exception.NoPermissionsException;
-import net.citizensnpcs.api.command.exception.ServerCommandException;
-import net.citizensnpcs.api.command.exception.UnhandledCommandException;
-import net.citizensnpcs.api.command.exception.WrappedCommandException;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.Paginator;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandManager {
+    private static final String COMMAND_FORMAT = "<7>/<c>%s%s <7>- <e>%s";
+    // Logger for general errors.
+    private static final Logger logger = Logger.getLogger(CommandManager.class.getCanonicalName());
     private final Map<Class<? extends Annotation>, CommandAnnotationProcessor> annotationProcessors = Maps.newHashMap();
-
     /*
      * Mapping of commands (including aliases) with a description. Root commands
      * are stored under a key of null, whereas child commands are cached under
@@ -46,34 +31,88 @@ public class CommandManager {
      * (one for each alias) with the method.
      */
     private final Map<String, Method> commands = new HashMap<String, Method>();
-    private Injector injector;
     private final Map<Method, Object> instances = new HashMap<Method, Object>();
     private final ListMultimap<Method, Annotation> registeredAnnotations = ArrayListMultimap.create();
     private final Set<Method> serverCommands = new HashSet<Method>();
+    private Injector injector;
 
     public CommandManager() {
         registerAnnotationProcessor(new RequirementsProcessor());
     }
 
+    private static String capitalize(Object string) {
+        String capitalize = string.toString();
+        return capitalize.length() == 0 ? ""
+                : Character.toUpperCase(capitalize.charAt(0)) + capitalize.substring(1, capitalize.length());
+    }
+
+    private static String format(Command command, String alias) {
+        return String.format(COMMAND_FORMAT, alias, (command.usage().isEmpty() ? "" : " " + command.usage()),
+                Messaging.tryTranslate(command.desc()));
+    }
+
+    private static int getLevenshteinDistance(String s, String t) {
+        if (s == null || t == null)
+            throw new IllegalArgumentException("Strings must not be null");
+
+        int n = s.length(); // length of s
+        int m = t.length(); // length of t
+
+        if (n == 0)
+            return m;
+        else if (m == 0)
+            return n;
+
+        int p[] = new int[n + 1]; // 'previous' cost array, horizontally
+        int d[] = new int[n + 1]; // cost array, horizontally
+        int _d[]; // placeholder to assist in swapping p and d
+
+        // indexes into strings s and t
+        int i; // iterates through s
+        int j; // iterates through t
+
+        char t_j; // jth character of t
+
+        int cost; // cost
+
+        for (i = 0; i <= n; i++)
+            p[i] = i;
+
+        for (j = 1; j <= m; j++) {
+            t_j = t.charAt(j - 1);
+            d[0] = j;
+
+            for (i = 1; i <= n; i++) {
+                cost = s.charAt(i - 1) == t_j ? 0 : 1;
+                // minimum of cell to the left+1, to the top+1, diagonally left
+                // and up +cost
+                d[i] = Math.min(Math.min(d[i - 1] + 1, p[i] + 1), p[i - 1] + cost);
+            }
+
+            // copy current distance counts to 'previous row' distance counts
+            _d = p;
+            p = d;
+            d = _d;
+        }
+
+        // our last action in the above loop was to switch d and p, so p now
+        // actually has the most recent cost counts
+        return p[n];
+    }
+
     /**
-     *
      * Attempt to execute a command using the root {@link Command} given. A list of method arguments may be used when
      * calling the command handler method.
-     *
+     * <p>
      * A command handler method should follow the form <code>command(CommandContext args, CommandSender sender)</code>
      * where {@link CommandSender} can be replaced with {@link Player} to only accept players. The method parameters
      * must include the method args given, if any.
      *
-     * @param command
-     *            The command to execute
-     * @param args
-     *            The arguments of the command
-     * @param sender
-     *            The sender of the command
-     * @param methodArgs
-     *            The method arguments to be used when calling the command handler
-     * @throws CommandException
-     *             Any exceptions caused from execution of the command
+     * @param command    The command to execute
+     * @param args       The arguments of the command
+     * @param sender     The sender of the command
+     * @param methodArgs The method arguments to be used when calling the command handler
+     * @throws CommandException Any exceptions caused from execution of the command
      */
     public void execute(org.bukkit.command.Command command, String[] args, CommandSender sender, Object... methodArgs)
             throws CommandException {
@@ -165,11 +204,11 @@ public class CommandManager {
      * A safe version of <code>execute</code> which catches and logs all errors that occur. Returns whether the command
      * handler should print usage or not.
      *
-     * @see #execute(Command, String[], CommandSender, Object...)
      * @return Whether further usage should be printed
+     * @see #execute(Command, String[], CommandSender, Object...)
      */
     public boolean executeSafe(org.bukkit.command.Command command, String[] args, CommandSender sender,
-            Object... methodArgs) {
+                               Object... methodArgs) {
         try {
             try {
                 execute(command, args, sender, methodArgs);
@@ -200,10 +239,8 @@ public class CommandManager {
     /**
      * Searches for the closest modifier using Levenshtein distance to the given top level command and modifier.
      *
-     * @param command
-     *            The top level command
-     * @param modifier
-     *            The modifier to use as the base
+     * @param command  The top level command
+     * @param modifier The modifier to use as the base
      * @return The closest modifier, or empty
      */
     public String getClosestCommandModifier(String command, String modifier) {
@@ -227,10 +264,8 @@ public class CommandManager {
     /**
      * Gets the {@link CommandInfo} for the given top level command and modifier, or null if not found.
      *
-     * @param rootCommand
-     *            The top level command
-     * @param modifier
-     *            The modifier (may be empty)
+     * @param rootCommand The top level command
+     * @param modifier    The modifier (may be empty)
      * @return The command info for the command
      */
     public CommandInfo getCommand(String rootCommand, String modifier) {
@@ -251,8 +286,7 @@ public class CommandManager {
      * <code>/npc jump</code> were defined, calling <code>getCommands("npc")</code> would return {@link CommandInfo}s
      * for both commands.
      *
-     * @param command
-     *            The root level command
+     * @param command The root level command
      * @return The list of {@link CommandInfo}s
      */
     public List<CommandInfo> getCommands(String command) {
@@ -294,10 +328,8 @@ public class CommandManager {
      * Checks to see whether there is a command handler for the given command at the root level. This will check aliases
      * as well.
      *
-     * @param cmd
-     *            The command to check
-     * @param modifier
-     *            The modifier to check (may be empty)
+     * @param cmd      The command to check
+     * @param modifier The modifier to check (may be empty)
      * @return Whether the command is handled
      */
     public boolean hasCommand(org.bukkit.command.Command cmd, String modifier) {
@@ -324,9 +356,8 @@ public class CommandManager {
      * {@link Injector} is specified, then only static methods of the class will be registered. Otherwise, new instances
      * the command class will be created and instance methods will be called.
      *
+     * @param clazz The class to scan
      * @see #setInjector(Injector)
-     * @param clazz
-     *            The class to scan
      */
     public void register(Class<?> clazz) {
         registerMethods(clazz, null);
@@ -334,14 +365,13 @@ public class CommandManager {
 
     /**
      * Registers an {@link CommandAnnotationProcessor} that can process annotations before a command is executed.
-     *
+     * <p>
      * Methods with the {@link Command} annotation will have the rest of their annotations scanned and stored if there
      * is a matching {@link CommandAnnotationProcessor}. Annotations that do not have a processor are discarded. The
      * scanning method uses annotations from the declaring class as a base before narrowing using the method's
      * annotations.
      *
-     * @param processor
-     *            The annotation processor
+     * @param processor The annotation processor
      */
     public void registerAnnotationProcessor(CommandAnnotationProcessor processor) {
         annotationProcessors.put(processor.getAnnotationClass(), processor);
@@ -470,69 +500,4 @@ public class CommandManager {
             return 31 + ((commandAnnotation == null) ? 0 : commandAnnotation.hashCode());
         }
     }
-
-    private static String capitalize(Object string) {
-        String capitalize = string.toString();
-        return capitalize.length() == 0 ? ""
-                : Character.toUpperCase(capitalize.charAt(0)) + capitalize.substring(1, capitalize.length());
-    }
-
-    private static String format(Command command, String alias) {
-        return String.format(COMMAND_FORMAT, alias, (command.usage().isEmpty() ? "" : " " + command.usage()),
-                Messaging.tryTranslate(command.desc()));
-    }
-
-    private static int getLevenshteinDistance(String s, String t) {
-        if (s == null || t == null)
-            throw new IllegalArgumentException("Strings must not be null");
-
-        int n = s.length(); // length of s
-        int m = t.length(); // length of t
-
-        if (n == 0)
-            return m;
-        else if (m == 0)
-            return n;
-
-        int p[] = new int[n + 1]; // 'previous' cost array, horizontally
-        int d[] = new int[n + 1]; // cost array, horizontally
-        int _d[]; // placeholder to assist in swapping p and d
-
-        // indexes into strings s and t
-        int i; // iterates through s
-        int j; // iterates through t
-
-        char t_j; // jth character of t
-
-        int cost; // cost
-
-        for (i = 0; i <= n; i++)
-            p[i] = i;
-
-        for (j = 1; j <= m; j++) {
-            t_j = t.charAt(j - 1);
-            d[0] = j;
-
-            for (i = 1; i <= n; i++) {
-                cost = s.charAt(i - 1) == t_j ? 0 : 1;
-                // minimum of cell to the left+1, to the top+1, diagonally left
-                // and up +cost
-                d[i] = Math.min(Math.min(d[i - 1] + 1, p[i] + 1), p[i - 1] + cost);
-            }
-
-            // copy current distance counts to 'previous row' distance counts
-            _d = p;
-            p = d;
-            d = _d;
-        }
-
-        // our last action in the above loop was to switch d and p, so p now
-        // actually has the most recent cost counts
-        return p[n];
-    }
-
-    private static final String COMMAND_FORMAT = "<7>/<c>%s%s <7>- <e>%s";
-
-    // Logger for general errors.
-    private static final Logger logger = Logger.getLogger(CommandManager.class.getCanonicalName());
 }

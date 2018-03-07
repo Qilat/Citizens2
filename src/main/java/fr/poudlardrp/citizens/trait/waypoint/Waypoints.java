@@ -1,15 +1,9 @@
-package net.poudlardcitizens.trait.waypoint;
-
-import java.util.Map;
-import java.util.Map.Entry;
-
-import net.poudlardcitizens.editor.Editor;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.StringHelper;
-import org.bukkit.command.CommandSender;
+package fr.poudlardrp.citizens.trait.waypoint;
 
 import com.google.common.collect.Maps;
-
+import fr.poudlardrp.citizens.editor.Editor;
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.StringHelper;
 import net.citizensnpcs.api.command.CommandContext;
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.persistence.PersistenceLoader;
@@ -17,14 +11,36 @@ import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.command.CommandSender;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 @TraitName("waypoints")
 public class Waypoints extends Trait {
+    private static final Map<String, Class<? extends WaypointProvider>> providers = Maps.newHashMap();
+
+    static {
+        providers.put("linear", LinearWaypointProvider.class);
+        providers.put("wander", WanderWaypointProvider.class);
+        providers.put("guided", GuidedWaypointProvider.class);
+    }
+
     private WaypointProvider provider = new LinearWaypointProvider();
     private String providerName = "linear";
 
     public Waypoints() {
         super("waypoints");
+    }
+
+    /**
+     * Registers a {@link WaypointProvider}, which can be subsequently used by NPCs.
+     *
+     * @param clazz The class of the waypoint provider
+     * @param name  The name of the waypoint provider
+     */
+    public static void registerWaypointProvider(Class<? extends WaypointProvider> clazz, String name) {
+        providers.put(name, clazz);
     }
 
     private WaypointProvider create(Class<? extends WaypointProvider> clazz) {
@@ -96,8 +112,7 @@ public class Waypoints extends Trait {
     /**
      * Sets the current {@link WaypointProvider} using the given name.
      *
-     * @param name
-     *            The name of the waypoint provider, registered using {@link #registerWaypointProvider(Class, String)}
+     * @param name The name of the waypoint provider, registered using {@link #registerWaypointProvider(Class, String)}
      * @return Whether the operation succeeded
      */
     public boolean setWaypointProvider(String name) {
@@ -113,25 +128,5 @@ public class Waypoints extends Trait {
             provider.onSpawn(npc);
         }
         return true;
-    }
-
-    /**
-     * Registers a {@link WaypointProvider}, which can be subsequently used by NPCs.
-     *
-     * @param clazz
-     *            The class of the waypoint provider
-     * @param name
-     *            The name of the waypoint provider
-     */
-    public static void registerWaypointProvider(Class<? extends WaypointProvider> clazz, String name) {
-        providers.put(name, clazz);
-    }
-
-    private static final Map<String, Class<? extends WaypointProvider>> providers = Maps.newHashMap();
-
-    static {
-        providers.put("linear", LinearWaypointProvider.class);
-        providers.put("wander", WanderWaypointProvider.class);
-        providers.put("guided", GuidedWaypointProvider.class);
     }
 }

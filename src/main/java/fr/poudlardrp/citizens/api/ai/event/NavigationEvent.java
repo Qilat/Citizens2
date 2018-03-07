@@ -1,8 +1,7 @@
 package fr.poudlardrp.citizens.api.ai.event;
 
-import net.citizensnpcs.api.ai.Navigator;
-import net.citizensnpcs.api.npc.NPC;
-
+import fr.poudlardrp.citizens.api.ai.Navigator;
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.event.Event;
 
 public abstract class NavigationEvent extends Event {

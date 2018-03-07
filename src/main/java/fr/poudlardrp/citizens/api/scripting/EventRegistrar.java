@@ -1,17 +1,12 @@
 package fr.poudlardrp.citizens.api.scripting;
 
-import java.util.Map;
-
-import org.bukkit.event.Event;
-import org.bukkit.event.EventException;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import com.google.common.collect.Maps;
+import org.bukkit.event.*;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.google.common.collect.Maps;
+import java.util.Map;
 
 /**
  * A simple {@link ContextProvider} for scripts, allowing them to register and unregister events.

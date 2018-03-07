@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.api.scripting;
 
+import com.google.common.base.Throwables;
+
 import javax.script.CompiledScript;
 import javax.script.ScriptException;
-
-import com.google.common.base.Throwables;
 
 public class SimpleScriptFactory implements ScriptFactory {
     private final ContextProvider[] providers;

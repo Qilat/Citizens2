@@ -1,6 +1,7 @@
-package net.poudlardcitizens.commands;
+package fr.poudlardrp.citizens.commands;
 
-import net.poudlardcitizens.Citizens;
+import fr.poudlardrp.citizens.Citizens;
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.command.Command;
 import net.citizensnpcs.api.command.CommandContext;
 import net.citizensnpcs.api.command.Requirements;
@@ -8,8 +9,6 @@ import net.citizensnpcs.api.command.exception.CommandException;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
 import net.poudlardcitizens.trait.waypoint.Waypoints;
-import net.poudlardcitizens.util.Messages;
-
 import org.bukkit.command.CommandSender;
 
 @Requirements(ownership = true, selected = true)
@@ -19,10 +18,10 @@ public class WaypointCommands {
 
     // TODO: refactor into a policy style system
     @Command(
-            aliases = { "waypoints", "waypoint", "wp" },
+            aliases = {"waypoints", "waypoint", "wp"},
             usage = "disableteleport",
             desc = "Disables teleportation when stuck (temporary command)",
-            modifiers = { "disableteleport" },
+            modifiers = {"disableteleport"},
             min = 1,
             max = 1,
             permission = "citizens.waypoints.disableteleport")
@@ -32,10 +31,10 @@ public class WaypointCommands {
     }
 
     @Command(
-            aliases = { "waypoints", "waypoint", "wp" },
+            aliases = {"waypoints", "waypoint", "wp"},
             usage = "provider [provider name] (-d)",
             desc = "Sets the current waypoint provider",
-            modifiers = { "provider" },
+            modifiers = {"provider"},
             min = 1,
             max = 2,
             flags = "d",

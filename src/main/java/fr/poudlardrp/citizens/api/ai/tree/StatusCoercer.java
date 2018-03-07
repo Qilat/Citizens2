@@ -11,6 +11,10 @@ public class StatusCoercer extends BehaviorGoalAdapter {
         this.to = to;
     }
 
+    public static StatusCoercer coercing(Behavior wrapping, Supplier<BehaviorStatus> to) {
+        return new StatusCoercer(wrapping, to);
+    }
+
     @Override
     public void reset() {
         wrapping.reset();
@@ -24,9 +28,5 @@ public class StatusCoercer extends BehaviorGoalAdapter {
     @Override
     public boolean shouldExecute() {
         return wrapping.shouldExecute();
-    }
-
-    public static StatusCoercer coercing(Behavior wrapping, Supplier<BehaviorStatus> to) {
-        return new StatusCoercer(wrapping, to);
     }
 }

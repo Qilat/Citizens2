@@ -1,35 +1,30 @@
-package net.poudlardcitizens.npc.ai;
+package fr.poudlardrp.citizens.npc.ai;
 
-import java.util.List;
-
-import net.poudlardcitizens.util.NMS;
+import com.google.common.collect.Lists;
+import fr.poudlardrp.citizens.util.NMS;
+import net.citizensnpcs.api.ai.AbstractPathStrategy;
+import net.citizensnpcs.api.ai.NavigatorParameters;
+import net.citizensnpcs.api.ai.TargetType;
+import net.citizensnpcs.api.ai.event.CancelReason;
+import net.citizensnpcs.api.astar.AStarMachine;
+import net.citizensnpcs.api.astar.pathfinder.*;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Lists;
-
-import net.citizensnpcs.api.ai.AbstractPathStrategy;
-import net.citizensnpcs.api.ai.NavigatorParameters;
-import net.citizensnpcs.api.ai.TargetType;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.astar.AStarMachine;
-import net.citizensnpcs.api.astar.pathfinder.BlockExaminer;
-import net.citizensnpcs.api.astar.pathfinder.ChunkBlockSource;
-import net.citizensnpcs.api.astar.pathfinder.FlyingBlockExaminer;
-import net.citizensnpcs.api.astar.pathfinder.Path;
-import net.citizensnpcs.api.astar.pathfinder.VectorGoal;
-import net.citizensnpcs.api.astar.pathfinder.VectorNode;
-import net.citizensnpcs.api.npc.NPC;
+import java.util.List;
 
 public class FlyingAStarNavigationStrategy extends AbstractPathStrategy {
+    private static final AStarMachine<VectorNode, Path> ASTAR = AStarMachine.createWithDefaultStorage();
+    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
     private final NPC npc;
     private final NavigatorParameters parameters;
+    private final Location target;
     private Path plan;
     private boolean planned;
-    private final Location target;
     private Vector vector;
 
     public FlyingAStarNavigationStrategy(NPC npc, Iterable<Vector> path, NavigatorParameters params) {
@@ -145,7 +140,4 @@ public class FlyingAStarNavigationStrategy extends AbstractPathStrategy {
         plan.run(npc);
         return false;
     }
-
-    private static final AStarMachine<VectorNode, Path> ASTAR = AStarMachine.createWithDefaultStorage();
-    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
 }

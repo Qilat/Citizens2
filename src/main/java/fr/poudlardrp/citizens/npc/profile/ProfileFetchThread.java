@@ -1,23 +1,15 @@
-package net.poudlardcitizens.npc.profile;
-
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import org.bukkit.Bukkit;
+package fr.poudlardrp.citizens.npc.profile;
 
 import com.google.common.base.Preconditions;
-
 import net.citizensnpcs.api.CitizensAPI;
+import org.bukkit.Bukkit;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Thread used to fetch profiles from the Mojang servers.
- *
+ * <p>
  * <p>
  * Maintains a cache of profiles so that no profile is ever requested more than once during a single server session.
  * </p>
@@ -33,14 +25,29 @@ class ProfileFetchThread implements Runnable {
     ProfileFetchThread() {
     }
 
+    private static void addHandler(final ProfileRequest request, final ProfileFetchHandler handler) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(CitizensAPI.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                request.addHandler(handler);
+            }
+        }, 1);
+    }
+
+    private static void sendResult(final ProfileFetchHandler handler, final ProfileRequest request) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(CitizensAPI.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                handler.onResult(request);
+            }
+        }, 1);
+    }
+
     /**
      * Fetch a profile.
      *
-     * @param name
-     *            The name of the player the profile belongs to.
-     * @param handler
-     *            Optional handler to handle result fetch result. Handler always invoked from the main thread.
-     *
+     * @param name    The name of the player the profile belongs to.
+     * @param handler Optional handler to handle result fetch result. Handler always invoked from the main thread.
      * @see ProfileFetcher#fetch
      */
     void fetch(String name, @Nullable ProfileFetchHandler handler) {
@@ -119,23 +126,5 @@ class ProfileFetchThread implements Runnable {
         }
 
         profileFetcher.fetchRequests(requests);
-    }
-
-    private static void addHandler(final ProfileRequest request, final ProfileFetchHandler handler) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(CitizensAPI.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                request.addHandler(handler);
-            }
-        }, 1);
-    }
-
-    private static void sendResult(final ProfileFetchHandler handler, final ProfileRequest request) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(CitizensAPI.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                handler.onResult(request);
-            }
-        }, 1);
     }
 }

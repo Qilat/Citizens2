@@ -1,10 +1,6 @@
-package net.poudlardcitizens.nms.v1_10_R1.network;
+package fr.poudlardrp.citizens.nms.v1_10_R1.network;
 
-import net.minecraft.server.v1_10_R1.EntityPlayer;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PlayerConnection;
+import net.minecraft.server.v1_10_R1.*;
 
 public class EmptyNetHandler extends PlayerConnection {
     public EmptyNetHandler(MinecraftServer minecraftServer, NetworkManager networkManager, EntityPlayer entityPlayer) {

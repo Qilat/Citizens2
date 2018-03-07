@@ -1,6 +1,6 @@
-package net.poudlardcitizens.trait.waypoint;
+package fr.poudlardrp.citizens.trait.waypoint;
 
-import net.poudlardcitizens.editor.Editor;
+import fr.poudlardrp.citizens.editor.Editor;
 
 public abstract class WaypointEditor extends Editor {
     public Waypoint getCurrentWaypoint() {

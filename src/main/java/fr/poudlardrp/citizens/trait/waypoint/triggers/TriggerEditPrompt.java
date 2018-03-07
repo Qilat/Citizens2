@@ -1,24 +1,27 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import net.poudlardcitizens.trait.waypoint.WaypointEditor;
-import net.poudlardcitizens.util.Messages;
-import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.StringPrompt;
-import org.bukkit.entity.Player;
-
+import fr.poudlardrp.citizens.trait.waypoint.WaypointEditor;
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.util.Messaging;
 import net.poudlardcitizens.trait.waypoint.Waypoint;
+import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.*;
+import org.bukkit.entity.Player;
 
 public class TriggerEditPrompt extends StringPrompt {
     private final WaypointEditor editor;
 
     public TriggerEditPrompt(WaypointEditor editor) {
         this.editor = editor;
+    }
+
+    public static Conversation start(Player player, WaypointEditor editor) {
+        final Conversation conversation = new ConversationFactory(CitizensAPI.getPlugin()).withLocalEcho(false)
+                .withEscapeSequence("exit").withEscapeSequence("triggers").withEscapeSequence("/npc path")
+                .withModality(false).withFirstPrompt(new TriggerEditPrompt(editor)).buildConversation(player);
+        conversation.begin();
+        return conversation;
     }
 
     @Override
@@ -50,13 +53,5 @@ public class TriggerEditPrompt extends StringPrompt {
         }
         Messaging.send((CommandSender) context.getForWhom(), base);
         return "";
-    }
-
-    public static Conversation start(Player player, WaypointEditor editor) {
-        final Conversation conversation = new ConversationFactory(CitizensAPI.getPlugin()).withLocalEcho(false)
-                .withEscapeSequence("exit").withEscapeSequence("triggers").withEscapeSequence("/npc path")
-                .withModality(false).withFirstPrompt(new TriggerEditPrompt(editor)).buildConversation(player);
-        conversation.begin();
-        return conversation;
     }
 }

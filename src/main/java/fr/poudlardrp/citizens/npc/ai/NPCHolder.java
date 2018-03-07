@@ -1,4 +1,4 @@
-package net.poudlardcitizens.npc.ai;
+package fr.poudlardrp.citizens.npc.ai;
 
 import net.citizensnpcs.api.npc.NPC;
 

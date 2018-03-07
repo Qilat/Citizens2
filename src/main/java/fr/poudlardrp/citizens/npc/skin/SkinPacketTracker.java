@@ -1,11 +1,9 @@
-package net.poudlardcitizens.npc.skin;
+package fr.poudlardrp.citizens.npc.skin;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import net.poudlardcitizens.util.NMS;
+import com.google.common.base.Preconditions;
+import fr.poudlardrp.citizens.util.NMS;
+import net.citizensnpcs.api.CitizensAPI;
+import net.poudlardcitizens.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,30 +13,32 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.google.common.base.Preconditions;
-
-import net.poudlardcitizens.Settings;
-import net.citizensnpcs.api.CitizensAPI;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Handles and synchronizes add and remove packets for Player type NPC's in order to properly apply the NPC skin.
- *
+ * <p>
  * <p>
  * Used as one instance per NPC entity.
  * </p>
  */
 public class SkinPacketTracker {
+    private static final Location CACHE_LOCATION = new Location(null, 0, 0, 0);
+    private static final int PACKET_DELAY_REMOVE = 1;
+    private static final TabListRemover TAB_LIST_REMOVER = new TabListRemover();
+    private static PlayerListener LISTENER;
     private final SkinnableEntity entity;
     private final Map<UUID, PlayerEntry> inProgress = new HashMap<UUID, PlayerEntry>(Bukkit.getMaxPlayers() / 2);
-
     private boolean isRemoved;
     private Skin skin;
 
     /**
      * Constructor.
      *
-     * @param entity
-     *            The skinnable entity the instance belongs to.
+     * @param entity The skinnable entity the instance belongs to.
      */
     public SkinPacketTracker(SkinnableEntity entity) {
         Preconditions.checkNotNull(entity);
@@ -62,8 +62,7 @@ public class SkinPacketTracker {
     /**
      * Notify the tracker that a remove packet has been sent to the specified player.
      *
-     * @param playerId
-     *            The ID of the player.
+     * @param playerId The ID of the player.
      */
     void notifyRemovePacketCancelled(UUID playerId) {
         inProgress.remove(playerId);
@@ -72,8 +71,7 @@ public class SkinPacketTracker {
     /**
      * Notify the tracker that a remove packet has been sent to the specified player.
      *
-     * @param playerId
-     *            The ID of the player.
+     * @param playerId The ID of the player.
      */
     void notifyRemovePacketSent(UUID playerId) {
         PlayerEntry entry = inProgress.get(playerId);
@@ -101,7 +99,7 @@ public class SkinPacketTracker {
 
     /**
      * Invoke when the NPC entity is removed.
-     *
+     * <p>
      * <p>
      * Sends remove packets to all players.
      * </p>
@@ -167,8 +165,7 @@ public class SkinPacketTracker {
     /**
      * Send skin related packets to all nearby players within the specified block radius.
      *
-     * @param radius
-     *            The radius.
+     * @param radius The radius.
      */
     public void updateNearbyViewers(double radius) {
         radius *= radius;
@@ -195,8 +192,7 @@ public class SkinPacketTracker {
     /**
      * Send skin related packets to a player.
      *
-     * @param player
-     *            The player.
+     * @param player The player.
      */
     public void updateViewer(final Player player) {
         Preconditions.checkNotNull(player);
@@ -220,6 +216,15 @@ public class SkinPacketTracker {
         scheduleRemovePacket(entry, 2);
     }
 
+    private static class PlayerListener implements Listener {
+        @EventHandler
+        private void onPlayerQuit(PlayerQuitEvent event) {
+            // this also causes any entries in the "inProgress" field to
+            // be removed.
+            TAB_LIST_REMOVER.cancelPackets(event.getPlayer());
+        }
+    }
+
     private class PlayerEntry {
         Player player;
         int removeCount;
@@ -237,18 +242,4 @@ public class SkinPacketTracker {
             removeCount = 0;
         }
     }
-
-    private static class PlayerListener implements Listener {
-        @EventHandler
-        private void onPlayerQuit(PlayerQuitEvent event) {
-            // this also causes any entries in the "inProgress" field to
-            // be removed.
-            TAB_LIST_REMOVER.cancelPackets(event.getPlayer());
-        }
-    }
-
-    private static final Location CACHE_LOCATION = new Location(null, 0, 0, 0);
-    private static PlayerListener LISTENER;
-    private static final int PACKET_DELAY_REMOVE = 1;
-    private static final TabListRemover TAB_LIST_REMOVER = new TabListRemover();
 }

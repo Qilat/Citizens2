@@ -1,9 +1,8 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
+import net.citizensnpcs.api.astar.AStarGoal;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.astar.AStarGoal;
 
 public class VectorGoal implements AStarGoal<VectorNode> {
     final Vector goal;

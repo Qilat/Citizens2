@@ -1,15 +1,6 @@
 package fr.poudlardrp.citizens.api.command;
 
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Set;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-
 import com.google.common.collect.Sets;
-
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.command.exception.CommandException;
 import net.citizensnpcs.api.command.exception.RequirementMissingException;
@@ -18,6 +9,13 @@ import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class RequirementsProcessor implements CommandAnnotationProcessor {
     @Override

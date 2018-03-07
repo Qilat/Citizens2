@@ -1,12 +1,16 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity;
 
-import java.util.UUID;
-import java.util.regex.Pattern;
-
-import net.poudlardcitizens.npc.AbstractEntityController;
-import net.poudlardcitizens.npc.skin.Skin;
-import net.poudlardcitizens.npc.skin.SkinnableEntity;
-import net.poudlardcitizens.util.NMS;
+import com.mojang.authlib.GameProfile;
+import fr.poudlardrp.citizens.npc.AbstractEntityController;
+import fr.poudlardrp.citizens.npc.skin.Skin;
+import fr.poudlardrp.citizens.npc.skin.SkinnableEntity;
+import fr.poudlardrp.citizens.util.NMS;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.util.Colorizer;
+import net.minecraft.server.v1_10_R1.PlayerInteractManager;
+import net.minecraft.server.v1_10_R1.WorldServer;
+import net.poudlardcitizens.Settings.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -16,16 +20,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.mojang.authlib.GameProfile;
-
-import net.poudlardcitizens.Settings.Setting;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.Colorizer;
-import net.minecraft.server.v1_10_R1.PlayerInteractManager;
-import net.minecraft.server.v1_10_R1.WorldServer;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class HumanController extends AbstractEntityController {
+    private static Pattern NON_ALPHABET_MATCHER = Pattern.compile(".*[^A-Za-z0-9_].*");
+
     public HumanController() {
         super();
     }
@@ -137,6 +137,4 @@ public class HumanController extends AbstractEntityController {
         }
         super.remove();
     }
-
-    private static Pattern NON_ALPHABET_MATCHER = Pattern.compile(".*[^A-Za-z0-9_].*");
 }

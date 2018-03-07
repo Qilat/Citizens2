@@ -1,11 +1,10 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import net.citizensnpcs.api.ai.TargetType;
 import net.citizensnpcs.api.ai.event.CancelReason;
 
 public abstract class AbstractPathStrategy implements PathStrategy {
-    private CancelReason cancelReason;
     private final TargetType type;
+    private CancelReason cancelReason;
 
     protected AbstractPathStrategy(TargetType type) {
         this.type = type;
@@ -21,12 +20,12 @@ public abstract class AbstractPathStrategy implements PathStrategy {
         return cancelReason;
     }
 
+    protected void setCancelReason(CancelReason reason) {
+        cancelReason = reason;
+    }
+
     @Override
     public TargetType getTargetType() {
         return type;
-    }
-
-    protected void setCancelReason(CancelReason reason) {
-        cancelReason = reason;
     }
 }

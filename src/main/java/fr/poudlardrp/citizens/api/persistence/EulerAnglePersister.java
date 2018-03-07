@@ -1,8 +1,7 @@
 package fr.poudlardrp.citizens.api.persistence;
 
-import org.bukkit.util.EulerAngle;
-
 import net.citizensnpcs.api.util.DataKey;
+import org.bukkit.util.EulerAngle;
 
 public class EulerAnglePersister implements Persister<EulerAngle> {
     @Override

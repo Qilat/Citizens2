@@ -13,6 +13,10 @@ public class Loop extends BehaviorGoalAdapter {
         this.condition = condition;
     }
 
+    public static Loop createWithCondition(Behavior wrapping, Condition condition) {
+        return new Loop(wrapping, condition);
+    }
+
     @Override
     public void reset() {
         wrapping.reset();
@@ -32,9 +36,5 @@ public class Loop extends BehaviorGoalAdapter {
     @Override
     public boolean shouldExecute() {
         return wrapping.shouldExecute();
-    }
-
-    public static Loop createWithCondition(Behavior wrapping, Condition condition) {
-        return new Loop(wrapping, condition);
     }
 }

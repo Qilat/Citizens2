@@ -1,10 +1,9 @@
 package fr.poudlardrp.citizens.api.trait.trait;
 
-import org.bukkit.entity.EntityType;
-
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.api.util.DataKey;
+import org.bukkit.entity.EntityType;
 
 /**
  * Represents an NPC's mob type.
@@ -24,6 +23,15 @@ public class MobType extends Trait {
      */
     public EntityType getType() {
         return type;
+    }
+
+    /**
+     * Sets the type of mob that an NPC is.
+     *
+     * @param type Mob type to set the NPC as
+     */
+    public void setType(EntityType type) {
+        this.type = type;
     }
 
     @Override
@@ -46,16 +54,6 @@ public class MobType extends Trait {
     @Override
     public void save(DataKey key) {
         key.setString("", type.name());
-    }
-
-    /**
-     * Sets the type of mob that an NPC is.
-     *
-     * @param type
-     *            Mob type to set the NPC as
-     */
-    public void setType(EntityType type) {
-        this.type = type;
     }
 
     @Override

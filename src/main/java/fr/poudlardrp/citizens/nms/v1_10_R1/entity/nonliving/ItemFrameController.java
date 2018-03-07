@@ -1,9 +1,12 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity.nonliving;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving;
 
-import net.poudlardcitizens.nms.v1_10_R1.entity.MobEntityController;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.MobEntityController;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.event.NPCPushEvent;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,14 +16,6 @@ import org.bukkit.craftbukkit.v1_10_R1.entity.CraftItemFrame;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.event.NPCPushEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.EntityItemFrame;
-import net.minecraft.server.v1_10_R1.EnumDirection;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.World;
 
 public class ItemFrameController extends MobEntityController {
     public ItemFrameController() {
@@ -127,7 +122,7 @@ public class ItemFrameController extends MobEntityController {
             Material id = Material.STONE;
             int data = npc.data().get(NPC.ITEM_DATA_METADATA, npc.data().get("falling-block-data", 0));
             if (npc.data().has(NPC.ITEM_ID_METADATA)) {
-                id = Material.getMaterial(npc.data().<String> get(NPC.ITEM_ID_METADATA));
+                id = Material.getMaterial(npc.data().<String>get(NPC.ITEM_ID_METADATA));
             }
             getItem().setType(id);
             getItem().setDurability((short) data);

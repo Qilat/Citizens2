@@ -1,32 +1,35 @@
 package fr.poudlardrp.citizens.api.ai.goals;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
-
 import net.citizensnpcs.api.ai.event.CancelReason;
 import net.citizensnpcs.api.ai.event.NavigatorCallback;
 import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
 import net.citizensnpcs.api.ai.tree.BehaviorStatus;
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
+
 public class TargetNearbyEntityGoal extends BehaviorGoalAdapter {
     private final boolean aggressive;
-    private boolean finished;
     private final NPC npc;
     private final double radius;
+    private final Set<EntityType> targets;
+    private boolean finished;
     private CancelReason reason;
     private Entity target;
-    private final Set<EntityType> targets;
 
     private TargetNearbyEntityGoal(NPC npc, Set<EntityType> targets, boolean aggressive, double radius) {
         this.npc = npc;
         this.targets = targets;
         this.aggressive = aggressive;
         this.radius = radius;
+    }
+
+    public static Builder builder(NPC npc) {
+        return new Builder(npc);
     }
 
     @Override
@@ -72,8 +75,8 @@ public class TargetNearbyEntityGoal extends BehaviorGoalAdapter {
     }
 
     public static class Builder {
-        private boolean aggressive;
         private final NPC npc;
+        private boolean aggressive;
         private double radius = 10D;
         private Set<EntityType> targetTypes = EnumSet.noneOf(EntityType.class);
 
@@ -99,9 +102,5 @@ public class TargetNearbyEntityGoal extends BehaviorGoalAdapter {
             this.targetTypes = targetTypes;
             return this;
         }
-    }
-
-    public static Builder builder(NPC npc) {
-        return new Builder(npc);
     }
 }

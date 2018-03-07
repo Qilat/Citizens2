@@ -1,25 +1,19 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity;
 
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.event.NPCEnderTeleportEvent;
+import net.citizensnpcs.api.event.NPCPushEvent;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.*;
+import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftChicken;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftEntity;
 import org.bukkit.entity.Chicken;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.event.NPCEnderTeleportEvent;
-import net.citizensnpcs.api.event.NPCPushEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.EntityChicken;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.SoundEffect;
-import net.minecraft.server.v1_10_R1.World;
 
 public class ChickenController extends MobEntityController {
     public ChickenController() {

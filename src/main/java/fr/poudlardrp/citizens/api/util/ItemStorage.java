@@ -1,14 +1,9 @@
 package fr.poudlardrp.citizens.api.util;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import com.google.common.collect.Lists;
+import net.citizensnpcs.api.event.CitizensDeserialiseMetaEvent;
+import net.citizensnpcs.api.event.CitizensSerialiseMetaEvent;
+import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.banner.Pattern;
@@ -16,26 +11,15 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.Repairable;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import com.google.common.collect.Lists;
-
-import net.citizensnpcs.api.event.CitizensDeserialiseMetaEvent;
-import net.citizensnpcs.api.event.CitizensSerialiseMetaEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ItemStorage {
     private static void deserialiseBanner(DataKey root, Banner meta) {

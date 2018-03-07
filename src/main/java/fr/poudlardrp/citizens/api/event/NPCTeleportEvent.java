@@ -1,21 +1,25 @@
 package fr.poudlardrp.citizens.api.event;
 
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-
-import net.citizensnpcs.api.npc.NPC;
 
 /**
  * Called when an NPC teleports.
  */
 public class NPCTeleportEvent extends NPCEvent implements Cancellable {
-    private boolean cancelled;
+    private static final HandlerList handlers = new HandlerList();
     private final Location to;
+    private boolean cancelled;
 
     public NPCTeleportEvent(NPC npc, Location to) {
         super(npc);
         this.to = to;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public Location getFrom() {
@@ -40,10 +44,4 @@ public class NPCTeleportEvent extends NPCEvent implements Cancellable {
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
     }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
 }

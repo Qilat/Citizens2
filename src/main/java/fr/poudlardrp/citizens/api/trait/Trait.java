@@ -1,10 +1,9 @@
 package fr.poudlardrp.citizens.api.trait;
 
-import org.bukkit.event.Listener;
-
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.DataKey;
+import org.bukkit.event.Listener;
 
 /**
  * Represents a Trait that can be loaded and saved.
@@ -49,10 +48,8 @@ public abstract class Trait implements Listener, Runnable {
     /**
      * Loads a trait.
      *
-     * @param key
-     *            DataKey to load from
-     * @throws NPCLoadException
-     *             Thrown if this trait failed to load properly
+     * @param key DataKey to load from
+     * @throws NPCLoadException Thrown if this trait failed to load properly
      */
     public void load(DataKey key) throws NPCLoadException {
     }
@@ -96,8 +93,7 @@ public abstract class Trait implements Listener, Runnable {
     /**
      * Saves a trait.
      *
-     * @param key
-     *            DataKey to save to
+     * @param key DataKey to save to
      */
     public void save(DataKey key) {
     }

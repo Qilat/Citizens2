@@ -1,12 +1,7 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
 
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
-import net.minecraft.server.v1_10_R1.EntityInsentient;
-import net.minecraft.server.v1_10_R1.IBlockAccess;
-import net.minecraft.server.v1_10_R1.MathHelper;
-import net.minecraft.server.v1_10_R1.PathPoint;
-import net.minecraft.server.v1_10_R1.PathType;
-import net.minecraft.server.v1_10_R1.PathfinderAbstract;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.EntityHumanNPC;
+import net.minecraft.server.v1_10_R1.*;
 
 public abstract class PlayerPathfinderAbstract extends PathfinderAbstract {
     protected IBlockAccess a;
@@ -41,13 +36,13 @@ public abstract class PlayerPathfinderAbstract extends PathfinderAbstract {
     }
 
     public abstract PathType a(IBlockAccess paramIBlockAccess, int paramInt1, int paramInt2, int paramInt3,
-            EntityHumanNPC paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
-            boolean paramBoolean2);
+                               EntityHumanNPC paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
+                               boolean paramBoolean2);
 
     @Override
     public abstract PathType a(IBlockAccess paramIBlockAccess, int paramInt1, int paramInt2, int paramInt3,
-            EntityInsentient paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
-            boolean paramBoolean2);
+                               EntityInsentient paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
+                               boolean paramBoolean2);
 
     @Override
     protected PathPoint a(int paramInt1, int paramInt2, int paramInt3) {
@@ -62,7 +57,7 @@ public abstract class PlayerPathfinderAbstract extends PathfinderAbstract {
 
     @Override
     public abstract int a(PathPoint[] paramArrayOfPathPoint, PathPoint paramPathPoint1, PathPoint paramPathPoint2,
-            float paramFloat);
+                          float paramFloat);
 
     @Override
     public abstract PathPoint b();

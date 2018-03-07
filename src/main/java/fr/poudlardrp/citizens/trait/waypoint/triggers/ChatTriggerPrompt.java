@@ -1,16 +1,14 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 
-import com.google.common.collect.Lists;
+import java.util.List;
 
 public class ChatTriggerPrompt extends StringPrompt implements WaypointTriggerPrompt {
     private final List<String> lines = Lists.newArrayList();

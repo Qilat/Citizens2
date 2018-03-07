@@ -7,6 +7,30 @@ public abstract class Precondition extends BehaviorGoalAdapter {
         this.condition = condition;
     }
 
+    /**
+     * Creates a {@link Precondition} that returns either {@link BehaviorStatus#SUCCESS} or
+     * {@link BehaviorStatus#FAILURE} depending on the underlying {@link Condition}'s return status.
+     *
+     * @param condition The condition to check while executing
+     * @return The precondition behavior
+     */
+    public static Precondition runPrecondition(Condition condition) {
+        return new RunPrecondition(condition);
+    }
+
+    /**
+     * Creates a {@link Precondition} that wraps the <code>shouldExecute</code> method in {@link Behavior}. When
+     * <code>shouldExecute</code> is called, the given {@link Condition} will be checked before the wrapped behavior's
+     * method is called.
+     *
+     * @param wrapping  The behavior to wrap calls to
+     * @param condition The execution condition
+     * @return The precondition behavior
+     */
+    public static Precondition wrappingPrecondition(Behavior wrapping, Condition condition) {
+        return new WrappingPrecondition(wrapping, condition);
+    }
+
     private static class RunPrecondition extends Precondition {
         public RunPrecondition(Condition condition) {
             super(condition);
@@ -49,32 +73,5 @@ public abstract class Precondition extends BehaviorGoalAdapter {
         public boolean shouldExecute() {
             return condition.get() ? wrapping.shouldExecute() : false;
         }
-    }
-
-    /**
-     * Creates a {@link Precondition} that returns either {@link BehaviorStatus#SUCCESS} or
-     * {@link BehaviorStatus#FAILURE} depending on the underlying {@link Condition}'s return status.
-     * 
-     * @param condition
-     *            The condition to check while executing
-     * @return The precondition behavior
-     */
-    public static Precondition runPrecondition(Condition condition) {
-        return new RunPrecondition(condition);
-    }
-
-    /**
-     * Creates a {@link Precondition} that wraps the <code>shouldExecute</code> method in {@link Behavior}. When
-     * <code>shouldExecute</code> is called, the given {@link Condition} will be checked before the wrapped behavior's
-     * method is called.
-     * 
-     * @param wrapping
-     *            The behavior to wrap calls to
-     * @param condition
-     *            The execution condition
-     * @return The precondition behavior
-     */
-    public static Precondition wrappingPrecondition(Behavior wrapping, Condition condition) {
-        return new WrappingPrecondition(wrapping, condition);
     }
 }

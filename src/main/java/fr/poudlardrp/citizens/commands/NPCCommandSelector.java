@@ -1,30 +1,19 @@
-package net.poudlardcitizens.commands;
+package fr.poudlardrp.citizens.commands;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.Util;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.command.CommandContext;
 import net.citizensnpcs.api.command.CommandMessages;
-import net.citizensnpcs.api.command.exception.CommandException;
-import net.citizensnpcs.api.command.exception.CommandUsageException;
-import net.citizensnpcs.api.command.exception.ServerCommandException;
-import net.citizensnpcs.api.command.exception.UnhandledCommandException;
-import net.citizensnpcs.api.command.exception.WrappedCommandException;
+import net.citizensnpcs.api.command.exception.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.Util;
-
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversable;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.NumericPrompt;
-import org.bukkit.conversations.Prompt;
+import org.bukkit.conversations.*;
 
-import com.google.common.collect.Lists;
+import java.util.List;
 
 public class NPCCommandSelector extends NumericPrompt {
     private final Callback callback;
@@ -33,6 +22,43 @@ public class NPCCommandSelector extends NumericPrompt {
     public NPCCommandSelector(Callback callback, List<NPC> possible) {
         this.callback = callback;
         this.choices = possible;
+    }
+
+    public static void start(Callback callback, Conversable player, List<NPC> possible) {
+        final Conversation conversation = new ConversationFactory(CitizensAPI.getPlugin()).withLocalEcho(false)
+                .withEscapeSequence("exit").withModality(false)
+                .withFirstPrompt(new NPCCommandSelector(callback, possible)).buildConversation(player);
+        conversation.begin();
+    }
+
+    public static void startWithCallback(Callback callback, NPCRegistry npcRegistry, CommandSender sender,
+                                         CommandContext args, String raw) throws CommandException {
+        try {
+            int id = Integer.parseInt(raw);
+            callback.run(npcRegistry.getById(id));
+            return;
+        } catch (NumberFormatException ex) {
+            String name = args.getString(1);
+            List<NPC> possible = Lists.newArrayList();
+            double range = -1;
+            if (args.hasValueFlag("r")) {
+                range = Math.abs(args.getFlagDouble("r"));
+            }
+            for (NPC test : npcRegistry) {
+                if (test.getName().equalsIgnoreCase(name)) {
+                    if (range > 0 && test.isSpawned() && !Util.locationWithinRange(args.getSenderLocation(),
+                            test.getEntity().getLocation(), range))
+                        continue;
+                    possible.add(test);
+                }
+            }
+            if (possible.size() == 1) {
+                callback.run(possible.get(0));
+            } else if (possible.size() > 1) {
+                NPCCommandSelector.start(callback, (Conversable) sender, possible);
+                return;
+            }
+        }
     }
 
     @Override
@@ -80,42 +106,5 @@ public class NPCCommandSelector extends NumericPrompt {
 
     public static interface Callback {
         public void run(NPC npc) throws CommandException;
-    }
-
-    public static void start(Callback callback, Conversable player, List<NPC> possible) {
-        final Conversation conversation = new ConversationFactory(CitizensAPI.getPlugin()).withLocalEcho(false)
-                .withEscapeSequence("exit").withModality(false)
-                .withFirstPrompt(new NPCCommandSelector(callback, possible)).buildConversation(player);
-        conversation.begin();
-    }
-
-    public static void startWithCallback(Callback callback, NPCRegistry npcRegistry, CommandSender sender,
-            CommandContext args, String raw) throws CommandException {
-        try {
-            int id = Integer.parseInt(raw);
-            callback.run(npcRegistry.getById(id));
-            return;
-        } catch (NumberFormatException ex) {
-            String name = args.getString(1);
-            List<NPC> possible = Lists.newArrayList();
-            double range = -1;
-            if (args.hasValueFlag("r")) {
-                range = Math.abs(args.getFlagDouble("r"));
-            }
-            for (NPC test : npcRegistry) {
-                if (test.getName().equalsIgnoreCase(name)) {
-                    if (range > 0 && test.isSpawned() && !Util.locationWithinRange(args.getSenderLocation(),
-                            test.getEntity().getLocation(), range))
-                        continue;
-                    possible.add(test);
-                }
-            }
-            if (possible.size() == 1) {
-                callback.run(possible.get(0));
-            } else if (possible.size() > 1) {
-                NPCCommandSelector.start(callback, (Conversable) sender, possible);
-                return;
-            }
-        }
     }
 }

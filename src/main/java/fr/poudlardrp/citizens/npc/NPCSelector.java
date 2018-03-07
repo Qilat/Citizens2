@@ -1,9 +1,6 @@
-package net.poudlardcitizens.npc;
+package fr.poudlardrp.citizens.npc;
 
-import java.util.List;
-import java.util.UUID;
-
-import net.poudlardcitizens.Settings.Setting;
+import com.google.common.collect.Lists;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -11,9 +8,9 @@ import net.citizensnpcs.api.event.NPCSelectEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.Messaging;
+import net.poudlardcitizens.Settings.Setting;
 import net.poudlardcitizens.editor.Editor;
 import net.poudlardcitizens.util.Util;
-
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -28,11 +25,12 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.Plugin;
 
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.UUID;
 
 public class NPCSelector implements Listener, net.citizensnpcs.api.npc.NPCSelector {
-    private UUID consoleSelectedNPC;
     private final Plugin plugin;
+    private UUID consoleSelectedNPC;
 
     public NPCSelector(Plugin plugin) {
         this.plugin = plugin;

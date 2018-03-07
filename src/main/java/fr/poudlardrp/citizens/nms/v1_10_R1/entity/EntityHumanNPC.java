@@ -1,19 +1,27 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.util.List;
-import java.util.Map;
-
-import net.poudlardcitizens.nms.v1_10_R1.network.EmptyNetHandler;
-import net.poudlardcitizens.nms.v1_10_R1.network.EmptyNetworkManager;
-import net.poudlardcitizens.nms.v1_10_R1.network.EmptySocket;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.npc.skin.SkinPacketTracker;
-import net.poudlardcitizens.npc.skin.SkinnableEntity;
-import net.poudlardcitizens.util.NMS;
-import net.poudlardcitizens.util.Util;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+import fr.poudlardrp.citizens.nms.v1_10_R1.network.EmptyNetHandler;
+import fr.poudlardrp.citizens.nms.v1_10_R1.network.EmptyNetworkManager;
+import fr.poudlardrp.citizens.nms.v1_10_R1.network.EmptySocket;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.npc.skin.SkinPacketTracker;
+import fr.poudlardrp.citizens.npc.skin.SkinnableEntity;
+import fr.poudlardrp.citizens.util.NMS;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.NPCEnderTeleportEvent;
+import net.citizensnpcs.api.event.NPCPushEvent;
+import net.citizensnpcs.api.npc.MetadataStore;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.trait.Inventory;
+import net.minecraft.server.v1_10_R1.*;
+import net.poudlardcitizens.Settings.Setting;
+import net.poudlardcitizens.nms.v1_10_R1.util.*;
+import net.poudlardcitizens.trait.Gravity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,59 +32,27 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-import com.mojang.authlib.GameProfile;
-
-import net.poudlardcitizens.Settings.Setting;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.event.NPCEnderTeleportEvent;
-import net.citizensnpcs.api.event.NPCPushEvent;
-import net.citizensnpcs.api.npc.MetadataStore;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Inventory;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
-import net.poudlardcitizens.nms.v1_10_R1.util.PlayerControllerJump;
-import net.poudlardcitizens.nms.v1_10_R1.util.PlayerControllerLook;
-import net.poudlardcitizens.nms.v1_10_R1.util.PlayerControllerMove;
-import net.poudlardcitizens.nms.v1_10_R1.util.PlayerNavigation;
-import net.poudlardcitizens.trait.Gravity;
-import net.minecraft.server.v1_10_R1.AttributeInstance;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.DamageSource;
-import net.minecraft.server.v1_10_R1.Entity;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
-import net.minecraft.server.v1_10_R1.EnumGamemode;
-import net.minecraft.server.v1_10_R1.EnumItemSlot;
-import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
-import net.minecraft.server.v1_10_R1.GenericAttributes;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.MathHelper;
-import net.minecraft.server.v1_10_R1.MinecraftServer;
-import net.minecraft.server.v1_10_R1.NavigationAbstract;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketPlayOutEntityEquipment;
-import net.minecraft.server.v1_10_R1.PacketPlayOutEntityHeadRotation;
-import net.minecraft.server.v1_10_R1.PathType;
-import net.minecraft.server.v1_10_R1.PlayerInteractManager;
-import net.minecraft.server.v1_10_R1.WorldServer;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.List;
+import java.util.Map;
 
 public class EntityHumanNPC extends EntityPlayer implements NPCHolder, SkinnableEntity {
+    private static final float EPSILON = 0.005F;
+    private static final Location LOADED_LOCATION = new Location(null, 0, 0, 0);
     private final Map<PathType, Float> bz = Maps.newEnumMap(PathType.class);
+    private final CitizensNPC npc;
+    private final Location packetLocationCache = new Location(null, 0, 0, 0);
+    private final SkinPacketTracker skinTracker;
     private PlayerControllerJump controllerJump;
     private PlayerControllerLook controllerLook;
     private PlayerControllerMove controllerMove;
     private int jumpTicks = 0;
     private PlayerNavigation navigation;
-    private final CitizensNPC npc;
-    private final Location packetLocationCache = new Location(null, 0, 0, 0);
-    private final SkinPacketTracker skinTracker;
     private int updateCounter = 0;
 
     public EntityHumanNPC(MinecraftServer minecraftServer, WorldServer world, GameProfile gameProfile,
-            PlayerInteractManager playerInteractManager, NPC npc) {
+                          PlayerInteractManager playerInteractManager, NPC npc) {
         super(minecraftServer, world, gameProfile, playerInteractManager);
 
         this.npc = (CitizensNPC) npc;
@@ -235,6 +211,11 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
     }
 
     @Override
+    public void setSkinName(String name) {
+        setSkinName(name, false);
+    }
+
+    @Override
     public SkinPacketTracker getSkinTracker() {
         return skinTracker;
     }
@@ -368,11 +349,6 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
     }
 
     @Override
-    public void setSkinName(String name) {
-        setSkinName(name, false);
-    }
-
-    @Override
     public void setSkinName(String name, boolean forceUpdate) {
         Preconditions.checkNotNull(name);
 
@@ -466,6 +442,11 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
         }
 
         @Override
+        public void setSkinName(String name) {
+            ((SkinnableEntity) this.entity).setSkinName(name);
+        }
+
+        @Override
         public SkinPacketTracker getSkinTracker() {
             return ((SkinnableEntity) this.entity).getSkinTracker();
         }
@@ -491,11 +472,6 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
         }
 
         @Override
-        public void setSkinName(String name) {
-            ((SkinnableEntity) this.entity).setSkinName(name);
-        }
-
-        @Override
         public void setSkinName(String skinName, boolean forceUpdate) {
             ((SkinnableEntity) this.entity).setSkinName(skinName, forceUpdate);
         }
@@ -505,8 +481,4 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
             ((SkinnableEntity) this.entity).setSkinPersistent(skinName, signature, data);
         }
     }
-
-    private static final float EPSILON = 0.005F;
-
-    private static final Location LOADED_LOCATION = new Location(null, 0, 0, 0);
 }

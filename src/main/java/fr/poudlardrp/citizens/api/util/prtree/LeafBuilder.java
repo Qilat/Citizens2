@@ -1,11 +1,6 @@
 package fr.poudlardrp.citizens.api.util.prtree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * A builder of internal nodes used during bulk loading of a PR-Tree. A PR-Tree is build by building a pseudo R-Tree and
@@ -23,7 +18,7 @@ class LeafBuilder {
     }
 
     private <T, N> void addGetterAndSplitter(List<NodeUsage<T>> nodes, Comparator<T> tcomp,
-            Circle<Noder<T, N>> getters) {
+                                             Circle<Noder<T, N>> getters) {
         Comparator<NodeUsage<T>> comp = new NodeUsageComparator<T>(tcomp);
         Collections.sort(nodes, comp);
         List<NodeUsage<T>> sortedNodes = new ArrayList<NodeUsage<T>>(nodes);
@@ -31,7 +26,7 @@ class LeafBuilder {
     }
 
     public <T, N> void buildLeafs(Collection<? extends T> ls, NodeComparators<T> comparators, NodeFactory<N> nf,
-            List<N> leafNodes) {
+                                  List<N> leafNodes) {
         List<NodeUsage<T>> nodes = new ArrayList<NodeUsage<T>>(ls.size());
         for (T t : ls)
             nodes.add(new NodeUsage<T>(t, 1));
@@ -48,7 +43,7 @@ class LeafBuilder {
     }
 
     private <T, N> void getLeafs(int id, int totalNumberOfElements, Circle<Noder<T, N>> getters, NodeFactory<N> nf,
-            List<N> leafNodes) {
+                                 List<N> leafNodes) {
         List<Partition> partitionsToExpand = new ArrayList<Partition>();
         int[] pos = new int[2 * dimensions];
         partitionsToExpand.add(new Partition(id, totalNumberOfElements, pos));
@@ -93,15 +88,11 @@ class LeafBuilder {
 
         /**
          * Get the next node.
-         * 
-         * @param p
-         *            the Partition to get a node from
-         * @param gi
-         *            the current getter index
-         * @param maxObjects
-         *            use at most this many objects
-         * @param nf
-         *            the NodeFactory used to create the nodes
+         *
+         * @param p          the Partition to get a node from
+         * @param gi         the current getter index
+         * @param maxObjects use at most this many objects
+         * @param nf         the NodeFactory used to create the nodes
          * @return the next node
          */
         private N getNextNode(Partition p, int gi, int maxObjects, NodeFactory<N> nf) {
@@ -144,7 +135,7 @@ class LeafBuilder {
         }
 
         private void split(Partition p, int gi, int nodesToMark, int fromId, int toId1, int toId2,
-                List<Partition> partitionsToExpand) {
+                           List<Partition> partitionsToExpand) {
             int sizePart2 = nodesToMark / 2;
             int sizePart1 = nodesToMark - sizePart2;
             int startPos = p.currentPositions[gi];
@@ -170,8 +161,8 @@ class LeafBuilder {
     }
 
     private static class Partition {
-        private int[] currentPositions;
         private final int id;
+        private int[] currentPositions;
         private int numElementsLeft;
 
         public Partition(int id, int numElementsLeft, int[] currentPositions) {

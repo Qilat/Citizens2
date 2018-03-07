@@ -1,4 +1,4 @@
-package net.poudlardcitizens.npc.ai.speech;
+package fr.poudlardrp.citizens.npc.ai.speech;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.speech.SpeechContext;
@@ -8,7 +8,6 @@ import net.citizensnpcs.api.ai.speech.event.SpeechBystanderEvent;
 import net.citizensnpcs.api.ai.speech.event.SpeechTargetedEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -41,7 +40,7 @@ public class TalkableEntity implements Talkable {
             // If NPC and matches, return 0
         } else if (CitizensAPI.getNPCRegistry().isNPC((Entity) o) && CitizensAPI.getNPCRegistry().isNPC(entity)
                 && CitizensAPI.getNPCRegistry().getNPC((Entity) o).getUniqueId()
-                        .equals(CitizensAPI.getNPCRegistry().getNPC(entity).getUniqueId())) {
+                .equals(CitizensAPI.getNPCRegistry().getNPC(entity).getUniqueId())) {
             return 0;
         } else if (entity.equals(o)) {
             return 0;

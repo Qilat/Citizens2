@@ -1,37 +1,32 @@
-package net.poudlardcitizens.npc.profile;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-
-import javax.annotation.Nullable;
-
-import org.bukkit.Bukkit;
+package fr.poudlardrp.citizens.npc.profile;
 
 import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
-
 import net.citizensnpcs.api.CitizensAPI;
+import org.bukkit.Bukkit;
+
+import javax.annotation.Nullable;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * Stores basic information about a single profile used to request profiles from the Mojang servers.
- *
+ * <p>
  * <p>
  * Also stores the result of the request.
  * </p>
  */
 public class ProfileRequest {
-    private Deque<ProfileFetchHandler> handlers;
     private final String playerName;
+    private Deque<ProfileFetchHandler> handlers;
     private GameProfile profile;
     private volatile ProfileFetchResult result = ProfileFetchResult.PENDING;
 
     /**
      * Constructor.
      *
-     * @param playerName
-     *            The name of the player whose profile is being requested.
-     * @param handler
-     *            Optional handler to handle the result for the profile. Handler always invoked from the main thread.
+     * @param playerName The name of the player whose profile is being requested.
+     * @param handler    Optional handler to handle the result for the profile. Handler always invoked from the main thread.
      */
     ProfileRequest(String playerName, @Nullable ProfileFetchHandler handler) {
         Preconditions.checkNotNull(playerName);
@@ -45,13 +40,12 @@ public class ProfileRequest {
 
     /**
      * Add one time result handler.
-     *
+     * <p>
      * <p>
      * Handler is always invoked from the main thread.
      * </p>
      *
-     * @param handler
-     *            The result handler.
+     * @param handler The result handler.
      */
     public void addHandler(ProfileFetchHandler handler) {
         Preconditions.checkNotNull(handler);
@@ -78,7 +72,7 @@ public class ProfileRequest {
      * Get the game profile that was requested.
      *
      * @return The game profile or null if the profile has not been retrieved yet or there was an error while retrieving
-     *         the profile.
+     * the profile.
      */
     @Nullable
     public GameProfile getProfile() {
@@ -94,15 +88,13 @@ public class ProfileRequest {
 
     /**
      * Invoked to set the profile result.
-     *
+     * <p>
      * <p>
      * Can be invoked from any thread, always executes on the main thread.
      * </p>
      *
-     * @param profile
-     *            The profile. Null if there was an error.
-     * @param result
-     *            The result of the request.
+     * @param profile The profile. Null if there was an error.
+     * @param result  The result of the request.
      */
     void setResult(final @Nullable GameProfile profile, final ProfileFetchResult result) {
         if (!CitizensAPI.hasImplementation())

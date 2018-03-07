@@ -1,11 +1,5 @@
 package fr.poudlardrp.citizens.api;
 
-import java.io.File;
-
-import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-
 import net.citizensnpcs.api.ai.speech.SpeechFactory;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCDataStore;
@@ -13,11 +7,19 @@ import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.npc.NPCSelector;
 import net.citizensnpcs.api.scripting.ScriptCompiler;
 import net.citizensnpcs.api.trait.TraitFactory;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+
+import java.io.File;
 
 /**
  * Contains methods used in order to utilize the Citizens API.
  */
 public final class CitizensAPI {
+    private static CitizensPlugin instance = null;
+    private static ScriptCompiler scriptCompiler;
+
     private CitizensAPI() {
     }
 
@@ -25,10 +27,9 @@ public final class CitizensAPI {
      * Creates a new <em>anonymous</em> {@link NPCRegistry} with its own set of {@link NPC}s. This is not stored by the
      * Citizens plugin.
      *
-     * @since 2.0.8
-     * @param store
-     *            The {@link NPCDataStore} to use with the registry
+     * @param store The {@link NPCDataStore} to use with the registry
      * @return A new anonymous NPCRegistry that is not accessible via {@link #getPluginNPCRegistry(String)}
+     * @since 2.0.8
      */
     public static NPCRegistry createAnonymousNPCRegistry(NPCDataStore store) {
         return getImplementation().createAnonymousNPCRegistry(store);
@@ -38,12 +39,10 @@ public final class CitizensAPI {
      * Creates a new {@link NPCRegistry} with its own set of {@link NPC}s. This is stored in memory with the Citizens
      * plugin, and can be accessed via {@link #getNamedNPCRegistry(String)}.
      *
-     * @param name
-     *            The plugin name
-     * @param store
-     *            The {@link NPCDataStore} to use with the registry
-     * @since 2.0.8
+     * @param name  The plugin name
+     * @param store The {@link NPCDataStore} to use with the registry
      * @return A new NPCRegistry, that can also be retrieved via {@link #getPluginNPCRegistry(String)}
+     * @since 2.0.8
      */
     public static NPCRegistry createNamedNPCRegistry(String name, NPCDataStore store) {
         return getImplementation().createNamedNPCRegistry(name, store);
@@ -66,6 +65,18 @@ public final class CitizensAPI {
         return instance;
     }
 
+    /**
+     * Sets the current Citizens implementation.
+     *
+     * @param implementation The new implementation
+     */
+    public static void setImplementation(CitizensPlugin implementation) {
+        if (implementation != null && hasImplementation()) {
+            getImplementation().onImplementationChanged();
+        }
+        instance = implementation;
+    }
+
     private static ClassLoader getImplementationClassLoader() {
         return getImplementation().getOwningClassLoader();
     }
@@ -74,10 +85,9 @@ public final class CitizensAPI {
      * Retrieves the {@link NPCRegistry} previously created via {@link #createNamedNPCRegistry(String)} with the given
      * name, or null if not found.
      *
-     * @param name
-     *            The registry name
-     * @since 2.0.8
+     * @param name The registry name
      * @return A NPCRegistry previously created via {@link #createNamedNPCRegistry(String)}, or null if not found
+     * @since 2.0.8
      */
     public static NPCRegistry getNamedNPCRegistry(String name) {
         return getImplementation().getNamedNPCRegistry(name);
@@ -123,8 +133,8 @@ public final class CitizensAPI {
     /**
      * Gets the current implementation's {@link SpeechFactory}.
      *
-     * @see CitizensPlugin
      * @return Citizens speech factory
+     * @see CitizensPlugin
      */
     public static SpeechFactory getSpeechFactory() {
         return getImplementation().getSpeechFactory();
@@ -133,8 +143,8 @@ public final class CitizensAPI {
     /**
      * Gets the current implementation's {@link TraitFactory}.
      *
-     * @see CitizensPlugin
      * @return Citizens trait factory
+     * @see CitizensPlugin
      */
     public static TraitFactory getTraitFactory() {
         return getImplementation().getTraitFactory();
@@ -150,9 +160,8 @@ public final class CitizensAPI {
     /**
      * A helper method for registering events using the current implementation's {@link Plugin}.
      *
+     * @param listener The listener to register events for
      * @see #getPlugin()
-     * @param listener
-     *            The listener to register events for
      */
     public static void registerEvents(Listener listener) {
         if (Bukkit.getServer() != null && getPlugin() != null)
@@ -162,25 +171,11 @@ public final class CitizensAPI {
     /**
      * Removes any previously created {@link NPCRegistry} stored under the given name.
      *
+     * @param name The name previously given to {@link #createNamedNPCRegistry(String)}
      * @since 2.0.8
-     * @param name
-     *            The name previously given to {@link #createNamedNPCRegistry(String)}
      */
     public static void removeNamedNPCRegistry(String name) {
         getImplementation().removeNamedNPCRegistry(name);
-    }
-
-    /**
-     * Sets the current Citizens implementation.
-     *
-     * @param implementation
-     *            The new implementation
-     */
-    public static void setImplementation(CitizensPlugin implementation) {
-        if (implementation != null && hasImplementation()) {
-            getImplementation().onImplementationChanged();
-        }
-        instance = implementation;
     }
 
     /**
@@ -193,7 +188,4 @@ public final class CitizensAPI {
         scriptCompiler.interrupt();
         scriptCompiler = null;
     }
-
-    private static CitizensPlugin instance = null;
-    private static ScriptCompiler scriptCompiler;
 }

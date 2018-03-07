@@ -1,19 +1,17 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import java.util.List;
-
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.PlayerAnimation;
+import fr.poudlardrp.citizens.util.Util;
 import net.citizensnpcs.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.PlayerAnimation;
-import net.poudlardcitizens.util.Util;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import java.util.List;
 
 public class AnimationTriggerPrompt extends StringPrompt implements WaypointTriggerPrompt {
     private final List<PlayerAnimation> animations = Lists.newArrayList();

@@ -1,7 +1,6 @@
 package fr.poudlardrp.citizens.api.event;
 
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -9,18 +8,22 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 
 public class EntityTargetNPCEvent extends NPCEvent implements Cancellable {
-    private boolean cancelled;
-
+    private static final HandlerList handlers = new HandlerList();
     private final EntityTargetEvent event;
+    private boolean cancelled;
 
     public EntityTargetNPCEvent(EntityTargetEvent event, NPC npc) {
         super(npc);
         this.event = event;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * Returns the Entity involved in this event
-     * 
+     *
      * @return Entity who is involved in this event
      */
     public Entity getEntity() {
@@ -34,7 +37,7 @@ public class EntityTargetNPCEvent extends NPCEvent implements Cancellable {
 
     /**
      * Returns the reason for the targeting
-     * 
+     *
      * @return The reason
      */
     public TargetReason getReason() {
@@ -49,11 +52,5 @@ public class EntityTargetNPCEvent extends NPCEvent implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

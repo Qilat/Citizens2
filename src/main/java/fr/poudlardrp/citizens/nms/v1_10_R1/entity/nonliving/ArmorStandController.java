@@ -1,9 +1,13 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity.nonliving;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving;
 
-import net.poudlardcitizens.nms.v1_10_R1.entity.MobEntityController;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.MobEntityController;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.event.NPCPushEvent;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.*;
+import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;
@@ -12,18 +16,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.event.NPCPushEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
-import net.minecraft.server.v1_10_R1.EntityArmorStand;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.EnumHand;
-import net.minecraft.server.v1_10_R1.EnumInteractionResult;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.Vec3D;
-import net.minecraft.server.v1_10_R1.World;
 
 public class ArmorStandController extends MobEntityController {
     public ArmorStandController() {

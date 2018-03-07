@@ -1,4 +1,4 @@
-package net.poudlardcitizens.nms.v1_10_R1.network;
+package fr.poudlardrp.citizens.nms.v1_10_R1.network;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class EmptySocket extends Socket {
+    private static final byte[] EMPTY = new byte[50];
+
     @Override
     public InputStream getInputStream() {
         return new ByteArrayInputStream(EMPTY);
@@ -16,6 +18,4 @@ public class EmptySocket extends Socket {
     public OutputStream getOutputStream() {
         return new ByteArrayOutputStream(10);
     }
-
-    private static final byte[] EMPTY = new byte[50];
 }

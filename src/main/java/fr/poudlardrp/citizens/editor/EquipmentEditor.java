@@ -1,8 +1,12 @@
-package net.poudlardcitizens.editor;
+package fr.poudlardrp.citizens.editor;
 
-import java.util.Map;
-
-import net.poudlardcitizens.util.Messages;
+import com.google.common.collect.Maps;
+import fr.poudlardrp.citizens.util.Messages;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.trait.Equipment;
+import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
+import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -15,15 +19,26 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.collect.Maps;
-
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Equipment;
-import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
-import net.citizensnpcs.api.util.Messaging;
+import java.util.Map;
 
 public class EquipmentEditor extends Editor {
+    private static final Map<EntityType, Equipper> EQUIPPERS = Maps.newEnumMap(EntityType.class);
+
+    static {
+        EQUIPPERS.put(EntityType.PIG, new PigEquipper());
+        EQUIPPERS.put(EntityType.SHEEP, new SheepEquipper());
+        EQUIPPERS.put(EntityType.ENDERMAN, new EndermanEquipper());
+        EQUIPPERS.put(EntityType.HORSE, new HorseEquipper());
+        try {
+            EQUIPPERS.put(EntityType.valueOf("ZOMBIE_HORSE"), new HorseEquipper());
+            EQUIPPERS.put(EntityType.valueOf("LLAMA"), new HorseEquipper());
+            EQUIPPERS.put(EntityType.valueOf("DONKEY"), new HorseEquipper());
+            EQUIPPERS.put(EntityType.valueOf("MULE"), new HorseEquipper());
+            EQUIPPERS.put(EntityType.valueOf("SKELETON_HORSE"), new HorseEquipper());
+        } catch (IllegalArgumentException ex) {
+        }
+    }
+
     private final NPC npc;
     private final Player player;
 
@@ -100,22 +115,5 @@ public class EquipmentEditor extends Editor {
         }
         equipper.equip(event.getPlayer(), npc);
         event.setCancelled(true);
-    }
-
-    private static final Map<EntityType, Equipper> EQUIPPERS = Maps.newEnumMap(EntityType.class);
-
-    static {
-        EQUIPPERS.put(EntityType.PIG, new PigEquipper());
-        EQUIPPERS.put(EntityType.SHEEP, new SheepEquipper());
-        EQUIPPERS.put(EntityType.ENDERMAN, new EndermanEquipper());
-        EQUIPPERS.put(EntityType.HORSE, new HorseEquipper());
-        try {
-            EQUIPPERS.put(EntityType.valueOf("ZOMBIE_HORSE"), new HorseEquipper());
-            EQUIPPERS.put(EntityType.valueOf("LLAMA"), new HorseEquipper());
-            EQUIPPERS.put(EntityType.valueOf("DONKEY"), new HorseEquipper());
-            EQUIPPERS.put(EntityType.valueOf("MULE"), new HorseEquipper());
-            EQUIPPERS.put(EntityType.valueOf("SKELETON_HORSE"), new HorseEquipper());
-        } catch (IllegalArgumentException ex) {
-        }
     }
 }

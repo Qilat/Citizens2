@@ -1,26 +1,17 @@
-package net.poudlardcitizens.npc.skin;
+package fr.poudlardrp.citizens.npc.skin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import net.poudlardcitizens.util.NMS;
+import com.google.common.base.Preconditions;
+import fr.poudlardrp.citizens.util.NMS;
+import net.citizensnpcs.api.CitizensAPI;
+import net.poudlardcitizens.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Preconditions;
-
-import net.poudlardcitizens.Settings;
-import net.citizensnpcs.api.CitizensAPI;
+import java.util.*;
 
 /**
  * Sends remove packets in batch per player.
- *
+ * <p>
  * <p>
  * Collects entities to remove and sends them all to the player in a single packet.
  * </p>
@@ -35,8 +26,7 @@ public class TabListRemover {
     /**
      * Cancel packets pending to be sent to the specified player.
      *
-     * @param player
-     *            The player.
+     * @param player The player.
      */
     public void cancelPackets(Player player) {
         Preconditions.checkNotNull(player);
@@ -53,10 +43,8 @@ public class TabListRemover {
     /**
      * Cancel packets pending to be sent to the specified player for the specified skinnable entity.
      *
-     * @param player
-     *            The player.
-     * @param skinnable
-     *            The skinnable entity.
+     * @param player    The player.
+     * @param skinnable The skinnable entity.
      */
     public void cancelPackets(Player player, SkinnableEntity skinnable) {
         Preconditions.checkNotNull(player);
@@ -88,10 +76,8 @@ public class TabListRemover {
     /**
      * Send a remove packet to the specified player for the specified skinnable entity.
      *
-     * @param player
-     *            The player to send the packet to.
-     * @param entity
-     *            The entity to remove.
+     * @param player The player to send the packet to.
+     * @param entity The entity to remove.
      */
     public void sendPacket(Player player, SkinnableEntity entity) {
         Preconditions.checkNotNull(player);

@@ -1,25 +1,24 @@
-package net.poudlardcitizens.commands;
+package fr.poudlardrp.citizens.commands;
 
+import fr.poudlardrp.citizens.editor.CopierEditor;
+import fr.poudlardrp.citizens.editor.Editor;
+import fr.poudlardrp.citizens.editor.EquipmentEditor;
+import fr.poudlardrp.citizens.trait.text.Text;
 import net.citizensnpcs.api.command.Command;
 import net.citizensnpcs.api.command.CommandContext;
 import net.citizensnpcs.api.command.Requirements;
 import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.editor.CopierEditor;
-import net.poudlardcitizens.editor.Editor;
-import net.poudlardcitizens.editor.EquipmentEditor;
-import net.poudlardcitizens.trait.text.Text;
 import net.poudlardcitizens.trait.waypoint.Waypoints;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @Requirements(selected = true, ownership = true)
 public class EditorCommands {
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "copier",
             desc = "Toggle the NPC copier",
-            modifiers = { "copier" },
+            modifiers = {"copier"},
             min = 1,
             max = 1,
             permission = "citizens.npc.edit.copier")
@@ -28,10 +27,10 @@ public class EditorCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "equip",
             desc = "Toggle the equipment editor",
-            modifiers = { "equip" },
+            modifiers = {"equip"},
             min = 1,
             max = 1,
             permission = "citizens.npc.edit.equip")
@@ -40,10 +39,10 @@ public class EditorCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "path",
             desc = "Toggle the waypoint editor",
-            modifiers = { "path" },
+            modifiers = {"path"},
             min = 1,
             max = 1,
             flags = "*",
@@ -57,10 +56,10 @@ public class EditorCommands {
     }
 
     @Command(
-            aliases = { "npc" },
+            aliases = {"npc"},
             usage = "text",
             desc = "Toggle the text editor",
-            modifiers = { "text" },
+            modifiers = {"text"},
             min = 1,
             max = 1,
             permission = "citizens.npc.edit.text")

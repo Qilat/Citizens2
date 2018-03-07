@@ -1,55 +1,28 @@
-package net.poudlardcitizens.npc;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+package fr.poudlardrp.citizens.npc;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
-import net.poudlardcitizens.Metrics;
-import net.poudlardcitizens.Metrics.Graph;
+import fr.poudlardrp.citizens.trait.Age;
+import fr.poudlardrp.citizens.trait.text.Text;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitFactory;
 import net.citizensnpcs.api.trait.TraitInfo;
-import net.citizensnpcs.api.trait.trait.Equipment;
-import net.citizensnpcs.api.trait.trait.Inventory;
-import net.citizensnpcs.api.trait.trait.MobType;
-import net.citizensnpcs.api.trait.trait.Owner;
-import net.citizensnpcs.api.trait.trait.Spawned;
-import net.citizensnpcs.api.trait.trait.Speech;
-import net.poudlardcitizens.trait.Age;
-import net.poudlardcitizens.trait.Anchors;
-import net.poudlardcitizens.trait.ArmorStandTrait;
-import net.poudlardcitizens.trait.BossBarTrait;
-import net.poudlardcitizens.trait.Controllable;
-import net.poudlardcitizens.trait.CurrentLocation;
-import net.poudlardcitizens.trait.Gravity;
-import net.poudlardcitizens.trait.HorseModifiers;
-import net.poudlardcitizens.trait.LookClose;
-import net.poudlardcitizens.trait.MountTrait;
-import net.poudlardcitizens.trait.OcelotModifiers;
-import net.poudlardcitizens.trait.Poses;
-import net.poudlardcitizens.trait.Powered;
-import net.poudlardcitizens.trait.RabbitType;
-import net.poudlardcitizens.trait.Saddle;
-import net.poudlardcitizens.trait.ScriptTrait;
-import net.poudlardcitizens.trait.SheepTrait;
-import net.poudlardcitizens.trait.ShulkerTrait;
-import net.poudlardcitizens.trait.SkinLayers;
-import net.poudlardcitizens.trait.SlimeSize;
-import net.poudlardcitizens.trait.VillagerProfession;
-import net.poudlardcitizens.trait.WitherTrait;
-import net.poudlardcitizens.trait.WolfModifiers;
-import net.poudlardcitizens.trait.WoolColor;
-import net.poudlardcitizens.trait.text.Text;
+import net.citizensnpcs.api.trait.trait.*;
+import net.poudlardcitizens.Metrics;
+import net.poudlardcitizens.Metrics.Graph;
+import net.poudlardcitizens.trait.*;
 import net.poudlardcitizens.trait.waypoint.Waypoints;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public class CitizensTraitFactory implements TraitFactory {
+    private static final Set<String> INTERNAL_TRAITS = Sets.newHashSet();
     private final List<TraitInfo> defaultTraits = Lists.newArrayList();
     private final Map<String, TraitInfo> registered = Maps.newHashMap();
 
@@ -170,6 +143,4 @@ public class CitizensTraitFactory implements TraitFactory {
             defaultTraits.add(info);
         }
     }
-
-    private static final Set<String> INTERNAL_TRAITS = Sets.newHashSet();
 }

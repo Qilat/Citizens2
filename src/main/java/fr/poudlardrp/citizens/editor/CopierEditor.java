@@ -1,10 +1,9 @@
-package net.poudlardcitizens.editor;
+package fr.poudlardrp.citizens.editor;
 
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
 import net.poudlardcitizens.trait.CurrentLocation;
-import net.poudlardcitizens.util.Messages;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,8 +1,7 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
-
 import org.bukkit.Location;
 
 public class SpeedTrigger implements WaypointTrigger {

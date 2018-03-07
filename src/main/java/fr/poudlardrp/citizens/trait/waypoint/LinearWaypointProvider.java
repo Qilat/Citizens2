@@ -1,29 +1,9 @@
-package net.poudlardcitizens.trait.waypoint;
-
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.poudlardcitizens.editor.Editor;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.Util;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.inventory.EquipmentSlot;
+package fr.poudlardrp.citizens.trait.waypoint;
 
 import com.google.common.collect.Lists;
-
+import fr.poudlardrp.citizens.editor.Editor;
+import fr.poudlardrp.citizens.util.Messages;
+import fr.poudlardrp.citizens.util.Util;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.Goal;
 import net.citizensnpcs.api.ai.GoalSelector;
@@ -40,11 +20,28 @@ import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.Messaging;
 import net.poudlardcitizens.trait.waypoint.WaypointProvider.EnumerableWaypointProvider;
 import net.poudlardcitizens.trait.waypoint.triggers.TriggerEditPrompt;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.EquipmentSlot;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
 
 public class LinearWaypointProvider implements EnumerableWaypointProvider {
+    private final List<Waypoint> waypoints = Lists.newArrayList();
     private LinearWaypointGoal currentGoal;
     private NPC npc;
-    private final List<Waypoint> waypoints = Lists.newArrayList();
 
     @Override
     public WaypointEditor createEditor(CommandSender sender, CommandContext args) {
@@ -98,6 +95,13 @@ public class LinearWaypointProvider implements EnumerableWaypointProvider {
     }
 
     @Override
+    public void setPaused(boolean paused) {
+        if (currentGoal != null) {
+            currentGoal.setPaused(paused);
+        }
+    }
+
+    @Override
     public void load(DataKey key) {
         for (DataKey root : key.getRelative("points").getIntegerSubKeys()) {
             Waypoint waypoint = PersistenceLoader.load(Waypoint.class, root);
@@ -131,23 +135,17 @@ public class LinearWaypointProvider implements EnumerableWaypointProvider {
     }
 
     @Override
-    public void setPaused(boolean paused) {
-        if (currentGoal != null) {
-            currentGoal.setPaused(paused);
-        }
-    }
-
-    @Override
     public Iterable<Waypoint> waypoints() {
         return waypoints;
     }
 
     private final class LinearWaypointEditor extends WaypointEditor {
+        private static final int LARGEST_SLOT = 8;
+        private final Player player;
         Conversation conversation;
         boolean editing = true;
         int editingSlot = waypoints.size() - 1;
         WaypointMarkers markers;
-        private final Player player;
         private boolean showPath;
 
         private LinearWaypointEditor(Player player) {
@@ -354,8 +352,6 @@ public class LinearWaypointProvider implements EnumerableWaypointProvider {
                 Messaging.sendTr(player, Messages.LINEAR_WAYPOINT_EDITOR_NOT_SHOWING_MARKERS);
             }
         }
-
-        private static final int LARGEST_SLOT = 8;
     }
 
     private class LinearWaypointGoal implements Goal {
@@ -410,6 +406,13 @@ public class LinearWaypointProvider implements EnumerableWaypointProvider {
             return paused;
         }
 
+        public void setPaused(boolean pause) {
+            if (pause && currentDestination != null) {
+                selector.finish();
+            }
+            paused = pause;
+        }
+
         public void onProviderChanged() {
             itr = getUnsafeIterator();
             if (currentDestination != null) {
@@ -433,13 +436,6 @@ public class LinearWaypointProvider implements EnumerableWaypointProvider {
             if (!getNavigator().isNavigating()) {
                 selector.finish();
             }
-        }
-
-        public void setPaused(boolean pause) {
-            if (pause && currentDestination != null) {
-                selector.finish();
-            }
-            paused = pause;
         }
 
         @Override

@@ -1,12 +1,12 @@
 package fr.poudlardrp.citizens.api.persistence;
 
+import net.citizensnpcs.api.util.DataKey;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Collection;
-
-import net.citizensnpcs.api.util.DataKey;
 
 /**
  * Tells the {@link PersistenceLoader} to persist this field by saving and loading it into {@link DataKey}s.
@@ -28,7 +28,7 @@ public @interface Persist {
 
     /**
      * The save key to use when saving. If not present, the field name will be used instead.
-     * 
+     * <p>
      * <ul>
      * <li><code>@Persist</code> -> root key + field name</li>
      * <li><code>@Persist("")</code> -> root key + "" (or simply root key)</li>

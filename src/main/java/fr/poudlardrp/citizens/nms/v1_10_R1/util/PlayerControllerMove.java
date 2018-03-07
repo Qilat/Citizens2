@@ -1,16 +1,10 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
+
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.EntityHumanNPC;
+import fr.poudlardrp.citizens.util.NMS;
+import net.minecraft.server.v1_10_R1.*;
 
 import java.util.Random;
-
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
-import net.poudlardcitizens.util.NMS;
-import net.minecraft.server.v1_10_R1.AttributeInstance;
-import net.minecraft.server.v1_10_R1.ControllerMove;
-import net.minecraft.server.v1_10_R1.EntityInsentient;
-import net.minecraft.server.v1_10_R1.EntityLiving;
-import net.minecraft.server.v1_10_R1.EntitySlime;
-import net.minecraft.server.v1_10_R1.GenericAttributes;
-import net.minecraft.server.v1_10_R1.MathHelper;
 
 public class PlayerControllerMove extends ControllerMove {
     protected EntityLiving a;

@@ -1,13 +1,20 @@
-package net.poudlardcitizens.trait.text;
+package fr.poudlardrp.citizens.trait.text;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.collect.Maps;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.ai.speech.SpeechContext;
+import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.citizensnpcs.api.exception.NPCLoadException;
+import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitName;
+import net.citizensnpcs.api.util.DataKey;
+import net.citizensnpcs.api.util.Messaging;
+import net.citizensnpcs.api.util.Paginator;
+import net.poudlardcitizens.Settings.Setting;
+import net.poudlardcitizens.editor.Editor;
+import net.poudlardcitizens.trait.Toggleable;
+import net.poudlardcitizens.util.Messages;
+import net.poudlardcitizens.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.conversations.Conversation;
@@ -20,35 +27,22 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-import com.google.common.collect.Maps;
-
-import net.poudlardcitizens.Settings.Setting;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.speech.SpeechContext;
-import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.citizensnpcs.api.exception.NPCLoadException;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
-import net.citizensnpcs.api.util.DataKey;
-import net.citizensnpcs.api.util.Messaging;
-import net.citizensnpcs.api.util.Paginator;
-import net.poudlardcitizens.editor.Editor;
-import net.poudlardcitizens.trait.Toggleable;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.Util;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @TraitName("text")
 public class Text extends Trait implements Runnable, Toggleable, Listener, ConversationAbandonedListener {
+    private static Random RANDOM = Util.getFastRandom();
     private final Map<UUID, Date> cooldowns = Maps.newHashMap();
+    private final Plugin plugin;
+    private final List<String> text = new ArrayList<String>();
     private int currentIndex;
     private int delay = -1;
     private String itemInHandPattern = "default";
-    private final Plugin plugin;
     private boolean randomTalker = Setting.DEFAULT_RANDOM_TALKER.asBoolean();
     private double range = Setting.DEFAULT_TALK_CLOSE_RANGE.asDouble();
     private boolean realisticLooker = Setting.DEFAULT_REALISTIC_LOOKING.asBoolean();
     private boolean talkClose = Setting.DEFAULT_TALK_CLOSE.asBoolean();
-    private final List<String> text = new ArrayList<String>();
 
     public Text() {
         super("text");
@@ -154,7 +148,7 @@ public class Text extends Trait implements Runnable, Toggleable, Listener, Conve
             Date wait = new Date();
             int secondsDelta = delay != -1 ? delay
                     : RANDOM.nextInt(Setting.TALK_CLOSE_MAXIMUM_COOLDOWN.asInt())
-                            + Setting.TALK_CLOSE_MINIMUM_COOLDOWN.asInt();
+                    + Setting.TALK_CLOSE_MINIMUM_COOLDOWN.asInt();
             if (secondsDelta <= 0)
                 return;
             long millisecondsDelta = TimeUnit.MILLISECONDS.convert(secondsDelta, TimeUnit.SECONDS);
@@ -244,6 +238,4 @@ public class Text extends Trait implements Runnable, Toggleable, Listener, Conve
         builder.append("}");
         return builder.toString();
     }
-
-    private static Random RANDOM = Util.getFastRandom();
 }

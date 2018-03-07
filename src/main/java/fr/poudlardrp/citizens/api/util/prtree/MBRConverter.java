@@ -2,9 +2,8 @@ package fr.poudlardrp.citizens.api.util.prtree;
 
 /**
  * A class that given a T can tell the minimum and maximum ordinates for that object.
- * 
- * @param <T>
- *            the data type stored in the PRTree
+ *
+ * @param <T> the data type stored in the PRTree
  */
 public interface MBRConverter<T> {
     /**
@@ -14,22 +13,18 @@ public interface MBRConverter<T> {
 
     /**
      * Get the maximum coordinate value for the given t
-     * 
-     * @param axis
-     *            the axis to get the max value for
-     * @param t
-     *            the object to get the mbr ordinate for
+     *
+     * @param axis the axis to get the max value for
+     * @param t    the object to get the mbr ordinate for
      * @return the max value for the given axis
      */
     double getMax(int axis, T t);
 
     /**
      * Get the minimum coordinate value for the given t.
-     * 
-     * @param axis
-     *            the axis to get the min value for
-     * @param t
-     *            the object to get the mbr ordinate for
+     *
+     * @param axis the axis to get the min value for
+     * @param t    the object to get the mbr ordinate for
      * @return the min value for the given axis
      */
     double getMin(int axis, T t);

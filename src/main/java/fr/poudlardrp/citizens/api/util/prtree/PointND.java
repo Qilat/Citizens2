@@ -10,8 +10,7 @@ public interface PointND {
     int getDimensions();
 
     /**
-     * @param axis
-     *            the axis to get the value for
+     * @param axis the axis to get the value for
      * @return the ordinate value for the given axis
      */
     double getOrd(int axis);

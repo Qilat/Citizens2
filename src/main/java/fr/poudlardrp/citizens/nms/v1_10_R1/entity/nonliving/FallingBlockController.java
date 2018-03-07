@@ -1,9 +1,13 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity.nonliving;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving;
 
-import net.poudlardcitizens.npc.AbstractEntityController;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
+import fr.poudlardrp.citizens.npc.AbstractEntityController;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.event.NPCPushEvent;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.*;
+import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,17 +19,6 @@ import org.bukkit.craftbukkit.v1_10_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.event.NPCPushEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
-import net.minecraft.server.v1_10_R1.Block;
-import net.minecraft.server.v1_10_R1.Blocks;
-import net.minecraft.server.v1_10_R1.EntityFallingBlock;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.World;
-import net.minecraft.server.v1_10_R1.WorldServer;
 
 public class FallingBlockController extends AbstractEntityController {
     public FallingBlockController() {
@@ -39,7 +32,7 @@ public class FallingBlockController extends AbstractEntityController {
         int data = npc.data().get(NPC.ITEM_DATA_METADATA, npc.data().get("falling-block-data", 0));
         if (npc.data().has("falling-block-id") || npc.data().has(NPC.ITEM_ID_METADATA)) {
             id = CraftMagicNumbers.getBlock(Material.getMaterial(
-                    npc.data().<String> get(NPC.ITEM_ID_METADATA, npc.data().<String> get("falling-block-id"))));
+                    npc.data().<String>get(NPC.ITEM_ID_METADATA, npc.data().<String>get("falling-block-id"))));
         }
         final EntityFallingBlockNPC handle = new EntityFallingBlockNPC(ws, npc, at.getX(), at.getY(), at.getZ(),
                 id.fromLegacyData(data));
@@ -52,6 +45,7 @@ public class FallingBlockController extends AbstractEntityController {
     }
 
     public static class EntityFallingBlockNPC extends EntityFallingBlock implements NPCHolder {
+        private static final double EPSILON = 0.001;
         private final CitizensNPC npc;
 
         public EntityFallingBlockNPC(World world) {
@@ -141,8 +135,6 @@ public class FallingBlockController extends AbstractEntityController {
                 super.m();
             }
         }
-
-        private static final double EPSILON = 0.001;
     }
 
     public static class FallingBlockNPC extends CraftFallingSand implements NPCHolder {

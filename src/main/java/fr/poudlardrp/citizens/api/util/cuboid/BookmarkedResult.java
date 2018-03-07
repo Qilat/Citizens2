@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class BookmarkedResult implements Iterable<QuadCuboid> {
+    @SuppressWarnings("unchecked")
+    public static final BookmarkedResult EMPTY = new BookmarkedResult(null, (Collections.EMPTY_LIST));
     final QuadNode bookmark;
     private final List<QuadCuboid> results;
 
@@ -22,7 +24,4 @@ public class BookmarkedResult implements Iterable<QuadCuboid> {
     public Iterator<QuadCuboid> iterator() {
         return results.iterator();
     }
-
-    @SuppressWarnings("unchecked")
-    public static final BookmarkedResult EMPTY = new BookmarkedResult(null, (Collections.EMPTY_LIST));
 }

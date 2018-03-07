@@ -1,14 +1,13 @@
-package net.poudlardcitizens.editor;
+package fr.poudlardrp.citizens.editor;
 
-import net.poudlardcitizens.util.Messages;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class GenericEquipper implements Equipper {
     @Override

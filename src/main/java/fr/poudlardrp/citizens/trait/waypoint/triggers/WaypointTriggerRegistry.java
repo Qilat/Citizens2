@@ -1,37 +1,28 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
-
-import java.util.Map;
-
-import org.bukkit.conversations.Prompt;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-
 import net.citizensnpcs.api.persistence.PersistenceLoader;
 import net.citizensnpcs.api.persistence.Persister;
 import net.citizensnpcs.api.util.DataKey;
+import org.bukkit.conversations.Prompt;
+
+import java.util.Map;
 
 public class WaypointTriggerRegistry implements Persister<WaypointTrigger> {
-    @Override
-    public WaypointTrigger create(DataKey root) {
-        String type = root.getString("type");
-        Class<? extends WaypointTrigger> clazz = triggers.get(type);
-        return clazz == null ? null : PersistenceLoader.load(clazz, root);
-    }
+    private static final Map<String, Class<? extends Prompt>> triggerPrompts = Maps.newHashMap();
+    private static final Map<String, Class<? extends WaypointTrigger>> triggers = Maps.newHashMap();
 
-    @Override
-    public void save(WaypointTrigger instance, DataKey root) {
-        PersistenceLoader.save(instance, root);
-        for (Map.Entry<String, Class<? extends WaypointTrigger>> entry : triggers.entrySet()) {
-            if (entry.getValue() == instance.getClass()) {
-                root.setString("type", entry.getKey());
-                break;
-            }
-        }
+    static {
+        addTrigger("animation", AnimationTrigger.class, AnimationTriggerPrompt.class);
+        addTrigger("chat", ChatTrigger.class, ChatTriggerPrompt.class);
+        addTrigger("delay", DelayTrigger.class, DelayTriggerPrompt.class);
+        addTrigger("teleport", TeleportTrigger.class, TeleportTriggerPrompt.class);
+        addTrigger("speed", SpeedTrigger.class, SpeedTriggerPrompt.class);
     }
 
     public static void addTrigger(String name, Class<? extends WaypointTrigger> triggerClass,
-            Class<? extends WaypointTriggerPrompt> promptClass) {
+                                  Class<? extends WaypointTriggerPrompt> promptClass) {
         triggers.put(name, triggerClass);
         triggerPrompts.put(name, promptClass);
     }
@@ -51,14 +42,21 @@ public class WaypointTriggerRegistry implements Persister<WaypointTrigger> {
         }
     }
 
-    private static final Map<String, Class<? extends Prompt>> triggerPrompts = Maps.newHashMap();
-    private static final Map<String, Class<? extends WaypointTrigger>> triggers = Maps.newHashMap();
+    @Override
+    public WaypointTrigger create(DataKey root) {
+        String type = root.getString("type");
+        Class<? extends WaypointTrigger> clazz = triggers.get(type);
+        return clazz == null ? null : PersistenceLoader.load(clazz, root);
+    }
 
-    static {
-        addTrigger("animation", AnimationTrigger.class, AnimationTriggerPrompt.class);
-        addTrigger("chat", ChatTrigger.class, ChatTriggerPrompt.class);
-        addTrigger("delay", DelayTrigger.class, DelayTriggerPrompt.class);
-        addTrigger("teleport", TeleportTrigger.class, TeleportTriggerPrompt.class);
-        addTrigger("speed", SpeedTrigger.class, SpeedTriggerPrompt.class);
+    @Override
+    public void save(WaypointTrigger instance, DataKey root) {
+        PersistenceLoader.save(instance, root);
+        for (Map.Entry<String, Class<? extends WaypointTrigger>> entry : triggers.entrySet()) {
+            if (entry.getValue() == instance.getClass()) {
+                root.setString("type", entry.getKey());
+                break;
+            }
+        }
     }
 }

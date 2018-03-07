@@ -1,13 +1,12 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import net.poudlardcitizens.trait.waypoint.WaypointProvider;
-import net.poudlardcitizens.trait.waypoint.Waypoints;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-
+import fr.poudlardrp.citizens.trait.waypoint.WaypointProvider;
+import fr.poudlardrp.citizens.trait.waypoint.Waypoints;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 public class DelayTrigger implements WaypointTrigger {
     @Persist

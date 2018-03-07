@@ -3,6 +3,8 @@ package fr.poudlardrp.citizens.api.npc;
 import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
 
 public abstract class BlockBreaker extends BehaviorGoalAdapter {
+    public static final BlockBreakerConfiguration EMPTY_CONFIG = new BlockBreakerConfiguration();
+
     public static class BlockBreakerConfiguration {
         private Runnable callback;
         private org.bukkit.inventory.ItemStack itemStack;
@@ -45,6 +47,4 @@ public abstract class BlockBreaker extends BehaviorGoalAdapter {
             return Math.pow(radius, 2);
         }
     }
-
-    public static final BlockBreakerConfiguration EMPTY_CONFIG = new BlockBreakerConfiguration();
 }

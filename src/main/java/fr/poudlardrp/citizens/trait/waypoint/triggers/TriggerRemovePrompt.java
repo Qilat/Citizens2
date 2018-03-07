@@ -1,15 +1,14 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import java.util.List;
-
-import net.poudlardcitizens.trait.waypoint.WaypointEditor;
-import net.poudlardcitizens.util.Messages;
+import fr.poudlardrp.citizens.trait.waypoint.WaypointEditor;
+import fr.poudlardrp.citizens.util.Messages;
+import net.citizensnpcs.api.util.Messaging;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 
-import net.citizensnpcs.api.util.Messaging;
+import java.util.List;
 
 public class TriggerRemovePrompt extends StringPrompt {
     private final WaypointEditor editor;

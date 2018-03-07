@@ -4,8 +4,7 @@ package fr.poudlardrp.citizens.api.util.prtree;
  * A node used while building the leaf sets, holds the actual data and an identifier for the partition this node belongs
  * to.
  *
- * @param <T>
- *            the data type of the stored item
+ * @param <T> the data type of the stored item
  */
 class NodeUsage<T> {
     private final T data;

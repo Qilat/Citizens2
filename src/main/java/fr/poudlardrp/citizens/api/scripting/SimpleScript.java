@@ -1,13 +1,8 @@
 package fr.poudlardrp.citizens.api.scripting;
 
-import javax.script.Bindings;
-import javax.script.CompiledScript;
-import javax.script.Invocable;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-
 import com.google.common.base.Throwables;
+
+import javax.script.*;
 
 public class SimpleScript implements Script {
     private final Bindings bindings;

@@ -1,23 +1,22 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import java.util.List;
-
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
 import com.google.common.collect.Lists;
-
 import net.citizensnpcs.api.astar.AStarNode;
 import net.citizensnpcs.api.astar.Plan;
 import net.citizensnpcs.api.astar.pathfinder.BlockExaminer.PassableState;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import java.util.List;
 
 public class VectorNode extends AStarNode implements PathPoint {
-    private float blockCost = -1;
+    private static final float TIEBREAKER = 1.001f;
     private final BlockSource blockSource;
-    List<PathCallback> callbacks;
     private final BlockExaminer[] examiners;
     private final VectorGoal goal;
+    List<PathCallback> callbacks;
     Vector location;
+    private float blockCost = -1;
 
     public VectorNode(VectorGoal goal, Location location, BlockSource source, BlockExaminer... examiners) {
         this(goal, location.toVector(), source, examiners);
@@ -26,7 +25,7 @@ public class VectorNode extends AStarNode implements PathPoint {
     public VectorNode(VectorGoal goal, Vector location, BlockSource source, BlockExaminer... examiners) {
         this.location = location.setX(location.getBlockX()).setY(location.getBlockY()).setZ(location.getBlockZ());
         this.blockSource = source;
-        this.examiners = examiners == null ? new BlockExaminer[] {} : examiners;
+        this.examiners = examiners == null ? new BlockExaminer[]{} : examiners;
         this.goal = goal;
     }
 
@@ -138,6 +137,11 @@ public class VectorNode extends AStarNode implements PathPoint {
     }
 
     @Override
+    public void setVector(Vector vector) {
+        this.location = vector;
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         return prime + ((location == null) ? 0 : location.hashCode());
@@ -157,11 +161,4 @@ public class VectorNode extends AStarNode implements PathPoint {
         }
         return passable;
     }
-
-    @Override
-    public void setVector(Vector vector) {
-        this.location = vector;
-    }
-
-    private static final float TIEBREAKER = 1.001f;
 }

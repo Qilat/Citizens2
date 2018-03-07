@@ -1,19 +1,18 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity.nonliving;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving;
 
-import net.poudlardcitizens.nms.v1_10_R1.entity.MobEntityController;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
-import org.bukkit.entity.Minecart;
-import org.bukkit.util.Vector;
-
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.MobEntityController;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
 import net.citizensnpcs.api.event.NPCPushEvent;
 import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
 import net.minecraft.server.v1_10_R1.DamageSource;
 import net.minecraft.server.v1_10_R1.EntityMinecartMobSpawner;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.World;
+import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
+import org.bukkit.entity.Minecart;
+import org.bukkit.util.Vector;
 
 public class MinecartSpawnerController extends MobEntityController {
     public MinecartSpawnerController() {

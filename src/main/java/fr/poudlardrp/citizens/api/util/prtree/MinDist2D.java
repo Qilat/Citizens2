@@ -13,19 +13,13 @@ public class MinDist2D {
 
     /**
      * Calculate the MINDIST between the given rectangle and the given point
-     * 
-     * @param minx
-     *            the rectangle minimum x point
-     * @param miny
-     *            the rectangle minimum y point
-     * @param maxx
-     *            the rectangle maximum x point
-     * @param maxy
-     *            the rectangle maximum y point
-     * @param x
-     *            the point
-     * @param y
-     *            the point
+     *
+     * @param minx the rectangle minimum x point
+     * @param miny the rectangle minimum y point
+     * @param maxx the rectangle maximum x point
+     * @param maxy the rectangle maximum y point
+     * @param x    the point
+     * @param y    the point
      * @return the squared distance
      */
     public static double get(double minx, double miny, double maxx, double maxy, double x, double y) {

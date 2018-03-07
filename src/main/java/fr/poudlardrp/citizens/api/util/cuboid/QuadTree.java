@@ -1,23 +1,15 @@
 package fr.poudlardrp.citizens.api.util.cuboid;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class QuadTree {
     QuadNode root;
 
     /**
      * Adds the {@link QuadCuboid} to the target node and fixes up the children's list holder link
-     * 
-     * @param node
-     *            The target node
-     * @param cuboid
-     *            The cuboid to add
+     *
+     * @param node   The target node
+     * @param cuboid The cuboid to add
      */
     private void addAndFixListHolders(QuadNode node, QuadCuboid cuboid) {
         node.cuboids.add(cuboid);
@@ -73,7 +65,7 @@ public class QuadTree {
      * Returns -1 for too small, 0 for minimal, 1 for larger than needed
      * <p>
      * Fit is based on the larger side. Means more tests but consumes an order of magnitude or less memory.
-     * 
+     *
      * @param node
      * @param cuboid
      * @return
@@ -366,9 +358,8 @@ public class QuadTree {
 
     /**
      * Attempts to insert the node ONLY if there are no overlaps with existing nodes
-     * 
-     * @param cuboid
-     *            cuboid to insert
+     *
+     * @param cuboid cuboid to insert
      * @return success or failure
      */
     public boolean insertIfNoOverlaps(QuadCuboid cuboid) {
@@ -491,7 +482,7 @@ public class QuadTree {
 
     /**
      * Removes any node from the tree that no longer serves a purpose, starting from the node given and moving up
-     * 
+     *
      * @param node
      */
     private void pruneTree(QuadNode node) {
@@ -568,7 +559,7 @@ public class QuadTree {
 
     /**
      * Grow the tree beyond the root in the direction of the target node
-     * 
+     *
      * @param cuboid
      */
     private void repotTree(QuadCuboid cuboid) {

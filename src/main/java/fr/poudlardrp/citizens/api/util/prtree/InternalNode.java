@@ -33,7 +33,7 @@ class InternalNode<T> extends NodeBase<Node<T>, T> {
     }
 
     public void nnExpand(DistanceCalculator<T> dc, NodeFilter<T> filter, List<DistanceResult<T>> drs, int maxHits,
-            PriorityQueue<Node<T>> queue, MinDistComparator<T, Node<T>> mdc) {
+                         PriorityQueue<Node<T>> queue, MinDistComparator<T, Node<T>> mdc) {
         int s = size();
         for (int i = 0; i < s; i++) {
             Node<T> n = get(i);

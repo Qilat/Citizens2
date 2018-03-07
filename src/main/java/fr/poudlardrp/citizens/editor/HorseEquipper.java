@@ -1,10 +1,9 @@
-package net.poudlardcitizens.editor;
+package fr.poudlardrp.citizens.editor;
 
-import net.poudlardcitizens.util.NMS;
+import fr.poudlardrp.citizens.util.NMS;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
-
-import net.citizensnpcs.api.npc.NPC;
 
 public class HorseEquipper implements Equipper {
     @Override

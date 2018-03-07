@@ -1,10 +1,10 @@
 package fr.poudlardrp.citizens.api.jnbt;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import java.util.List;
+import java.util.Map;
 
 /*
  * JNBT License
@@ -41,9 +41,8 @@ import com.google.common.collect.Maps;
 
 /**
  * A class which contains NBT-related utility methods.
- * 
+ *
  * @author Graham Edgecombe
- * 
  */
 public final class NBTUtils {
 
@@ -112,12 +111,10 @@ public final class NBTUtils {
 
     /**
      * Gets the class of a type of tag.
-     * 
-     * @param type
-     *            The type.
+     *
+     * @param type The type.
      * @return The class.
-     * @throws IllegalArgumentException
-     *             if the tag type is invalid.
+     * @throws IllegalArgumentException if the tag type is invalid.
      */
     public static Class<? extends Tag> getTypeClass(int type) {
         switch (type) {
@@ -152,12 +149,10 @@ public final class NBTUtils {
 
     /**
      * Gets the type code of a tag class.
-     * 
-     * @param clazz
-     *            The tag class.
+     *
+     * @param clazz The tag class.
      * @return The type code.
-     * @throws IllegalArgumentException
-     *             if the tag class is invalid.
+     * @throws IllegalArgumentException if the tag class is invalid.
      */
     public static int getTypeCode(Class<? extends Tag> clazz) {
         if (clazz.equals(ByteArrayTag.class)) {
@@ -191,9 +186,8 @@ public final class NBTUtils {
 
     /**
      * Gets the type name of a tag.
-     * 
-     * @param clazz
-     *            The tag class.
+     *
+     * @param clazz The tag class.
      * @return The type name.
      */
     public static String getTypeName(Class<? extends Tag> clazz) {

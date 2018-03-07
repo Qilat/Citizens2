@@ -1,11 +1,6 @@
-package net.poudlardcitizens.trait.waypoint;
+package fr.poudlardrp.citizens.trait.waypoint;
 
-import net.poudlardcitizens.util.Messages;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-
+import fr.poudlardrp.citizens.util.Messages;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.Goal;
 import net.citizensnpcs.api.ai.goals.WanderGoal;
@@ -14,15 +9,21 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.Messaging;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class WanderWaypointProvider implements WaypointProvider {
-    private Goal currentGoal;
-    private NPC npc;
-    private volatile boolean paused;
+    private static final int DEFAULT_XRANGE = 3;
+    private static final int DEFAULT_YRANGE = 25;
     @Persist
     public int xrange = DEFAULT_XRANGE;
     @Persist
     public int yrange = DEFAULT_YRANGE;
+    private Goal currentGoal;
+    private NPC npc;
+    private volatile boolean paused;
 
     @Override
     public WaypointEditor createEditor(final CommandSender sender, CommandContext args) {
@@ -74,6 +75,11 @@ public class WanderWaypointProvider implements WaypointProvider {
     }
 
     @Override
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    @Override
     public void load(DataKey key) {
     }
 
@@ -94,12 +100,4 @@ public class WanderWaypointProvider implements WaypointProvider {
     @Override
     public void save(DataKey key) {
     }
-
-    @Override
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    private static final int DEFAULT_XRANGE = 3;
-    private static final int DEFAULT_YRANGE = 25;
 }

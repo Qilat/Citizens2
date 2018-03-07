@@ -1,21 +1,20 @@
-package net.poudlardcitizens.npc.ai;
-
-import java.util.List;
-
-import net.poudlardcitizens.util.NMS;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.util.Vector;
+package fr.poudlardrp.citizens.npc.ai;
 
 import com.google.common.collect.Lists;
-
+import fr.poudlardrp.citizens.util.NMS;
 import net.citizensnpcs.api.ai.AbstractPathStrategy;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.ai.TargetType;
 import net.citizensnpcs.api.ai.event.CancelReason;
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
+
+import java.util.List;
 
 public class MCNavigationStrategy extends AbstractPathStrategy {
+    private static final Location HANDLE_LOCATION = new Location(null, 0, 0, 0);
     private final Entity handle;
     private final MCNavigator navigator;
     private final NavigatorParameters parameters;
@@ -92,6 +91,4 @@ public class MCNavigationStrategy extends AbstractPathStrategy {
 
         boolean update();
     }
-
-    private static final Location HANDLE_LOCATION = new Location(null, 0, 0, 0);
 }

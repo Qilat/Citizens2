@@ -1,9 +1,9 @@
 package fr.poudlardrp.citizens.api.scripting;
 
-import java.util.concurrent.Callable;
-
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.Callables;
+
+import java.util.concurrent.Callable;
 
 public class ObjectProvider implements ContextProvider {
     private final String name;

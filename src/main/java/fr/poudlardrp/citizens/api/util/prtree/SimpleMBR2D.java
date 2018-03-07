@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.api.util.prtree;
 
 /**
  * An implementation of MBR that keeps 4 double values for the actual min and max values needed.
- *
+ * <p>
  * <p>
  * Please note that you should not normally use this class when PRTree wants a MBR since this will actually use a lot of
  * extra memory.
@@ -15,15 +15,11 @@ public class SimpleMBR2D implements MBR2D {
 
     /**
      * Create a 2D minimum bounding box
-     * 
-     * @param xmin
-     *            the xmin of the MBR
-     * @param ymin
-     *            the ymin of the MBR
-     * @param xmax
-     *            the xmax of the MBR
-     * @param ymax
-     *            the ymax of the MBR
+     *
+     * @param xmin the xmin of the MBR
+     * @param ymin the ymin of the MBR
+     * @param xmax the xmax of the MBR
+     * @param ymax the ymax of the MBR
      */
     public SimpleMBR2D(double xmin, double ymin, double xmax, double ymax) {
         this.xmin = xmin;

@@ -1,40 +1,29 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
 
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.PlayerAnimation;
-import net.poudlardcitizens.util.Util;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.PlayerAnimation;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.ai.tree.BehaviorStatus;
+import net.citizensnpcs.api.npc.BlockBreaker;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
-import net.citizensnpcs.api.ai.tree.BehaviorStatus;
-import net.citizensnpcs.api.npc.BlockBreaker;
-import net.citizensnpcs.api.npc.NPC;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.Blocks;
-import net.minecraft.server.v1_10_R1.EnchantmentManager;
-import net.minecraft.server.v1_10_R1.Entity;
-import net.minecraft.server.v1_10_R1.EntityLiving;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
-import net.minecraft.server.v1_10_R1.EnumItemSlot;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.Material;
-import net.minecraft.server.v1_10_R1.MobEffects;
-
 public class CitizensBlockBreaker extends BlockBreaker {
     private final BlockBreakerConfiguration configuration;
+    private final Entity entity;
+    private final Location location;
+    private final int x, y, z;
     private int currentDamage;
     private int currentTick;
-    private final Entity entity;
     private boolean isDigging = true;
-    private final Location location;
     private int startDigTick;
-    private final int x, y, z;
 
     public CitizensBlockBreaker(org.bukkit.entity.Entity entity, org.bukkit.block.Block target,
-            BlockBreakerConfiguration config) {
+                                BlockBreakerConfiguration config) {
         this.entity = ((CraftEntity) entity).getHandle();
         this.x = target.getX();
         this.y = target.getY();

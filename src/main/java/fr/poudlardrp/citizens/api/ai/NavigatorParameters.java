@@ -1,21 +1,27 @@
 package fr.poudlardrp.citizens.api.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-
 import net.citizensnpcs.api.ai.event.CancelReason;
 import net.citizensnpcs.api.ai.event.NavigatorCallback;
 import net.citizensnpcs.api.astar.AStarMachine;
 import net.citizensnpcs.api.astar.pathfinder.BlockExaminer;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 public class NavigatorParameters implements Cloneable {
+    private static final Function<Entity, Location> DEFAULT_MAPPER = new Function<Entity, Location>() {
+        Location location = new Location(null, 0, 0, 0);
+
+        @Override
+        public Location apply(Entity input) {
+            return input.getLocation(location);
+        }
+    };
     private int attackDelayTicks = 20;
     private double attackRange;
     private AttackStrategy attackStrategy;
@@ -40,8 +46,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Adds a {@link Runnable} callback that will be called every tick while the path is running.
      *
-     * @param callback
-     *            The callback to add
+     * @param callback The callback to add
      */
     public NavigatorParameters addRunCallback(Runnable callback) {
         runCallbacks.add(callback);
@@ -51,8 +56,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Adds a {@link NavigatorCallback} that will be removed <em>immediately</em> after being called.
      *
-     * @param callback
-     *            The callback
+     * @param callback The callback
      */
     public NavigatorParameters addSingleUseCallback(NavigatorCallback callback) {
         callbacks.add(callback);
@@ -60,8 +64,8 @@ public class NavigatorParameters implements Cloneable {
     }
 
     /**
-     * @see #attackDelayTicks(int)
      * @return The number of ticks to wait between attacks
+     * @see #attackDelayTicks(int)
      */
     public int attackDelayTicks() {
         return attackDelayTicks;
@@ -72,8 +76,7 @@ public class NavigatorParameters implements Cloneable {
      * certain number of ticks between attacks to avoid spamming damage to the target. This determines the number of
      * ticks to wait.
      *
-     * @param ticks
-     *            The new number of ticks to wait between attacks
+     * @param ticks The new number of ticks to wait between attacks
      */
     public NavigatorParameters attackDelayTicks(int ticks) {
         attackDelayTicks = ticks;
@@ -81,8 +84,8 @@ public class NavigatorParameters implements Cloneable {
     }
 
     /**
-     * @see #attackRange(double)
      * @return The attack range, in blocks squared
+     * @see #attackRange(double)
      */
     public double attackRange() {
         return attackRange;
@@ -93,8 +96,7 @@ public class NavigatorParameters implements Cloneable {
      * the {@link #attackStrategy()}. This parameter determines the range in blocks squared before the target will be
      * valid to attack.
      *
-     * @param range
-     *            The new attack range, in blocks squared
+     * @param range The new attack range, in blocks squared
      */
     public NavigatorParameters attackRange(double range) {
         this.attackRange = range;
@@ -103,7 +105,7 @@ public class NavigatorParameters implements Cloneable {
 
     /**
      * @return The {@link AttackStrategy} currently in use or the {@link #defaultAttackStrategy()} if not configured
-     *         (may return null)
+     * (may return null)
      */
     public AttackStrategy attackStrategy() {
         return attackStrategy == null ? defaultStrategy : attackStrategy;
@@ -112,8 +114,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets the {@link AttackStrategy} for use when attacking entity targets.
      *
-     * @param strategy
-     *            The strategy to use
+     * @param strategy The strategy to use
      */
     public void attackStrategy(AttackStrategy strategy) {
         attackStrategy = strategy;
@@ -129,8 +130,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets whether to avoid water while pathfinding
      *
-     * @param avoidWater
-     *            Whether to avoid water
+     * @param avoidWater Whether to avoid water
      */
     public NavigatorParameters avoidWater(boolean avoidWater) {
         this.avoidWater = avoidWater;
@@ -148,9 +148,8 @@ public class NavigatorParameters implements Cloneable {
      * Sets the base movement speed of the {@link Navigator}. Note that this is mob-specific and may not always be sane.
      * Using {@link #speedModifier()} is preferred.
      *
+     * @param speed The new movement speed
      * @see #speedModifier()
-     * @param speed
-     *            The new movement speed
      */
     public NavigatorParameters baseSpeed(float speed) {
         this.baseSpeed = speed;
@@ -225,8 +224,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets the default {@link AttackStrategy}.
      *
-     * @param defaultStrategy
-     *            The new default strategy
+     * @param defaultStrategy The new default strategy
      * @see #defaultAttackStrategy()
      */
     public NavigatorParameters defaultAttackStrategy(AttackStrategy defaultStrategy) {
@@ -237,7 +235,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Returns the distance margin or leeway that the {@link Navigator} will be able to stop from the target
      * destination. The margin will be measured against the block distance squared.
-     *
+     * <p>
      * For example: if the distance margin were 2, then the {@link Navigator} could stop moving towards the target when
      * it is 2 blocks squared away from it.
      *
@@ -250,9 +248,8 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets the distance margin.
      *
+     * @param newMargin The new distance margin
      * @see #distanceMargin()
-     * @param newMargin
-     *            The new distance margin
      */
     public NavigatorParameters distanceMargin(double newMargin) {
         distanceMargin = newMargin;
@@ -270,8 +267,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Set the target location mapper.
      *
-     * @param mapper
-     *            The new mapper
+     * @param mapper The new mapper
      * @see #entityTargetLocationMapper(Function)
      */
     public NavigatorParameters entityTargetLocationMapper(Function<Entity, Location> mapper) {
@@ -282,8 +278,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Adds the given {@link BlockExaminer}.
      *
-     * @param examiner
-     *            The BlockExaminer to add
+     * @param examiner The BlockExaminer to add
      */
     public NavigatorParameters examiner(BlockExaminer examiner) {
         examiners.add(examiner);
@@ -309,8 +304,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets the position to look at during pathfinding, overriding the default 'look at target' behaviour.
      *
-     * @param lookAt
-     *            Where to look
+     * @param lookAt Where to look
      */
     public NavigatorParameters lookAtFunction(Function<Navigator, Location> lookAt) {
         this.lookAtFunction = lookAt;
@@ -320,8 +314,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Modifieds the given speed value based on the current parameters.
      *
-     * @param toModify
-     *            The speed value to modify
+     * @param toModify The speed value to modify
      * @return The modified speed
      */
     public float modifiedSpeed(float toModify) {
@@ -341,8 +334,7 @@ public class NavigatorParameters implements Cloneable {
      * Sets the path distance margin. This is how close the pathfinder should to the target when pathfinding. If you
      * need to set how far the NPC should get away from the target, use {@link #distanceMargin(double)}.
      *
-     * @param distance
-     *            The distance margin
+     * @param distance The distance margin
      */
     public NavigatorParameters pathDistanceMargin(double distance) {
         this.pathDistanceMargin = distance;
@@ -361,8 +353,7 @@ public class NavigatorParameters implements Cloneable {
      * Sets the pathfinding range in blocks. The pathfinding range determines how far away the {@link Navigator} will
      * attempt to pathfind before giving up to save computation.
      *
-     * @param range
-     *            The new range
+     * @param range The new range
      */
     public NavigatorParameters range(float range) {
         this.range = range;
@@ -372,9 +363,8 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Removes a previously added run callback.
      *
+     * @param runnable The run callback to remove
      * @see #addRunCallback(Runnable)
-     * @param runnable
-     *            The run callback to remove
      */
     public NavigatorParameters removeRunCallback(Runnable runnable) {
         runCallbacks.remove(runnable);
@@ -401,9 +391,8 @@ public class NavigatorParameters implements Cloneable {
      * Sets the base movement speed of the {@link Navigator}. Note that this is mob-specific and may not always be sane.
      * Using {@link #speedModifier()} is preferred.
      *
+     * @param speed The new movement speed
      * @see #speedModifier()
-     * @param speed
-     *            The new movement speed
      * @deprecated @see {@link #baseSpeed(float)}
      */
     @Deprecated
@@ -424,8 +413,7 @@ public class NavigatorParameters implements Cloneable {
      * Sets the movement speed modifier of the {@link Navigator}. This is a percentage modifier that alters the movement
      * speed returned in {@link #speed()}.
      *
-     * @param percent
-     *            The new speed modifier
+     * @param percent The new speed modifier
      */
     public NavigatorParameters speedModifier(float percent) {
         speedModifier = percent;
@@ -443,8 +431,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets the number of stationary ticks before navigation is cancelled with a {@link CancelReason} of STUCK.
      *
-     * @param ticks
-     *            The new number of stationary ticks
+     * @param ticks The new number of stationary ticks
      */
     public NavigatorParameters stationaryTicks(int ticks) {
         stationaryTicks = ticks;
@@ -464,8 +451,7 @@ public class NavigatorParameters implements Cloneable {
     /**
      * Sets the {@link StuckAction} of the parameters.
      *
-     * @param action
-     *            The new stuck action
+     * @param action The new stuck action
      * @see #stuckAction()
      */
     public NavigatorParameters stuckAction(StuckAction action) {
@@ -474,8 +460,8 @@ public class NavigatorParameters implements Cloneable {
     }
 
     /**
-     * @see #updatePathRate(int)
      * @return The current path rate
+     * @see #updatePathRate(int)
      */
     public int updatePathRate() {
         return updatePathRate;
@@ -485,8 +471,7 @@ public class NavigatorParameters implements Cloneable {
      * Sets the update path rate, in ticks (default 20). Mainly used for target following at this point - the NPC will
      * recalculate its path to the target every {@code rate} ticks.
      *
-     * @param rate
-     *            The new rate in ticks to use
+     * @param rate The new rate in ticks to use
      */
     public NavigatorParameters updatePathRate(int rate) {
         updatePathRate = rate;
@@ -494,8 +479,8 @@ public class NavigatorParameters implements Cloneable {
     }
 
     /**
-     * @see #useNewPathfinder(boolean)
      * @return Whether to use the new pathfinder
+     * @see #useNewPathfinder(boolean)
      */
     public boolean useNewPathfinder() {
         return useNewPathfinder;
@@ -503,26 +488,16 @@ public class NavigatorParameters implements Cloneable {
 
     /**
      * Sets whether or not to use an A* pathfinder defined in {@link AStarMachine} for pathfinding.
-     *
+     * <p>
      * If this is set to false, then the Minecraft pathfinder will be used, which may or may not be more consistent.
-     *
+     * <p>
      * Note that certain API features will not be possible if this is set to false - this includes
      * {@link #examiner(BlockExaminer)} and {@link #distanceMargin(double)}.
      *
-     * @param use
-     *            Whether to use the A* pathfinder
+     * @param use Whether to use the A* pathfinder
      */
     public NavigatorParameters useNewPathfinder(boolean use) {
         useNewPathfinder = use;
         return this;
     }
-
-    private static final Function<Entity, Location> DEFAULT_MAPPER = new Function<Entity, Location>() {
-        Location location = new Location(null, 0, 0, 0);
-
-        @Override
-        public Location apply(Entity input) {
-            return input.getLocation(location);
-        }
-    };
 }

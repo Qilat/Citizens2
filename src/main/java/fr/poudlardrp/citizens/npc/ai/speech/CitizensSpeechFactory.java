@@ -1,17 +1,15 @@
-package net.poudlardcitizens.npc.ai.speech;
+package fr.poudlardrp.citizens.npc.ai.speech;
+
+import com.google.common.base.Preconditions;
+import net.citizensnpcs.api.ai.speech.SpeechFactory;
+import net.citizensnpcs.api.ai.speech.Talkable;
+import net.citizensnpcs.api.ai.speech.VocalChord;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.citizensnpcs.api.ai.speech.SpeechFactory;
-import net.citizensnpcs.api.ai.speech.Talkable;
-import net.citizensnpcs.api.ai.speech.VocalChord;
-
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-
-import com.google.common.base.Preconditions;
 
 public class CitizensSpeechFactory implements SpeechFactory {
     Map<String, Class<? extends VocalChord>> registered = new HashMap<String, Class<? extends VocalChord>>();

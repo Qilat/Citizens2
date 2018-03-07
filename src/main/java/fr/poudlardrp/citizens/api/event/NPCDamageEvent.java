@@ -1,18 +1,22 @@
 package fr.poudlardrp.citizens.api.event;
 
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class NPCDamageEvent extends NPCEvent implements Cancellable {
+    private static final HandlerList handlers = new HandlerList();
     private final EntityDamageEvent event;
 
     public NPCDamageEvent(NPC npc, EntityDamageEvent event) {
         super(npc);
         this.event = event;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public DamageCause getCause() {
@@ -21,6 +25,10 @@ public class NPCDamageEvent extends NPCEvent implements Cancellable {
 
     public double getDamage() {
         return event.getDamage();
+    }
+
+    public void setDamage(int damage) {
+        event.setDamage(damage);
     }
 
     @Override
@@ -37,14 +45,4 @@ public class NPCDamageEvent extends NPCEvent implements Cancellable {
     public void setCancelled(boolean cancel) {
         event.setCancelled(cancel);
     }
-
-    public void setDamage(int damage) {
-        event.setDamage(damage);
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
 }

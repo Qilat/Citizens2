@@ -1,35 +1,22 @@
-package net.poudlardcitizens.npc.skin;
+package fr.poudlardrp.citizens.npc.skin;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
-import java.util.WeakHashMap;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
 import net.poudlardcitizens.EventListen;
-import net.poudlardcitizens.util.Util;
+import net.poudlardcitizens.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
-
-import net.poudlardcitizens.Settings;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Tracks skin updates for players.
@@ -37,6 +24,10 @@ import net.citizensnpcs.api.npc.NPCRegistry;
  * @see EventListen
  */
 public class SkinUpdateTracker {
+    private static final Location CACHE_LOCATION = new Location(null, 0, 0, 0);
+    private static final float FIELD_OF_VIEW = 70f;
+    private static final int MOVEMENT_SKIN_UPDATE_DISTANCE = 50 * 50;
+    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
     private final Map<SkinnableEntity, Void> navigating = new WeakHashMap<SkinnableEntity, Void>(25);
     private final NPCRegistry npcRegistry;
     private final Map<UUID, PlayerTracker> playerTrackers = new HashMap<UUID, PlayerTracker>(
@@ -47,10 +38,8 @@ public class SkinUpdateTracker {
     /**
      * Constructor.
      *
-     * @param npcRegistry
-     *            The primary citizens registry.
-     * @param registries
-     *            Map of other registries.
+     * @param npcRegistry The primary citizens registry.
+     * @param registries  Map of other registries.
      */
     public SkinUpdateTracker(NPCRegistry npcRegistry, Map<String, NPCRegistry> registries) {
         Preconditions.checkNotNull(npcRegistry);
@@ -172,8 +161,7 @@ public class SkinUpdateTracker {
     /**
      * Invoke when an NPC is despawned.
      *
-     * @param npc
-     *            The despawned NPC.
+     * @param npc The despawned NPC.
      */
     public void onNPCDespawn(NPC npc) {
         Preconditions.checkNotNull(npc);
@@ -191,8 +179,7 @@ public class SkinUpdateTracker {
     /**
      * Invoke when an NPC begins navigating.
      *
-     * @param npc
-     *            The navigating NPC.
+     * @param npc The navigating NPC.
      */
     public void onNPCNavigationBegin(NPC npc) {
         Preconditions.checkNotNull(npc);
@@ -206,8 +193,7 @@ public class SkinUpdateTracker {
     /**
      * Invoke when an NPC finishes navigating.
      *
-     * @param npc
-     *            The finished NPC.
+     * @param npc The finished NPC.
      */
     public void onNPCNavigationComplete(NPC npc) {
         Preconditions.checkNotNull(npc);
@@ -221,8 +207,7 @@ public class SkinUpdateTracker {
     /**
      * Invoke when an NPC is spawned.
      *
-     * @param npc
-     *            The spawned NPC.
+     * @param npc The spawned NPC.
      */
     public void onNPCSpawn(NPC npc) {
         Preconditions.checkNotNull(npc);
@@ -237,8 +222,7 @@ public class SkinUpdateTracker {
     /**
      * Invoke when a player moves.
      *
-     * @param player
-     *            The player that moved.
+     * @param player The player that moved.
      */
     public void onPlayerMove(Player player) {
         Preconditions.checkNotNull(player);
@@ -254,13 +238,12 @@ public class SkinUpdateTracker {
 
     /**
      * Remove a player from the tracker.
-     *
+     * <p>
      * <p>
      * Used when the player logs out.
      * </p>
      *
-     * @param playerId
-     *            The ID of the player.
+     * @param playerId The ID of the player.
      */
     public void removePlayer(UUID playerId) {
         Preconditions.checkNotNull(playerId);
@@ -269,7 +252,7 @@ public class SkinUpdateTracker {
 
     /**
      * Reset all players currently being tracked.
-     *
+     * <p>
      * <p>
      * Used when Citizens is reloaded.
      * </p>
@@ -317,12 +300,9 @@ public class SkinUpdateTracker {
     /**
      * Update a player with skin related packets from nearby skinnable NPC's.
      *
-     * @param player
-     *            The player to update.
-     * @param delay
-     *            The delay before sending the packets.
-     * @param reset
-     *            True to hard reset the players tracking info, otherwise false.
+     * @param player The player to update.
+     * @param delay  The delay before sending the packets.
+     * @param reset  True to hard reset the players tracking info, otherwise false.
      */
     public void updatePlayer(final Player player, long delay, final boolean reset) {
         if (player.hasMetadata("NPC"))
@@ -337,6 +317,16 @@ public class SkinUpdateTracker {
                 }
             }
         }.runTaskLater(CitizensAPI.getPlugin(), delay);
+    }
+
+    private static class UpdateInfo {
+        SkinnableEntity entity;
+        Player player;
+
+        UpdateInfo(Player player, SkinnableEntity entity) {
+            this.player = player;
+            this.entity = entity;
+        }
     }
 
     // update players when the NPC navigates into their field of view
@@ -384,8 +374,8 @@ public class SkinUpdateTracker {
     // with nearby skins.
     private class PlayerTracker {
         final Set<SkinnableEntity> fovVisibleSkins = new HashSet<SkinnableEntity>(20);
-        boolean hasMoved;
         final Location location = new Location(null, 0, 0, 0);
+        boolean hasMoved;
         float lowerBound;
         int rotationCount;
         float startYaw;
@@ -461,19 +451,4 @@ public class SkinUpdateTracker {
             }
         }
     }
-
-    private static class UpdateInfo {
-        SkinnableEntity entity;
-        Player player;
-
-        UpdateInfo(Player player, SkinnableEntity entity) {
-            this.player = player;
-            this.entity = entity;
-        }
-    }
-
-    private static final Location CACHE_LOCATION = new Location(null, 0, 0, 0);
-    private static final float FIELD_OF_VIEW = 70f;
-    private static final int MOVEMENT_SKIN_UPDATE_DISTANCE = 50 * 50;
-    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
 }

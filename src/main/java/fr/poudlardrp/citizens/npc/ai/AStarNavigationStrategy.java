@@ -1,14 +1,7 @@
-package net.poudlardcitizens.npc.ai;
-
-import java.util.List;
-
-import net.poudlardcitizens.util.NMS;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
+package fr.poudlardrp.citizens.npc.ai;
 
 import com.google.common.collect.Lists;
-
+import fr.poudlardrp.citizens.util.NMS;
 import net.citizensnpcs.api.ai.AbstractPathStrategy;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.ai.TargetType;
@@ -19,8 +12,15 @@ import net.citizensnpcs.api.astar.pathfinder.Path;
 import net.citizensnpcs.api.astar.pathfinder.VectorGoal;
 import net.citizensnpcs.api.astar.pathfinder.VectorNode;
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import java.util.List;
 
 public class AStarNavigationStrategy extends AbstractPathStrategy {
+    private static final AStarMachine<VectorNode, Path> ASTAR = AStarMachine.createWithDefaultStorage();
+    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
     private final Location destination;
     private final NPC npc;
     private final NavigatorParameters params;
@@ -113,7 +113,4 @@ public class AStarNavigationStrategy extends AbstractPathStrategy {
         plan.run(npc);
         return false;
     }
-
-    private static final AStarMachine<VectorNode, Path> ASTAR = AStarMachine.createWithDefaultStorage();
-    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
 }

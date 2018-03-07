@@ -1,52 +1,4 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.SocketAddress;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import net.poudlardcitizens.nms.v1_10_R1.network.EmptyChannel;
-import net.poudlardcitizens.npc.EntityControllers;
-import net.poudlardcitizens.npc.ai.MCNavigationStrategy;
-import net.poudlardcitizens.npc.ai.MCTargetStrategy;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.npc.skin.SkinnableEntity;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_9_R2.CraftSound;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R2.boss.CraftBossBar;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftWither;
-import org.bukkit.craftbukkit.v1_9_R2.event.CraftEventFactory;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FishHook;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.Wither;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.PluginLoadOrder;
-import org.bukkit.util.Vector;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
@@ -60,132 +12,409 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.util.UUIDTypeAdapter;
+import fr.poudlardrp.citizens.Settings;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.*;
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving.*;
+import fr.poudlardrp.citizens.nms.v1_10_R1.network.EmptyChannel;
+import fr.poudlardrp.citizens.npc.EntityControllers;
+import fr.poudlardrp.citizens.npc.ai.MCNavigationStrategy;
+import fr.poudlardrp.citizens.npc.ai.MCTargetStrategy;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.npc.skin.SkinnableEntity;
+import fr.poudlardrp.citizens.util.*;
+import net.minecraft.server.v1_9_R2.*;
+import net.minecraft.server.v1_9_R2.Entity;
+import net.minecraft.server.v1_9_R2.NPC;
+import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R2.CraftSound;
+import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R2.boss.CraftBossBar;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftWither;
+import org.bukkit.craftbukkit.v1_9_R2.event.CraftEventFactory;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.PluginLoadOrder;
+import org.bukkit.util.Vector;
 
-import net.poudlardcitizens.Settings.Setting;
-import net.poudlardcitizens.nms.v1_10_R1.entity.BatController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.BlazeController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.CaveSpiderController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.ChickenController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.CowController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.CreeperController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.EnderDragonController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.EndermanController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.EndermiteController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
-import net.poudlardcitizens.nms.v1_10_R1.entity.GhastController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.GiantController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.GuardianController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.HorseController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.HumanController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.IronGolemController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.MagmaCubeController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.MushroomCowController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.OcelotController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.PigController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.PigZombieController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.PolarBearController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.RabbitController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SheepController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.ShulkerController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SilverfishController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SkeletonController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SlimeController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SnowmanController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SpiderController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.SquidController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.VillagerController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.WitchController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.WitherController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.WolfController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.ZombieController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.AreaEffectCloudController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.ArmorStandController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.BoatController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.DragonFireballController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.EggController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.EnderCrystalController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.EnderPearlController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.EnderSignalController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.FallingBlockController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.FireworkController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.FishingHookController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.ItemController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.ItemFrameController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.LargeFireballController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.LeashController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.MinecartChestController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.MinecartCommandController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.MinecartFurnaceController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.MinecartHopperController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.MinecartRideableController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.MinecartTNTController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.PaintingController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.ShulkerBulletController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.SmallFireballController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.SnowballController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.SpectralArrowController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.TNTPrimedController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.ThrownExpBottleController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.ThrownPotionController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.TippedArrowController;
-import net.poudlardcitizens.nms.v1_10_R1.entity.nonliving.WitherSkullController;
-import net.poudlardcitizens.util.BoundingBox;
-import net.poudlardcitizens.util.Messages;
-import net.poudlardcitizens.util.NMS;
-import net.poudlardcitizens.util.NMSBridge;
-import net.poudlardcitizens.util.PlayerAnimation;
-import net.poudlardcitizens.util.PlayerUpdateTask;
-import net.poudlardcitizens.util.Util;
-import net.minecraft.server.v1_10_R1.AttributeInstance;
-import net.minecraft.server.v1_10_R1.AxisAlignedBB;
-import net.minecraft.server.v1_10_R1.Block;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.BossBattleServer;
-import net.minecraft.server.v1_10_R1.ControllerJump;
-import net.minecraft.server.v1_10_R1.CrashReport;
-import net.minecraft.server.v1_10_R1.CrashReportSystemDetails;
-import net.minecraft.server.v1_10_R1.DamageSource;
-import net.minecraft.server.v1_10_R1.DataWatcherObject;
-import net.minecraft.server.v1_10_R1.EnchantmentManager;
-import net.minecraft.server.v1_10_R1.EnderDragonBattle;
-import net.minecraft.server.v1_10_R1.Entity;
-import net.minecraft.server.v1_10_R1.EntityEnderDragon;
-import net.minecraft.server.v1_10_R1.EntityFishingHook;
-import net.minecraft.server.v1_10_R1.EntityHorse;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.EntityInsentient;
-import net.minecraft.server.v1_10_R1.EntityLiving;
-import net.minecraft.server.v1_10_R1.EntityMinecartAbstract;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
-import net.minecraft.server.v1_10_R1.EntityPolarBear;
-import net.minecraft.server.v1_10_R1.EntityRabbit;
-import net.minecraft.server.v1_10_R1.EntityShulker;
-import net.minecraft.server.v1_10_R1.EntityTameableAnimal;
-import net.minecraft.server.v1_10_R1.EntityTracker;
-import net.minecraft.server.v1_10_R1.EntityTrackerEntry;
-import net.minecraft.server.v1_10_R1.EntityTypes;
-import net.minecraft.server.v1_10_R1.EntityWither;
-import net.minecraft.server.v1_10_R1.GenericAttributes;
-import net.minecraft.server.v1_10_R1.MathHelper;
-import net.minecraft.server.v1_10_R1.MinecraftKey;
-import net.minecraft.server.v1_10_R1.MobEffects;
-import net.minecraft.server.v1_10_R1.NavigationAbstract;
-import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_10_R1.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_10_R1.PathEntity;
-import net.minecraft.server.v1_10_R1.PathPoint;
-import net.minecraft.server.v1_10_R1.PathfinderGoalSelector;
-import net.minecraft.server.v1_10_R1.ReportedException;
-import net.minecraft.server.v1_10_R1.SoundEffect;
-import net.minecraft.server.v1_10_R1.Vec3D;
-import net.minecraft.server.v1_10_R1.WorldServer;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.SocketAddress;
+import java.net.URL;
+import java.util.*;
+
 
 @SuppressWarnings("unchecked")
 public class NMSImpl implements NMSBridge {
+    public static final Location PACKET_CACHE_LOCATION = new Location(null, 0, 0, 0);
+    private static final Set<EntityType> BAD_CONTROLLER_LOOK = EnumSet.of(EntityType.POLAR_BEAR, EntityType.SILVERFISH,
+            EntityType.ENDERMITE, EntityType.ENDER_DRAGON, EntityType.BAT, EntityType.SLIME, EntityType.MAGMA_CUBE,
+            EntityType.HORSE, EntityType.GHAST);
+    private static final Field CRAFT_BOSSBAR_HANDLE_FIELD = NMS.getField(CraftBossBar.class, "handle");
+    private static final float DEFAULT_SPEED = 1F;
+    private static final Field ENDERDRAGON_BATTLE_BAR_FIELD = NMS.getField(EnderDragonBattle.class, "c");
+    private static final Field ENDERDRAGON_BATTLE_FIELD = NMS.getField(EntityEnderDragon.class, "bK");
+    private static final Location FROM_LOCATION = new Location(null, 0, 0, 0);
+    private static final Field JUMP_FIELD = NMS.getField(EntityLiving.class, "be");
+    private static final Field RABBIT_FIELD = NMS.getField(EntityRabbit.class, "bx");
+    private static final Random RANDOM = Util.getFastRandom();
+    private static final Field WITHER_BOSS_BAR_FIELD = NMS.getField(EntityWither.class, "bG");
+    public static Field GOAL_FIELD = NMS.getField(PathfinderGoalSelector.class, "b");
+    public static Field NETWORK_ADDRESS = NMS.getField(NetworkManager.class, "l");
+    private static Map<Class<?>, Integer> ENTITY_CLASS_TO_INT;
+    private static Map<Class<?>, String> ENTITY_CLASS_TO_NAME;
+    private static Method MAKE_REQUEST;
+    private static Field NAVIGATION_WORLD_FIELD = NMS.getField(NavigationAbstract.class, "b");
+    private static Field PATHFINDING_RANGE = NMS.getField(NavigationAbstract.class, "f");
+    private static Field SKULL_PROFILE_FIELD;
+    private static Field TRACKED_ENTITY_SET = NMS.getField(EntityTracker.class, "c");
+
+    static {
+        try {
+            Field field = NMS.getField(EntityTypes.class, "f");
+            ENTITY_CLASS_TO_INT = (Map<Class<?>, Integer>) field.get(null);
+            field = NMS.getField(EntityTypes.class, "d");
+            ENTITY_CLASS_TO_NAME = (Map<Class<?>, String>) field.get(null);
+        } catch (Exception e) {
+            Messaging.logTr(Messages.ERROR_GETTING_ID_MAPPING, e.getMessage());
+        }
+
+        try {
+            MAKE_REQUEST = YggdrasilAuthenticationService.class.getDeclaredMethod("makeRequest", URL.class,
+                    Object.class, Class.class);
+            MAKE_REQUEST.setAccessible(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public NMSImpl() {
         loadEntityTypes();
+    }
+
+    public static void clearGoals(PathfinderGoalSelector... goalSelectors) {
+        if (GOAL_FIELD == null || goalSelectors == null)
+            return;
+        for (PathfinderGoalSelector selector : goalSelectors) {
+            try {
+                Collection<?> list = (Collection<?>) GOAL_FIELD.get(selector);
+                list.clear();
+            } catch (Exception e) {
+                Messaging.logTr(Messages.ERROR_CLEARING_GOALS, e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public static void flyingMoveLogic(EntityLiving entity, float f, float f1) {
+        if ((entity.ct()) || (entity.bA())) {
+            if ((entity.isInWater())
+                    && ((!(entity instanceof EntityHuman)) || (!((EntityHuman) entity).abilities.isFlying))) {
+                double d1 = entity.locY;
+                float f4 = entity instanceof EntityPolarBear ? 0.98F : 0.8F;
+                float f3 = 0.02F;
+                float f2 = EnchantmentManager.d(entity);
+                if (f2 > 3.0F) {
+                    f2 = 3.0F;
+                }
+                if (!entity.onGround) {
+                    f2 *= 0.5F;
+                }
+                if (f2 > 0.0F) {
+                    f4 += (0.54600006F - f4) * f2 / 3.0F;
+                    f3 += (entity.cp() - f3) * f2 / 3.0F;
+                }
+                entity.a(f, f1, f3);
+                entity.move(entity.motX, entity.motY, entity.motZ);
+                entity.motX *= f4;
+                entity.motY *= 0.800000011920929D;
+                entity.motZ *= f4;
+                if (!entity.isNoGravity()) {
+                    entity.motY -= 0.02D;
+                }
+                if ((entity.positionChanged)
+                        && (entity.c(entity.motX, entity.motY + 0.6000000238418579D - entity.locY + d1, entity.motZ))) {
+                    entity.motY = 0.30000001192092896D;
+                }
+            } else if ((entity.ao())
+                    && ((!(entity instanceof EntityHuman)) || (!((EntityHuman) entity).abilities.isFlying))) {
+                double d1 = entity.locY;
+                entity.a(f, f1, 0.02F);
+                entity.move(entity.motX, entity.motY, entity.motZ);
+                entity.motX *= 0.5D;
+                entity.motY *= 0.5D;
+                entity.motZ *= 0.5D;
+                if (!entity.isNoGravity()) {
+                    entity.motY -= 0.02D;
+                }
+                if ((entity.positionChanged)
+                        && (entity.c(entity.motX, entity.motY + 0.6000000238418579D - entity.locY + d1, entity.motZ))) {
+                    entity.motY = 0.30000001192092896D;
+                }
+            } else if (entity.cG()) {
+                if (entity.motY > -0.5D) {
+                    entity.fallDistance = 1.0F;
+                }
+                Vec3D vec3d = entity.aB();
+                float f5 = entity.pitch * 0.017453292F;
+
+                double d0 = Math.sqrt(vec3d.x * vec3d.x + vec3d.z * vec3d.z);
+                double d2 = Math.sqrt(entity.motX * entity.motX + entity.motZ * entity.motZ);
+                double d3 = vec3d.b();
+                float f6 = MathHelper.cos(f5);
+
+                f6 = (float) (f6 * f6 * Math.min(1.0D, d3 / 0.4D));
+                entity.motY += -0.08D + f6 * 0.06D;
+                if ((entity.motY < 0.0D) && (d0 > 0.0D)) {
+                    double d4 = entity.motY * -0.1D * f6;
+                    entity.motY += d4;
+                    entity.motX += vec3d.x * d4 / d0;
+                    entity.motZ += vec3d.z * d4 / d0;
+                }
+                if (f5 < 0.0F) {
+                    double d4 = d2 * -MathHelper.sin(f5) * 0.04D;
+                    entity.motY += d4 * 3.2D;
+                    entity.motX -= vec3d.x * d4 / d0;
+                    entity.motZ -= vec3d.z * d4 / d0;
+                }
+                if (d0 > 0.0D) {
+                    entity.motX += (vec3d.x / d0 * d2 - entity.motX) * 0.1D;
+                    entity.motZ += (vec3d.z / d0 * d2 - entity.motZ) * 0.1D;
+                }
+                entity.motX *= 0.9900000095367432D;
+                entity.motY *= 0.9800000190734863D;
+                entity.motZ *= 0.9900000095367432D;
+                entity.move(entity.motX, entity.motY, entity.motZ);
+                if ((entity.positionChanged) && (!entity.world.isClientSide)) {
+                    double d4 = Math.sqrt(entity.motX * entity.motX + entity.motZ * entity.motZ);
+                    double d5 = d2 - d4;
+                    float f7 = (float) (d5 * 10.0D - 3.0D);
+                    if (f7 > 0.0F) {
+                        entity.a(entity.e((int) f7), 1.0F, 1.0F);
+                        entity.damageEntity(DamageSource.FLY_INTO_WALL, f7);
+                    }
+                }
+                if ((entity.onGround) && (!entity.world.isClientSide) && (entity.getFlag(7))
+                        && (!CraftEventFactory.callToggleGlideEvent(entity, false).isCancelled())) {
+                    entity.setFlag(7, false);
+                }
+            } else {
+                float f8 = 0.91F;
+                BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition
+                        .d(entity.locX, entity.getBoundingBox().b - 1.0D, entity.locZ);
+                if (entity.onGround) {
+                    f8 = entity.world.getType(blockposition_pooledblockposition).getBlock().frictionFactor * 0.91F;
+                }
+                float f4 = 0.16277136F / (f8 * f8 * f8);
+                float f3;
+                if (entity.onGround) {
+                    f3 = entity.cp() * f4;
+                } else {
+                    f3 = entity.aS;
+                }
+                entity.a(f, f1, f3);
+                f8 = 0.91F;
+                if (entity.onGround) {
+                    f8 = entity.world.getType(blockposition_pooledblockposition.e(entity.locX,
+                            entity.getBoundingBox().b - 1.0D, entity.locZ)).getBlock().frictionFactor * 0.91F;
+                }
+                if (entity.m_()) {
+                    entity.motX = MathHelper.a(entity.motX, -0.15000000596046448D, 0.15000000596046448D);
+                    entity.motZ = MathHelper.a(entity.motZ, -0.15000000596046448D, 0.15000000596046448D);
+                    entity.fallDistance = 0.0F;
+                    if (entity.motY < -0.15D) {
+                        entity.motY = -0.15D;
+                    }
+                    boolean flag = (entity.isSneaking()) && ((entity instanceof EntityHuman));
+                    if ((flag) && (entity.motY < 0.0D)) {
+                        entity.motY = 0.0D;
+                    }
+                }
+                entity.move(entity.motX, entity.motY, entity.motZ);
+                if ((entity.positionChanged) && (entity.m_())) {
+                    entity.motY = 0.2D;
+                }
+                if (entity.hasEffect(MobEffects.LEVITATION)) {
+                    entity.motY += (0.05D * (entity.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - entity.motY)
+                            * 0.2D;
+                } else {
+                    blockposition_pooledblockposition.e(entity.locX, 0.0D, entity.locZ);
+                    if ((entity.world.isClientSide) && ((!entity.world.isLoaded(blockposition_pooledblockposition))
+                            || (!entity.world.getChunkAtWorldCoords(blockposition_pooledblockposition).p()))) {
+                        if (entity.locY > 0.0D) {
+                            entity.motY = -0.1D;
+                        } else {
+                            entity.motY = 0.0D;
+                        }
+                    } else if (!entity.isNoGravity()) {
+                        entity.motY -= 0.08D;
+                    }
+                }
+                entity.motY *= 0.9800000190734863D;
+                entity.motX *= f8;
+                entity.motZ *= f8;
+                blockposition_pooledblockposition.t();
+            }
+        }
+        entity.aG = entity.aH;
+        double d1 = entity.locX - entity.lastX;
+        double d0 = entity.locZ - entity.lastZ;
+        float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
+        if (f2 > 1.0F) {
+            f2 = 1.0F;
+        }
+        entity.aH += (f2 - entity.aH) * 0.4F;
+        entity.aI += entity.aH;
+    }
+
+    private static EntityLiving getHandle(LivingEntity entity) {
+        return (EntityLiving) NMSImpl.getHandle((org.bukkit.entity.Entity) entity);
+    }
+
+    public static Entity getHandle(org.bukkit.entity.Entity entity) {
+        if (!(entity instanceof CraftEntity))
+            return null;
+        return ((CraftEntity) entity).getHandle();
+    }
+
+    public static float getHeadYaw(EntityLiving handle) {
+        return handle.aP;
+    }
+
+    public static NavigationAbstract getNavigation(org.bukkit.entity.Entity entity) {
+        Entity handle = getHandle(entity);
+        return handle instanceof EntityInsentient ? ((EntityInsentient) handle).getNavigation()
+                : handle instanceof EntityHumanNPC ? ((EntityHumanNPC) handle).getNavigation() : null;
+    }
+
+    public static DataWatcherObject<Integer> getRabbitTypeField() {
+        if (RABBIT_FIELD == null)
+            return null;
+        try {
+            return (DataWatcherObject<Integer>) RABBIT_FIELD.get(null);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static SoundEffect getSoundEffect(NPC npc, SoundEffect snd, String meta) {
+        return npc == null || !npc.data().has(meta) ? snd
+                : SoundEffect.a.get(new MinecraftKey(npc.data().get(meta, snd == null ? "" : snd.toString())));
+    }
+
+    public static void initNetworkManager(NetworkManager network) {
+        if (NETWORK_ADDRESS == null)
+            return;
+        try {
+            network.channel = new EmptyChannel(null);
+            NETWORK_ADDRESS.set(network, new SocketAddress() {
+                private static final long serialVersionUID = 8207338859896320185L;
+            });
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isNavigationFinished(NavigationAbstract navigation) {
+        return navigation.n();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void minecartItemLogic(EntityMinecartAbstract minecart) {
+        NPC npc = ((NPCHolder) minecart).getNPC();
+        if (npc == null)
+            return;
+        Material mat = Material.getMaterial(npc.data().get(NPC.MINECART_ITEM_METADATA, ""));
+        int data = npc.data().get(NPC.MINECART_ITEM_DATA_METADATA, 0);
+        int offset = npc.data().get(NPC.MINECART_OFFSET_METADATA, 0);
+        minecart.a(mat != null);
+        if (mat != null) {
+            minecart.setDisplayBlock(Block.getById(mat.getId()).fromLegacyData(data));
+        }
+        minecart.setDisplayBlockOffset(offset);
+    }
+
+    public static void sendPacket(Player player, Packet<?> packet) {
+        if (packet == null)
+            return;
+        ((EntityPlayer) NMSImpl.getHandle(player)).playerConnection.sendPacket(packet);
+    }
+
+    public static void sendPacketNearby(Player from, Location location, Packet<?> packet) {
+        sendPacketNearby(from, location, packet, 64);
+    }
+
+    public static void sendPacketNearby(Player from, Location location, Packet<?> packet, double radius) {
+        List<Packet<?>> list = new ArrayList<Packet<?>>();
+        list.add(packet);
+        sendPacketsNearby(from, location, list, radius);
+    }
+
+    public static void sendPacketsNearby(Player from, Location location, Collection<Packet<?>> packets, double radius) {
+        radius *= radius;
+        final World world = location.getWorld();
+        for (Player ply : Bukkit.getServer().getOnlinePlayers()) {
+            if (ply == null || world != ply.getWorld() || (from != null && !ply.canSee(from))) {
+                continue;
+            }
+            if (location.distanceSquared(ply.getLocation(PACKET_CACHE_LOCATION)) > radius) {
+                continue;
+            }
+            for (Packet<?> packet : packets) {
+                NMSImpl.sendPacket(ply, packet);
+            }
+        }
+    }
+
+    public static void sendPacketsNearby(Player from, Location location, Packet<?>... packets) {
+        NMSImpl.sendPacketsNearby(from, location, Arrays.asList(packets), 64);
+    }
+
+    public static void setSize(Entity entity, float f, float f1, boolean justCreated) {
+        if ((f != entity.width) || (f1 != entity.length)) {
+            float f2 = entity.width;
+
+            entity.width = f;
+            entity.length = f1;
+            entity.a(new AxisAlignedBB(entity.getBoundingBox().a, entity.getBoundingBox().b, entity.getBoundingBox().c,
+                    entity.getBoundingBox().a + entity.width, entity.getBoundingBox().b + entity.length,
+                    entity.getBoundingBox().c + entity.width));
+            if ((entity.width > f2) && (!justCreated) && (!entity.world.isClientSide))
+                entity.move((f2 - entity.width) / 2, 0.0D, (f2 - entity.width) / 2);
+        }
+    }
+
+    public static void stopNavigation(NavigationAbstract navigation) {
+        navigation.n();
+    }
+
+    public static void updateAI(EntityLiving entity) {
+        if (entity instanceof EntityInsentient) {
+            EntityInsentient handle = (EntityInsentient) entity;
+            handle.getEntitySenses().a();
+            NMSImpl.updateNavigation(handle.getNavigation());
+            handle.getControllerMove().c();
+            handle.getControllerLook().a();
+            handle.getControllerJump().b();
+        } else if (entity instanceof EntityHumanNPC) {
+            ((EntityHumanNPC) entity).updateAI();
+        }
+    }
+
+    public static void updateNavigation(NavigationAbstract navigation) {
+        navigation.l();
     }
 
     @Override
@@ -276,12 +505,12 @@ public class NMSImpl implements NMSBridge {
     }
 
     public String getAuthServerBaseUrl() {
-        return Setting.AUTH_SERVER_URL.asString();
+        return Settings.Setting.AUTH_SERVER_URL.asString();
     }
 
     @Override
     public BlockBreaker getBlockBreaker(org.bukkit.entity.Entity entity, org.bukkit.block.Block targetBlock,
-            BlockBreakerConfiguration config) {
+                                        BlockBreakerConfiguration config) {
         return new CitizensBlockBreaker(entity, targetBlock, config);
     }
 
@@ -477,7 +706,7 @@ public class NMSImpl implements NMSBridge {
                         reason = CancelReason.STUCK;
                     }
                     handle.width = oldWidth; // minecraft requires that an entity fit onto both blocks if width >= 1f,
-                                             // but we'd prefer to make it just fit on 1 so hack around it a bit.
+                    // but we'd prefer to make it just fit on 1 so hack around it a bit.
                     lastSpeed = params.speed();
                 }
                 navigation.a(params.speed());
@@ -1020,7 +1249,7 @@ public class NMSImpl implements NMSBridge {
         private final org.bukkit.entity.Entity target;
 
         private NavigationFieldWrapper(NavigationAbstract navigation, org.bukkit.entity.Entity target,
-                NavigatorParameters parameters) {
+                                       NavigatorParameters parameters) {
             this.navigation = navigation;
             this.target = target;
             this.parameters = parameters;
@@ -1048,7 +1277,9 @@ public class NMSImpl implements NMSBridge {
         @Override
         public void update() {
             updateNavigation(navigation);
-        };
+        }
+
+        ;
     }
 
     private static class NavigationIterable implements Iterable<Vector> {
@@ -1082,364 +1313,6 @@ public class NMSImpl implements NMSBridge {
                     throw new UnsupportedOperationException();
                 }
             };
-        }
-    }
-
-    public static void clearGoals(PathfinderGoalSelector... goalSelectors) {
-        if (GOAL_FIELD == null || goalSelectors == null)
-            return;
-        for (PathfinderGoalSelector selector : goalSelectors) {
-            try {
-                Collection<?> list = (Collection<?>) GOAL_FIELD.get(selector);
-                list.clear();
-            } catch (Exception e) {
-                Messaging.logTr(Messages.ERROR_CLEARING_GOALS, e.getLocalizedMessage());
-            }
-        }
-    }
-
-    public static void flyingMoveLogic(EntityLiving entity, float f, float f1) {
-        if ((entity.ct()) || (entity.bA())) {
-            if ((entity.isInWater())
-                    && ((!(entity instanceof EntityHuman)) || (!((EntityHuman) entity).abilities.isFlying))) {
-                double d1 = entity.locY;
-                float f4 = entity instanceof EntityPolarBear ? 0.98F : 0.8F;
-                float f3 = 0.02F;
-                float f2 = EnchantmentManager.d(entity);
-                if (f2 > 3.0F) {
-                    f2 = 3.0F;
-                }
-                if (!entity.onGround) {
-                    f2 *= 0.5F;
-                }
-                if (f2 > 0.0F) {
-                    f4 += (0.54600006F - f4) * f2 / 3.0F;
-                    f3 += (entity.cp() - f3) * f2 / 3.0F;
-                }
-                entity.a(f, f1, f3);
-                entity.move(entity.motX, entity.motY, entity.motZ);
-                entity.motX *= f4;
-                entity.motY *= 0.800000011920929D;
-                entity.motZ *= f4;
-                if (!entity.isNoGravity()) {
-                    entity.motY -= 0.02D;
-                }
-                if ((entity.positionChanged)
-                        && (entity.c(entity.motX, entity.motY + 0.6000000238418579D - entity.locY + d1, entity.motZ))) {
-                    entity.motY = 0.30000001192092896D;
-                }
-            } else if ((entity.ao())
-                    && ((!(entity instanceof EntityHuman)) || (!((EntityHuman) entity).abilities.isFlying))) {
-                double d1 = entity.locY;
-                entity.a(f, f1, 0.02F);
-                entity.move(entity.motX, entity.motY, entity.motZ);
-                entity.motX *= 0.5D;
-                entity.motY *= 0.5D;
-                entity.motZ *= 0.5D;
-                if (!entity.isNoGravity()) {
-                    entity.motY -= 0.02D;
-                }
-                if ((entity.positionChanged)
-                        && (entity.c(entity.motX, entity.motY + 0.6000000238418579D - entity.locY + d1, entity.motZ))) {
-                    entity.motY = 0.30000001192092896D;
-                }
-            } else if (entity.cG()) {
-                if (entity.motY > -0.5D) {
-                    entity.fallDistance = 1.0F;
-                }
-                Vec3D vec3d = entity.aB();
-                float f5 = entity.pitch * 0.017453292F;
-
-                double d0 = Math.sqrt(vec3d.x * vec3d.x + vec3d.z * vec3d.z);
-                double d2 = Math.sqrt(entity.motX * entity.motX + entity.motZ * entity.motZ);
-                double d3 = vec3d.b();
-                float f6 = MathHelper.cos(f5);
-
-                f6 = (float) (f6 * f6 * Math.min(1.0D, d3 / 0.4D));
-                entity.motY += -0.08D + f6 * 0.06D;
-                if ((entity.motY < 0.0D) && (d0 > 0.0D)) {
-                    double d4 = entity.motY * -0.1D * f6;
-                    entity.motY += d4;
-                    entity.motX += vec3d.x * d4 / d0;
-                    entity.motZ += vec3d.z * d4 / d0;
-                }
-                if (f5 < 0.0F) {
-                    double d4 = d2 * -MathHelper.sin(f5) * 0.04D;
-                    entity.motY += d4 * 3.2D;
-                    entity.motX -= vec3d.x * d4 / d0;
-                    entity.motZ -= vec3d.z * d4 / d0;
-                }
-                if (d0 > 0.0D) {
-                    entity.motX += (vec3d.x / d0 * d2 - entity.motX) * 0.1D;
-                    entity.motZ += (vec3d.z / d0 * d2 - entity.motZ) * 0.1D;
-                }
-                entity.motX *= 0.9900000095367432D;
-                entity.motY *= 0.9800000190734863D;
-                entity.motZ *= 0.9900000095367432D;
-                entity.move(entity.motX, entity.motY, entity.motZ);
-                if ((entity.positionChanged) && (!entity.world.isClientSide)) {
-                    double d4 = Math.sqrt(entity.motX * entity.motX + entity.motZ * entity.motZ);
-                    double d5 = d2 - d4;
-                    float f7 = (float) (d5 * 10.0D - 3.0D);
-                    if (f7 > 0.0F) {
-                        entity.a(entity.e((int) f7), 1.0F, 1.0F);
-                        entity.damageEntity(DamageSource.FLY_INTO_WALL, f7);
-                    }
-                }
-                if ((entity.onGround) && (!entity.world.isClientSide) && (entity.getFlag(7))
-                        && (!CraftEventFactory.callToggleGlideEvent(entity, false).isCancelled())) {
-                    entity.setFlag(7, false);
-                }
-            } else {
-                float f8 = 0.91F;
-                BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition
-                        .d(entity.locX, entity.getBoundingBox().b - 1.0D, entity.locZ);
-                if (entity.onGround) {
-                    f8 = entity.world.getType(blockposition_pooledblockposition).getBlock().frictionFactor * 0.91F;
-                }
-                float f4 = 0.16277136F / (f8 * f8 * f8);
-                float f3;
-                if (entity.onGround) {
-                    f3 = entity.cp() * f4;
-                } else {
-                    f3 = entity.aS;
-                }
-                entity.a(f, f1, f3);
-                f8 = 0.91F;
-                if (entity.onGround) {
-                    f8 = entity.world.getType(blockposition_pooledblockposition.e(entity.locX,
-                            entity.getBoundingBox().b - 1.0D, entity.locZ)).getBlock().frictionFactor * 0.91F;
-                }
-                if (entity.m_()) {
-                    entity.motX = MathHelper.a(entity.motX, -0.15000000596046448D, 0.15000000596046448D);
-                    entity.motZ = MathHelper.a(entity.motZ, -0.15000000596046448D, 0.15000000596046448D);
-                    entity.fallDistance = 0.0F;
-                    if (entity.motY < -0.15D) {
-                        entity.motY = -0.15D;
-                    }
-                    boolean flag = (entity.isSneaking()) && ((entity instanceof EntityHuman));
-                    if ((flag) && (entity.motY < 0.0D)) {
-                        entity.motY = 0.0D;
-                    }
-                }
-                entity.move(entity.motX, entity.motY, entity.motZ);
-                if ((entity.positionChanged) && (entity.m_())) {
-                    entity.motY = 0.2D;
-                }
-                if (entity.hasEffect(MobEffects.LEVITATION)) {
-                    entity.motY += (0.05D * (entity.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - entity.motY)
-                            * 0.2D;
-                } else {
-                    blockposition_pooledblockposition.e(entity.locX, 0.0D, entity.locZ);
-                    if ((entity.world.isClientSide) && ((!entity.world.isLoaded(blockposition_pooledblockposition))
-                            || (!entity.world.getChunkAtWorldCoords(blockposition_pooledblockposition).p()))) {
-                        if (entity.locY > 0.0D) {
-                            entity.motY = -0.1D;
-                        } else {
-                            entity.motY = 0.0D;
-                        }
-                    } else if (!entity.isNoGravity()) {
-                        entity.motY -= 0.08D;
-                    }
-                }
-                entity.motY *= 0.9800000190734863D;
-                entity.motX *= f8;
-                entity.motZ *= f8;
-                blockposition_pooledblockposition.t();
-            }
-        }
-        entity.aG = entity.aH;
-        double d1 = entity.locX - entity.lastX;
-        double d0 = entity.locZ - entity.lastZ;
-        float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
-        if (f2 > 1.0F) {
-            f2 = 1.0F;
-        }
-        entity.aH += (f2 - entity.aH) * 0.4F;
-        entity.aI += entity.aH;
-    }
-
-    private static EntityLiving getHandle(LivingEntity entity) {
-        return (EntityLiving) NMSImpl.getHandle((org.bukkit.entity.Entity) entity);
-    }
-
-    public static Entity getHandle(org.bukkit.entity.Entity entity) {
-        if (!(entity instanceof CraftEntity))
-            return null;
-        return ((CraftEntity) entity).getHandle();
-    }
-
-    public static float getHeadYaw(EntityLiving handle) {
-        return handle.aP;
-    }
-
-    public static NavigationAbstract getNavigation(org.bukkit.entity.Entity entity) {
-        Entity handle = getHandle(entity);
-        return handle instanceof EntityInsentient ? ((EntityInsentient) handle).getNavigation()
-                : handle instanceof EntityHumanNPC ? ((EntityHumanNPC) handle).getNavigation() : null;
-    }
-
-    public static DataWatcherObject<Integer> getRabbitTypeField() {
-        if (RABBIT_FIELD == null)
-            return null;
-        try {
-            return (DataWatcherObject<Integer>) RABBIT_FIELD.get(null);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static SoundEffect getSoundEffect(NPC npc, SoundEffect snd, String meta) {
-        return npc == null || !npc.data().has(meta) ? snd
-                : SoundEffect.a.get(new MinecraftKey(npc.data().get(meta, snd == null ? "" : snd.toString())));
-    }
-
-    public static void initNetworkManager(NetworkManager network) {
-        if (NETWORK_ADDRESS == null)
-            return;
-        try {
-            network.channel = new EmptyChannel(null);
-            NETWORK_ADDRESS.set(network, new SocketAddress() {
-                private static final long serialVersionUID = 8207338859896320185L;
-            });
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean isNavigationFinished(NavigationAbstract navigation) {
-        return navigation.n();
-    }
-
-    @SuppressWarnings("deprecation")
-    public static void minecartItemLogic(EntityMinecartAbstract minecart) {
-        NPC npc = ((NPCHolder) minecart).getNPC();
-        if (npc == null)
-            return;
-        Material mat = Material.getMaterial(npc.data().get(NPC.MINECART_ITEM_METADATA, ""));
-        int data = npc.data().get(NPC.MINECART_ITEM_DATA_METADATA, 0);
-        int offset = npc.data().get(NPC.MINECART_OFFSET_METADATA, 0);
-        minecart.a(mat != null);
-        if (mat != null) {
-            minecart.setDisplayBlock(Block.getById(mat.getId()).fromLegacyData(data));
-        }
-        minecart.setDisplayBlockOffset(offset);
-    }
-
-    public static void sendPacket(Player player, Packet<?> packet) {
-        if (packet == null)
-            return;
-        ((EntityPlayer) NMSImpl.getHandle(player)).playerConnection.sendPacket(packet);
-    }
-
-    public static void sendPacketNearby(Player from, Location location, Packet<?> packet) {
-        sendPacketNearby(from, location, packet, 64);
-    }
-
-    public static void sendPacketNearby(Player from, Location location, Packet<?> packet, double radius) {
-        List<Packet<?>> list = new ArrayList<Packet<?>>();
-        list.add(packet);
-        sendPacketsNearby(from, location, list, radius);
-    }
-
-    public static void sendPacketsNearby(Player from, Location location, Collection<Packet<?>> packets, double radius) {
-        radius *= radius;
-        final World world = location.getWorld();
-        for (Player ply : Bukkit.getServer().getOnlinePlayers()) {
-            if (ply == null || world != ply.getWorld() || (from != null && !ply.canSee(from))) {
-                continue;
-            }
-            if (location.distanceSquared(ply.getLocation(PACKET_CACHE_LOCATION)) > radius) {
-                continue;
-            }
-            for (Packet<?> packet : packets) {
-                NMSImpl.sendPacket(ply, packet);
-            }
-        }
-    }
-
-    public static void sendPacketsNearby(Player from, Location location, Packet<?>... packets) {
-        NMSImpl.sendPacketsNearby(from, location, Arrays.asList(packets), 64);
-    }
-
-    public static void setSize(Entity entity, float f, float f1, boolean justCreated) {
-        if ((f != entity.width) || (f1 != entity.length)) {
-            float f2 = entity.width;
-
-            entity.width = f;
-            entity.length = f1;
-            entity.a(new AxisAlignedBB(entity.getBoundingBox().a, entity.getBoundingBox().b, entity.getBoundingBox().c,
-                    entity.getBoundingBox().a + entity.width, entity.getBoundingBox().b + entity.length,
-                    entity.getBoundingBox().c + entity.width));
-            if ((entity.width > f2) && (!justCreated) && (!entity.world.isClientSide))
-                entity.move((f2 - entity.width) / 2, 0.0D, (f2 - entity.width) / 2);
-        }
-    }
-
-    public static void stopNavigation(NavigationAbstract navigation) {
-        navigation.n();
-    }
-
-    public static void updateAI(EntityLiving entity) {
-        if (entity instanceof EntityInsentient) {
-            EntityInsentient handle = (EntityInsentient) entity;
-            handle.getEntitySenses().a();
-            NMSImpl.updateNavigation(handle.getNavigation());
-            handle.getControllerMove().c();
-            handle.getControllerLook().a();
-            handle.getControllerJump().b();
-        } else if (entity instanceof EntityHumanNPC) {
-            ((EntityHumanNPC) entity).updateAI();
-        }
-    }
-
-    public static void updateNavigation(NavigationAbstract navigation) {
-        navigation.l();
-    }
-
-    private static final Set<EntityType> BAD_CONTROLLER_LOOK = EnumSet.of(EntityType.POLAR_BEAR, EntityType.SILVERFISH,
-            EntityType.ENDERMITE, EntityType.ENDER_DRAGON, EntityType.BAT, EntityType.SLIME, EntityType.MAGMA_CUBE,
-            EntityType.HORSE, EntityType.GHAST);
-    private static final Field CRAFT_BOSSBAR_HANDLE_FIELD = NMS.getField(CraftBossBar.class, "handle");
-    private static final float DEFAULT_SPEED = 1F;
-    private static final Field ENDERDRAGON_BATTLE_BAR_FIELD = NMS.getField(EnderDragonBattle.class, "c");
-    private static final Field ENDERDRAGON_BATTLE_FIELD = NMS.getField(EntityEnderDragon.class, "bK");
-    private static Map<Class<?>, Integer> ENTITY_CLASS_TO_INT;
-    private static Map<Class<?>, String> ENTITY_CLASS_TO_NAME;
-    private static final Location FROM_LOCATION = new Location(null, 0, 0, 0);
-    public static Field GOAL_FIELD = NMS.getField(PathfinderGoalSelector.class, "b");
-    private static final Field JUMP_FIELD = NMS.getField(EntityLiving.class, "be");
-    private static Method MAKE_REQUEST;
-    private static Field NAVIGATION_WORLD_FIELD = NMS.getField(NavigationAbstract.class, "b");
-    public static Field NETWORK_ADDRESS = NMS.getField(NetworkManager.class, "l");
-    public static final Location PACKET_CACHE_LOCATION = new Location(null, 0, 0, 0);
-    private static Field PATHFINDING_RANGE = NMS.getField(NavigationAbstract.class, "f");
-    private static final Field RABBIT_FIELD = NMS.getField(EntityRabbit.class, "bx");
-    private static final Random RANDOM = Util.getFastRandom();
-    private static Field SKULL_PROFILE_FIELD;
-    private static Field TRACKED_ENTITY_SET = NMS.getField(EntityTracker.class, "c");
-    private static final Field WITHER_BOSS_BAR_FIELD = NMS.getField(EntityWither.class, "bG");
-    static {
-        try {
-            Field field = NMS.getField(EntityTypes.class, "f");
-            ENTITY_CLASS_TO_INT = (Map<Class<?>, Integer>) field.get(null);
-            field = NMS.getField(EntityTypes.class, "d");
-            ENTITY_CLASS_TO_NAME = (Map<Class<?>, String>) field.get(null);
-        } catch (Exception e) {
-            Messaging.logTr(Messages.ERROR_GETTING_ID_MAPPING, e.getMessage());
-        }
-
-        try {
-            MAKE_REQUEST = YggdrasilAuthenticationService.class.getDeclaredMethod("makeRequest", URL.class,
-                    Object.class, Class.class);
-            MAKE_REQUEST.setAccessible(true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 }

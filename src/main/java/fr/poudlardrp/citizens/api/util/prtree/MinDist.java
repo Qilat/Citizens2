@@ -13,11 +13,9 @@ public class MinDist {
 
     /**
      * Calculate the MINDIST between the given MBRND and the given point
-     * 
-     * @param mbr
-     *            the bounding box to use
-     * @param p
-     *            the point
+     *
+     * @param mbr the bounding box to use
+     * @param p   the point
      * @return the squared distance
      */
     public static double get(MBR mbr, PointND p) {

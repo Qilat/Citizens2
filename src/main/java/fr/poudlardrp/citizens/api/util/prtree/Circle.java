@@ -6,12 +6,11 @@ import java.util.List;
 /**
  * A simple circular data structure.
  *
- * @param <T>
- *            the element type
+ * @param <T> the element type
  */
 class Circle<T> {
-    private int currentPos;
     private final List<T> data;
+    private int currentPos;
 
     public Circle(int size) {
         data = new ArrayList<T>(size);

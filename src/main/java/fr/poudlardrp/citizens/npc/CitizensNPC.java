@@ -1,28 +1,7 @@
-package net.poudlardcitizens.npc;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scoreboard.Team;
-import org.bukkit.scoreboard.Team.Option;
-import org.bukkit.scoreboard.Team.OptionStatus;
+package fr.poudlardrp.citizens.npc;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
-
-import net.poudlardcitizens.NPCNeedsRespawnEvent;
-import net.poudlardcitizens.Settings.Setting;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.event.DespawnReason;
@@ -38,16 +17,36 @@ import net.citizensnpcs.api.trait.trait.MobType;
 import net.citizensnpcs.api.trait.trait.Spawned;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.Messaging;
+import net.poudlardcitizens.NPCNeedsRespawnEvent;
+import net.poudlardcitizens.Settings.Setting;
 import net.poudlardcitizens.npc.ai.CitizensNavigator;
 import net.poudlardcitizens.npc.skin.SkinnableEntity;
 import net.poudlardcitizens.trait.CurrentLocation;
 import net.poudlardcitizens.util.Messages;
 import net.poudlardcitizens.util.NMS;
 import net.poudlardcitizens.util.Util;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 public class CitizensNPC extends AbstractNPC {
-    private EntityController entityController;
+    private static final String NPC_METADATA_MARKER = "NPC";
     private final CitizensNavigator navigator = new CitizensNavigator(this);
+    private EntityController entityController;
     private int updateCounter = 0;
 
     public CitizensNPC(UUID uuid, int id, String name, EntityController entityController, NPCRegistry registry) {
@@ -133,6 +132,12 @@ public class CitizensNPC extends AbstractNPC {
     }
 
     @Override
+    public void setFlyable(boolean flyable) {
+        super.setFlyable(flyable);
+        updateFlyableState();
+    }
+
+    @Override
     public void load(final DataKey root) {
         super.load(root);
 
@@ -176,12 +181,6 @@ public class CitizensNPC extends AbstractNPC {
         if (wasSpawned) {
             spawn(prev);
         }
-    }
-
-    @Override
-    public void setFlyable(boolean flyable) {
-        super.setFlyable(flyable);
-        updateFlyableState();
     }
 
     @Override
@@ -282,7 +281,7 @@ public class CitizensNPC extends AbstractNPC {
                 if (getEntity() instanceof LivingEntity) {
                     OptionStatus nameVisibility = OptionStatus.NEVER;
                     if (!getEntity().isCustomNameVisible()
-                            && !data().<Object> get(NPC.NAMEPLATE_VISIBLE_METADATA, true).toString().equals("hover")) {
+                            && !data().<Object>get(NPC.NAMEPLATE_VISIBLE_METADATA, true).toString().equals("hover")) {
                         getEntity().setCustomName("");
                     } else {
                         nameVisibility = OptionStatus.ALWAYS;
@@ -300,8 +299,8 @@ public class CitizensNPC extends AbstractNPC {
                             if (data().has(NPC.GLOWING_COLOR_METADATA)) {
                                 if (team.getPrefix() == null || team.getPrefix().length() == 0
                                         || (data().has("previous-glowing-color")
-                                                && !team.getPrefix().equals(data().get("previous-glowing-color")))) {
-                                    team.setPrefix(ChatColor.valueOf(data().<String> get(NPC.GLOWING_COLOR_METADATA))
+                                        && !team.getPrefix().equals(data().get("previous-glowing-color")))) {
+                                    team.setPrefix(ChatColor.valueOf(data().<String>get(NPC.GLOWING_COLOR_METADATA))
                                             .toString());
                                     data().set("previous-glowing-color", team.getPrefix());
                                 }
@@ -314,7 +313,7 @@ public class CitizensNPC extends AbstractNPC {
             }
 
             if (getEntity() instanceof LivingEntity) {
-                String nameplateVisible = data().<Object> get(NPC.NAMEPLATE_VISIBLE_METADATA, true).toString();
+                String nameplateVisible = data().<Object>get(NPC.NAMEPLATE_VISIBLE_METADATA, true).toString();
                 if (nameplateVisible.equals("hover")) {
                     ((LivingEntity) getEntity()).setCustomNameVisible(false);
                 } else {
@@ -345,6 +344,4 @@ public class CitizensNPC extends AbstractNPC {
             data().setPersistent(NPC.FLYABLE_METADATA, true);
         }
     }
-
-    private static final String NPC_METADATA_MARKER = "NPC";
 }

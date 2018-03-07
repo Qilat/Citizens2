@@ -1,29 +1,32 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
 
-import java.util.EnumMap;
-
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.NMS;
-import net.poudlardcitizens.util.PlayerAnimation;
+import com.google.common.collect.Maps;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.NMS;
+import fr.poudlardrp.citizens.util.PlayerAnimation;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.minecraft.server.v1_10_R1.*;
+import net.poudlardcitizens.trait.ArmorStandTrait;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.google.common.collect.Maps;
-
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.trait.ArmorStandTrait;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.EntityPlayer;
-import net.minecraft.server.v1_10_R1.EnumHand;
-import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_10_R1.PacketPlayOutBed;
-import net.minecraft.server.v1_10_R1.PacketPlayOutEntityMetadata;
+import java.util.EnumMap;
 
 public class PlayerAnimationImpl {
+    private static EnumMap<PlayerAnimation, Integer> DEFAULTS = Maps.newEnumMap(PlayerAnimation.class);
+
+    static {
+        DEFAULTS.put(PlayerAnimation.ARM_SWING, 0);
+        DEFAULTS.put(PlayerAnimation.HURT, 1);
+        DEFAULTS.put(PlayerAnimation.EAT_FOOD, 2);
+        DEFAULTS.put(PlayerAnimation.ARM_SWING_OFFHAND, 3);
+        DEFAULTS.put(PlayerAnimation.CRIT, 4);
+        DEFAULTS.put(PlayerAnimation.MAGIC_CRIT, 5);
+    }
+
     public static void play(PlayerAnimation animation, Player bplayer, int radius) {
         // TODO: this is pretty gross
         final EntityPlayer player = (EntityPlayer) NMSImpl.getHandle(bplayer);
@@ -121,15 +124,5 @@ public class PlayerAnimationImpl {
 
     protected static void sendPacketNearby(Packet<?> packet, EntityPlayer player, int radius) {
         NMSImpl.sendPacketNearby(player.getBukkitEntity(), player.getBukkitEntity().getLocation(), packet, radius);
-    }
-
-    private static EnumMap<PlayerAnimation, Integer> DEFAULTS = Maps.newEnumMap(PlayerAnimation.class);
-    static {
-        DEFAULTS.put(PlayerAnimation.ARM_SWING, 0);
-        DEFAULTS.put(PlayerAnimation.HURT, 1);
-        DEFAULTS.put(PlayerAnimation.EAT_FOOD, 2);
-        DEFAULTS.put(PlayerAnimation.ARM_SWING_OFFHAND, 3);
-        DEFAULTS.put(PlayerAnimation.CRIT, 4);
-        DEFAULTS.put(PlayerAnimation.MAGIC_CRIT, 5);
     }
 }

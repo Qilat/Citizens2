@@ -1,11 +1,10 @@
 package fr.poudlardrp.citizens.api.ai.flocking;
 
-import java.util.Collection;
-
 import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+
+import java.util.Collection;
 
 public class CohesionBehavior implements FlockBehavior {
     private final double weight;

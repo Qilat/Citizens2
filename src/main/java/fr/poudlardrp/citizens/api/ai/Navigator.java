@@ -1,10 +1,9 @@
 package fr.poudlardrp.citizens.api.ai;
 
+import fr.poudlardrp.citizens.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
-
-import net.citizensnpcs.api.npc.NPC;
 
 /**
  * Represents the pathfinding AI of an {@link NPC}. The navigator can path towards a single target at a time.
@@ -19,8 +18,8 @@ public interface Navigator {
      * Returns the {@link NavigatorParameters} local to this navigator. These parameters are copied to local target
      * parameters when a new target is started.
      *
-     * @see #getLocalParameters()
      * @return The default parameters
+     * @see #getLocalParameters()
      */
 
     NavigatorParameters getDefaultParameters();
@@ -36,8 +35,8 @@ public interface Navigator {
      * Returns the {@link NavigatorParameters} local to any current target execution. These are updated independently of
      * the default parameters.
      *
-     * @see #getDefaultParameters()
      * @return The local parameters
+     * @see #getDefaultParameters()
      */
     NavigatorParameters getLocalParameters();
 
@@ -47,7 +46,6 @@ public interface Navigator {
     NPC getNPC();
 
     /**
-     *
      * @return The current {@link PathStrategy} or null if the navigator is not pathfinding
      */
     PathStrategy getPathStrategy();
@@ -66,8 +64,8 @@ public interface Navigator {
     TargetType getTargetType();
 
     /**
-     * @see #getTargetType()
      * @return Whether the navigator is currently pathing towards a target.
+     * @see #getTargetType()
      */
     boolean isNavigating();
 
@@ -79,34 +77,29 @@ public interface Navigator {
     /**
      * Sets whether the navigator is paused and shouldn't process the path for now.
      *
-     * @param paused
-     *            Whether the navigator should be paused or not
+     * @param paused Whether the navigator should be paused or not
      */
     void setPaused(boolean paused);
 
     /**
      * Sets the current navigation to an entity target.
      *
-     * @param target
-     *            The {@link Entity} to path towards
-     * @param aggressive
-     *            Whether to attack the target when close enough
+     * @param target     The {@link Entity} to path towards
+     * @param aggressive Whether to attack the target when close enough
      */
     void setTarget(Entity target, boolean aggressive);
 
     /**
      * Sets the current navigation using a list of {@link Vector}s which will be followed in turn.
      *
-     * @param path
-     *            The path
+     * @param path The path
      */
     void setTarget(Iterable<Vector> path);
 
     /**
      * Sets the current navigation to a {@link Location} destination.
      *
-     * @param target
-     *            The destination
+     * @param target The destination
      */
     void setTarget(Location target);
 }

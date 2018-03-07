@@ -1,84 +1,36 @@
 package fr.poudlardrp.citizens.api.persistence;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.WeakHashMap;
-
-import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.EulerAngle;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Primitives;
-
 import net.citizensnpcs.api.util.DataKey;
+import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.EulerAngle;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class PersistenceLoader {
-    private static class PersistField {
-        private final Persister<?> delegate;
-        private final Field field;
-        private final Object instance;
-        private final String key;
-        private final Persist persistAnnotation;
-        private Object value;
+    private static final Map<Class<?>, Field[]> fieldCache = new WeakHashMap<Class<?>, Field[]>();
+    private static final Map<Class<? extends Persister<?>>, Persister<?>> loadedDelegates = new WeakHashMap<Class<? extends Persister<?>>, Persister<?>>();
+    private static final Exception loadException = new Exception() {
+        private static final long serialVersionUID = -4245839150826112365L;
 
-        private PersistField(Field field, Object instance) {
-            this.field = field;
-            this.persistAnnotation = field.getAnnotation(Persist.class);
-            this.key = persistAnnotation.value().equals("UNINITIALISED") ? field.getName() : persistAnnotation.value();
-            Class<?> fallback = field.getType();
-            if (field.getGenericType() instanceof ParameterizedType) {
-                fallback = (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
-            }
-            this.delegate = getDelegate(field, fallback);
-            this.instance = instance;
+        @SuppressWarnings("unused")
+        public void fillInStackTrace(StackTraceElement[] elements) {
         }
+    };
+    private static final Map<Class<?>, Class<? extends Persister<?>>> persistRedirects = new WeakHashMap<Class<?>, Class<? extends Persister<?>>>();
 
-        @SuppressWarnings("unchecked")
-        public <T> T get() {
-            if (value == null)
-                try {
-                    value = field.get(instance);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    value = NULL;
-                }
-            if (value == NULL)
-                return null;
-            return (T) value;
-        }
-
-        public Class<?> getCollectionType() {
-            return persistAnnotation.collectionType();
-        }
-
-        public Class<?> getType() {
-            return field.getType();
-        }
-
-        public boolean isRequired() {
-            return persistAnnotation.required();
-        }
-
-        public void set(Object value) {
-            try {
-                field.set(instance, value);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        private static final Object NULL = new Object();
+    static {
+        registerPersistDelegate(Location.class, LocationPersister.class);
+        registerPersistDelegate(ItemStack.class, ItemStackPersister.class);
+        registerPersistDelegate(EulerAngle.class, EulerAnglePersister.class);
+        registerPersistDelegate(UUID.class, UUIDPersister.class);
     }
 
     private static String createRelativeKey(String key, int ext) {
@@ -93,7 +45,7 @@ public class PersistenceLoader {
         return parent.isEmpty() ? ext : parent + '.' + ext;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static void deserialise(PersistField field, DataKey root) throws Exception {
         Object value;
         Class<?> type = field.getType();
@@ -198,7 +150,7 @@ public class PersistenceLoader {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static Object deserialiseValue(PersistField field, DataKey root) {
         Class<?> type = field.field.getType().isEnum() ? field.field.getType() : getGenericType(field.field);
         if (field.delegate == null && type.isEnum()) {
@@ -285,12 +237,10 @@ public class PersistenceLoader {
      * Creates an instance of the given class using the default constructor and loads it using
      * {@link #load(Object, DataKey)}. Will return null if an exception occurs.
      *
-     * @see #load(Object, DataKey)
-     * @param clazz
-     *            The class to create an instance from
-     * @param root
-     *            The root key to load from
+     * @param clazz The class to create an instance from
+     * @param root  The root key to load from
      * @return The loaded instance
+     * @see #load(Object, DataKey)
      */
     public static <T> T load(Class<? extends T> clazz, DataKey root) {
         T instance;
@@ -314,10 +264,8 @@ public class PersistenceLoader {
      * will be used to create the instance. This annotation can be omitted if the Persister has been registered using
      * {@link #registerPersistDelegate(Class, Class)}
      *
-     * @param instance
-     *            The instance to load data into
-     * @param root
-     *            The key to load data from
+     * @param instance The instance to load data into
+     * @param root     The key to load data from
      * @return The instance, with persisted fields loaded
      */
     public static <T> T load(T instance, DataKey root) {
@@ -344,10 +292,8 @@ public class PersistenceLoader {
      * registered using this method will use the Persister by default to load and save data. The
      * {@link DelegatePersistence} annotation will be preferred if present.
      *
-     * @param clazz
-     *            The class to redirect
-     * @param delegateClass
-     *            The Persister class to use when loading and saving
+     * @param clazz         The class to redirect
+     * @param delegateClass The Persister class to use when loading and saving
      */
     public static void registerPersistDelegate(Class<?> clazz, Class<? extends Persister<?>> delegateClass) {
         persistRedirects.put(clazz, delegateClass);
@@ -357,10 +303,8 @@ public class PersistenceLoader {
     /**
      * Scans the object for fields annotated with {@link Persist} and saves them to the given {@link DataKey}.
      *
-     * @param instance
-     *            The instance to save
-     * @param root
-     *            The key to save into
+     * @param instance The instance to save
+     * @param root     The key to save into
      */
     public static void save(Object instance, DataKey root) {
         Class<?> clazz = instance.getClass();
@@ -408,21 +352,59 @@ public class PersistenceLoader {
         }
     }
 
-    private static final Map<Class<?>, Field[]> fieldCache = new WeakHashMap<Class<?>, Field[]>();
-    private static final Map<Class<? extends Persister<?>>, Persister<?>> loadedDelegates = new WeakHashMap<Class<? extends Persister<?>>, Persister<?>>();
-    private static final Exception loadException = new Exception() {
-        @SuppressWarnings("unused")
-        public void fillInStackTrace(StackTraceElement[] elements) {
+    private static class PersistField {
+        private static final Object NULL = new Object();
+        private final Persister<?> delegate;
+        private final Field field;
+        private final Object instance;
+        private final String key;
+        private final Persist persistAnnotation;
+        private Object value;
+
+        private PersistField(Field field, Object instance) {
+            this.field = field;
+            this.persistAnnotation = field.getAnnotation(Persist.class);
+            this.key = persistAnnotation.value().equals("UNINITIALISED") ? field.getName() : persistAnnotation.value();
+            Class<?> fallback = field.getType();
+            if (field.getGenericType() instanceof ParameterizedType) {
+                fallback = (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+            }
+            this.delegate = getDelegate(field, fallback);
+            this.instance = instance;
         }
 
-        private static final long serialVersionUID = -4245839150826112365L;
-    };
-    private static final Map<Class<?>, Class<? extends Persister<?>>> persistRedirects = new WeakHashMap<Class<?>, Class<? extends Persister<?>>>();
+        @SuppressWarnings("unchecked")
+        public <T> T get() {
+            if (value == null)
+                try {
+                    value = field.get(instance);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    value = NULL;
+                }
+            if (value == NULL)
+                return null;
+            return (T) value;
+        }
 
-    static {
-        registerPersistDelegate(Location.class, LocationPersister.class);
-        registerPersistDelegate(ItemStack.class, ItemStackPersister.class);
-        registerPersistDelegate(EulerAngle.class, EulerAnglePersister.class);
-        registerPersistDelegate(UUID.class, UUIDPersister.class);
+        public Class<?> getCollectionType() {
+            return persistAnnotation.collectionType();
+        }
+
+        public Class<?> getType() {
+            return field.getType();
+        }
+
+        public boolean isRequired() {
+            return persistAnnotation.required();
+        }
+
+        public void set(Object value) {
+            try {
+                field.set(instance, value);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

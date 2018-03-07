@@ -1,7 +1,11 @@
 package fr.poudlardrp.citizens.api.ai.goals;
 
-import java.util.Random;
-
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
+import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
+import net.citizensnpcs.api.ai.tree.BehaviorStatus;
+import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -9,24 +13,27 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
-import net.citizensnpcs.api.ai.tree.BehaviorGoalAdapter;
-import net.citizensnpcs.api.ai.tree.BehaviorStatus;
-import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
-import net.citizensnpcs.api.npc.NPC;
+import java.util.Random;
 
 public class WanderGoal extends BehaviorGoalAdapter implements Listener {
-    private boolean forceFinish;
     private final NPC npc;
     private final Random random = new Random();
     private final int xrange;
     private final int yrange;
+    private boolean forceFinish;
 
     private WanderGoal(NPC npc, int xrange, int yrange) {
         this.npc = npc;
         this.xrange = xrange;
         this.yrange = yrange;
+    }
+
+    public static WanderGoal createWithNPC(NPC npc) {
+        return createWithNPCAndRange(npc, 10, 2);
+    }
+
+    public static WanderGoal createWithNPCAndRange(NPC npc, int xrange, int yrange) {
+        return new WanderGoal(npc, xrange, yrange);
     }
 
     private Location findRandomPosition() {
@@ -74,13 +81,5 @@ public class WanderGoal extends BehaviorGoalAdapter implements Listener {
         npc.getNavigator().setTarget(dest);
         CitizensAPI.registerEvents(this);
         return true;
-    }
-
-    public static WanderGoal createWithNPC(NPC npc) {
-        return createWithNPCAndRange(npc, 10, 2);
-    }
-
-    public static WanderGoal createWithNPCAndRange(NPC npc, int xrange, int yrange) {
-        return new WanderGoal(npc, xrange, yrange);
     }
 }

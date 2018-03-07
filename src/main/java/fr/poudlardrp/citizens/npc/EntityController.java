@@ -1,9 +1,8 @@
-package net.poudlardcitizens.npc;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
+package fr.poudlardrp.citizens.npc;
 
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 
 public interface EntityController {
     Entity getBukkitEntity();

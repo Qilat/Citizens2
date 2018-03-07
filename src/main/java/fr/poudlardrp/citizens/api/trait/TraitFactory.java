@@ -7,8 +7,7 @@ public interface TraitFactory {
     /**
      * Adds all default traits to a given NPC.
      *
-     * @param npc
-     *            The NPC to add default traits to
+     * @param npc The NPC to add default traits to
      */
     void addDefaultTraits(NPC npc);
 
@@ -16,16 +15,14 @@ public interface TraitFactory {
      * Removes a trait. This prevents a trait from being added to an NPC but does not remove existing traits from the
      * NPCs.
      *
-     * @param info
-     *            The TraitInfo to deregister
+     * @param info The TraitInfo to deregister
      */
     void deregisterTrait(TraitInfo info);
 
     /**
      * Gets a trait with the given class.
      *
-     * @param clazz
-     *            Class of the trait
+     * @param clazz Class of the trait
      * @return Trait with the given class
      */
     <T extends Trait> T getTrait(Class<T> clazz);
@@ -33,8 +30,7 @@ public interface TraitFactory {
     /**
      * Gets a trait with the given name.
      *
-     * @param name
-     *            Name of the trait
+     * @param name Name of the trait
      * @return Trait with the given name
      */
     <T extends Trait> T getTrait(String name);
@@ -42,8 +38,7 @@ public interface TraitFactory {
     /**
      * Gets the {@link Trait} class with the given name, or null if not found.
      *
-     * @param name
-     *            The trait name
+     * @param name The trait name
      * @return The trait class
      */
     Class<? extends Trait> getTraitClass(String name);
@@ -52,8 +47,7 @@ public interface TraitFactory {
      * Checks whether the given trait is 'internal'. An internal trait is implementation-defined and is default or
      * built-in.
      *
-     * @param trait
-     *            The trait to check
+     * @param trait The trait to check
      * @return Whether the trait is an internal trait
      */
     boolean isInternalTrait(Trait trait);
@@ -61,8 +55,7 @@ public interface TraitFactory {
     /**
      * Registers a trait using the given information.
      *
-     * @param info
-     *            Registration information
+     * @param info Registration information
      */
     void registerTrait(TraitInfo info);
 }

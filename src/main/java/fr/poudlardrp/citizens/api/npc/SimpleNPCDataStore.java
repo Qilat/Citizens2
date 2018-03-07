@@ -1,18 +1,50 @@
 package fr.poudlardrp.citizens.api.npc;
 
-import java.util.UUID;
-
-import org.bukkit.entity.EntityType;
-
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.Messaging;
 import net.citizensnpcs.api.util.Storage;
+import org.bukkit.entity.EntityType;
+
+import java.util.UUID;
 
 public class SimpleNPCDataStore implements NPCDataStore {
+    private static final String LOAD_NAME_NOT_FOUND = "citizens.notifications.npc-name-not-found";
+    private static final String LOAD_UNKNOWN_NPC_TYPE = "citizens.notifications.unknown-npc-type";
     private final Storage root;
 
     protected SimpleNPCDataStore(Storage saves) {
         root = saves;
+    }
+
+    public static NPCDataStore create(Storage storage) {
+        return new SimpleNPCDataStore(storage);
+    }
+
+    private static EntityType matchEntityType(String toMatch) {
+        EntityType type;
+        try {
+            type = EntityType.valueOf(toMatch);
+        } catch (IllegalArgumentException ex) {
+            type = EntityType.fromName(toMatch);
+        }
+        if (type != null)
+            return type;
+        return matchEnum(EntityType.values(), toMatch);
+    }
+
+    private static <T extends Enum<?>> T matchEnum(T[] values, String toMatch) {
+        T type = null;
+        for (T check : values) {
+            String name = check.name();
+            if (name.matches(toMatch) || name.equalsIgnoreCase(toMatch)
+                    || name.replace("_", "").equalsIgnoreCase(toMatch)
+                    || name.replace('_', '-').equalsIgnoreCase(toMatch)
+                    || name.replace('_', ' ').equalsIgnoreCase(toMatch) || name.startsWith(toMatch)) {
+                type = check;
+                break;
+            }
+        }
+        return type;
     }
 
     @Override
@@ -86,38 +118,4 @@ public class SimpleNPCDataStore implements NPCDataStore {
             store(npc);
         }
     }
-
-    public static NPCDataStore create(Storage storage) {
-        return new SimpleNPCDataStore(storage);
-    }
-
-    private static EntityType matchEntityType(String toMatch) {
-        EntityType type;
-        try {
-            type = EntityType.valueOf(toMatch);
-        } catch (IllegalArgumentException ex) {
-            type = EntityType.fromName(toMatch);
-        }
-        if (type != null)
-            return type;
-        return matchEnum(EntityType.values(), toMatch);
-    }
-
-    private static <T extends Enum<?>> T matchEnum(T[] values, String toMatch) {
-        T type = null;
-        for (T check : values) {
-            String name = check.name();
-            if (name.matches(toMatch) || name.equalsIgnoreCase(toMatch)
-                    || name.replace("_", "").equalsIgnoreCase(toMatch)
-                    || name.replace('_', '-').equalsIgnoreCase(toMatch)
-                    || name.replace('_', ' ').equalsIgnoreCase(toMatch) || name.startsWith(toMatch)) {
-                type = check;
-                break;
-            }
-        }
-        return type;
-    }
-
-    private static final String LOAD_NAME_NOT_FOUND = "citizens.notifications.npc-name-not-found";
-    private static final String LOAD_UNKNOWN_NPC_TYPE = "citizens.notifications.unknown-npc-type";
 }

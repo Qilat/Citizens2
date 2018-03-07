@@ -1,18 +1,12 @@
-package net.poudlardcitizens.nms.v1_10_R1.entity.nonliving;
+package fr.poudlardrp.citizens.nms.v1_10_R1.entity.nonliving;
 
+import fr.poudlardrp.citizens.npc.AbstractEntityController;
+import fr.poudlardrp.citizens.npc.CitizensNPC;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.util.Util;
 import net.citizensnpcs.api.event.NPCPushEvent;
 import net.citizensnpcs.api.npc.NPC;
-import net.poudlardcitizens.npc.AbstractEntityController;
-import net.poudlardcitizens.npc.CitizensNPC;
-import net.poudlardcitizens.npc.ai.NPCHolder;
-import net.poudlardcitizens.util.Util;
-import net.minecraft.server.v1_10_R1.EntityHuman;
-import net.minecraft.server.v1_10_R1.EntityItem;
-import net.minecraft.server.v1_10_R1.ItemStack;
-import net.minecraft.server.v1_10_R1.NBTTagCompound;
-import net.minecraft.server.v1_10_R1.World;
-import net.minecraft.server.v1_10_R1.WorldServer;
-
+import net.minecraft.server.v1_10_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,7 +30,7 @@ public class ItemController extends AbstractEntityController {
         Material id = Material.STONE;
         int data = npc.data().get(NPC.ITEM_DATA_METADATA, npc.data().get("falling-block-data", 0));
         if (npc.data().has(NPC.ITEM_ID_METADATA)) {
-            id = Material.getMaterial(npc.data().<String> get(NPC.ITEM_ID_METADATA));
+            id = Material.getMaterial(npc.data().<String>get(NPC.ITEM_ID_METADATA));
         }
         final EntityItemNPC handle = new EntityItemNPC(ws, npc, at.getX(), at.getY(), at.getZ(),
                 CraftItemStack.asNMSCopy(new org.bukkit.inventory.ItemStack(id, 1, (short) data)));

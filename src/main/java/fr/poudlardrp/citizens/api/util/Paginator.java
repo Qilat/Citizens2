@@ -1,13 +1,19 @@
 package fr.poudlardrp.citizens.api.util;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.CommandSender;
-
 public class Paginator {
-    private String header;
+    private static final int LINES_PER_PAGE = 9;
     private final List<String> lines = new ArrayList<String>();
+    private String header;
+
+    public static String wrapHeader(Object string) {
+        String highlight = "<e>";
+        return highlight + "=====[ " + string.toString() + highlight + " ]=====";
+    }
 
     public void addLine(String line) {
         lines.add(line);
@@ -35,11 +41,4 @@ public class Paginator {
             Messaging.send(sender, line);
         return true;
     }
-
-    public static String wrapHeader(Object string) {
-        String highlight = "<e>";
-        return highlight + "=====[ " + string.toString() + highlight + " ]=====";
-    }
-
-    private static final int LINES_PER_PAGE = 9;
 }

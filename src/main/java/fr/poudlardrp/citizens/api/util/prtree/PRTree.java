@@ -1,16 +1,11 @@
 package fr.poudlardrp.citizens.api.util.prtree;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * A Priority R-Tree, a spatial index, for N dimensions. This tree only supports bulk loading.
- * 
- * @param <T>
- *            the data type stored in the PRTree
+ *
+ * @param <T> the data type stored in the PRTree
  */
 public class PRTree<T> {
 
@@ -23,15 +18,17 @@ public class PRTree<T> {
 
     /**
      * Create a new PRTree using the specified branch factor.
-     * 
-     * @param converter
-     *            the MBRConverter to use for this tree
-     * @param branchFactor
-     *            the number of child nodes for each internal node.
+     *
+     * @param converter    the MBRConverter to use for this tree
+     * @param branchFactor the number of child nodes for each internal node.
      */
     public PRTree(MBRConverter<T> converter, int branchFactor) {
         this.converter = converter;
         this.branchFactor = branchFactor;
+    }
+
+    public static <T> PRTree<T> create(MBRConverter<T> converter, int branchFactor) {
+        return new PRTree<T>(converter, branchFactor);
     }
 
     public void clear() {
@@ -47,18 +44,13 @@ public class PRTree<T> {
     /**
      * Find all objects that intersect the given rectangle. Note, this find method will only use two dimensions, no
      * matter how many dimensions the PRTree actually has.
-     * 
-     * @param xmin
-     *            the minimum value of the x coordinate when searching
-     * @param ymin
-     *            the minimum value of the y coordinate when searching
-     * @param xmax
-     *            the maximum value of the x coordinate when searching
-     * @param ymax
-     *            the maximum value of the y coordinate when searching
+     *
+     * @param xmin the minimum value of the x coordinate when searching
+     * @param ymin the minimum value of the y coordinate when searching
+     * @param xmax the maximum value of the x coordinate when searching
+     * @param ymax the maximum value of the y coordinate when searching
      * @return an iterable of the elements inside the query rectangle
-     * @throws IllegalArgumentException
-     *             if xmin &gt; xmax or ymin &gt; ymax
+     * @throws IllegalArgumentException if xmin &gt; xmax or ymin &gt; ymax
      */
     public Iterable<T> find(double xmin, double ymin, double xmax, double ymax) {
         return find(new SimpleMBR(xmin, xmax, ymin, ymax));
@@ -67,17 +59,12 @@ public class PRTree<T> {
     /**
      * Finds all objects that intersect the given rectangle and stores the found node in the given list. Note, this find
      * method will only use two dimensions, no matter how many dimensions the PRTree actually has.
-     * 
-     * @param xmin
-     *            the minimum value of the x coordinate when searching
-     * @param ymin
-     *            the minimum value of the y coordinate when searching
-     * @param xmax
-     *            the maximum value of the x coordinate when searching
-     * @param ymax
-     *            the maximum value of the y coordinate when searching
-     * @param resultNodes
-     *            the list that will be filled with the result
+     *
+     * @param xmin        the minimum value of the x coordinate when searching
+     * @param ymin        the minimum value of the y coordinate when searching
+     * @param xmax        the maximum value of the x coordinate when searching
+     * @param ymax        the maximum value of the y coordinate when searching
+     * @param resultNodes the list that will be filled with the result
      */
     public void find(double xmin, double ymin, double xmax, double ymax, List<T> resultNodes) {
         find(new SimpleMBR(xmin, xmax, ymin, ymax), resultNodes);
@@ -85,12 +72,10 @@ public class PRTree<T> {
 
     /**
      * Find all objects that intersect the given rectangle.
-     * 
-     * @param query
-     *            the bounds of the query
-     * @throws IllegalArgumentException
-     *             if xmin &gt; xmax or ymin &gt; ymax
+     *
+     * @param query the bounds of the query
      * @return an iterable of the elements inside the query rectangle
+     * @throws IllegalArgumentException if xmin &gt; xmax or ymin &gt; ymax
      */
     public Iterable<T> find(final MBR query) {
         validateRect(query);
@@ -104,11 +89,9 @@ public class PRTree<T> {
 
     /**
      * Finds all objects that intersect the given rectangle and stores the found node in the given list.
-     * 
-     * @param query
-     *            the bounds of the query
-     * @param resultNodes
-     *            the list that will be filled with the result
+     *
+     * @param query       the bounds of the query
+     * @param resultNodes the list that will be filled with the result
      */
     public void find(MBR query, List<T> resultNodes) {
         validateRect(query);
@@ -117,7 +100,7 @@ public class PRTree<T> {
 
     /**
      * Get the height of this tree.
-     * 
+     *
      * @return the total height of this tree
      */
     public int getHeight() {
@@ -126,7 +109,7 @@ public class PRTree<T> {
 
     /**
      * Get an N dimensional minimum bounding box of the data stored in this tree.
-     * 
+     *
      * @return the MBR of the whole PRTree
      */
     public MBR getMBR() {
@@ -135,7 +118,7 @@ public class PRTree<T> {
 
     /**
      * Get a 2 dimensional minimum bounding rectangle of the data stored in this tree.
-     * 
+     *
      * @return the MBR of the whole PRTree
      */
     public MBR2D getMBR2D() {
@@ -147,7 +130,7 @@ public class PRTree<T> {
 
     /**
      * Get the number of data leafs in this tree.
-     * 
+     *
      * @return the total number of leafs in this tree
      */
     public int getNumberOfLeaves() {
@@ -156,7 +139,7 @@ public class PRTree<T> {
 
     /**
      * Check if this tree is empty
-     * 
+     *
      * @return true if the number of leafs is 0, false otherwise
      */
     public boolean isEmpty() {
@@ -165,14 +148,12 @@ public class PRTree<T> {
 
     /**
      * Bulk load data into this tree.
-     * 
+     * <p>
      * Create the leaf nodes that each hold (up to) branchFactor data entries. Then use the leaf nodes as data until we
      * can fit all nodes into the root node.
-     * 
-     * @param data
-     *            the collection of data to store in the tree.
-     * @throws IllegalStateException
-     *             if the tree is already loaded
+     *
+     * @param data the collection of data to store in the tree.
+     * @throws IllegalStateException if the tree is already loaded
      */
     public void load(Collection<? extends T> data) {
         if (root != null)
@@ -196,19 +177,15 @@ public class PRTree<T> {
 
     /**
      * Get the nearest neighbour of the given point
-     * 
-     * @param dc
-     *            the DistanceCalculator to use.
-     * @param filter
-     *            a NodeFilter that can be used to ignore some leaf nodes.
-     * @param maxHits
-     *            the maximum number of entries to find.
-     * @param p
-     *            the point to find the nearest neighbour to.
+     *
+     * @param dc      the DistanceCalculator to use.
+     * @param filter  a NodeFilter that can be used to ignore some leaf nodes.
+     * @param maxHits the maximum number of entries to find.
+     * @param p       the point to find the nearest neighbour to.
      * @return A List of DistanceResult with up to maxHits results. Will return an empty list if this tree is empty.
      */
     public List<DistanceResult<T>> nearestNeighbour(DistanceCalculator<T> dc, NodeFilter<T> filter, int maxHits,
-            PointND p) {
+                                                    PointND p) {
         if (isEmpty())
             return Collections.emptyList();
         NearestNeighbour<T> nn = new NearestNeighbour<T>(converter, filter, maxHits, root, dc, p);
@@ -237,13 +214,11 @@ public class PRTree<T> {
     }
 
     private class Finder implements Iterator<T> {
-        private int dataNodesVisited = 0;
-
         private final MBR mbr;
-        private T next;
         private final List<Node<T>> toVisit = new ArrayList<Node<T>>();
-
         private final List<T> ts = new ArrayList<T>();
+        private int dataNodesVisited = 0;
+        private T next;
         private int visitedNodes = 0;
 
         public Finder(MBR mbr) {
@@ -296,9 +271,5 @@ public class PRTree<T> {
         public LeafNode<T> create(Object[] data) {
             return new LeafNode<T>(data);
         }
-    }
-
-    public static <T> PRTree<T> create(MBRConverter<T> converter, int branchFactor) {
-        return new PRTree<T>(converter, branchFactor);
     }
 }

@@ -1,4 +1,4 @@
-package net.poudlardcitizens.npc.profile;
+package fr.poudlardrp.citizens.npc.profile;
 
 /**
  * The result status of a profile fetch.

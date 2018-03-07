@@ -1,10 +1,18 @@
-package net.poudlardcitizens.npc.ai;
+package fr.poudlardrp.citizens.npc.ai;
 
-import java.util.Iterator;
-import java.util.ListIterator;
-
-import net.poudlardcitizens.util.NMS;
-import net.poudlardcitizens.util.Util;
+import com.google.common.collect.Iterables;
+import fr.poudlardrp.citizens.util.NMS;
+import fr.poudlardrp.citizens.util.Util;
+import net.citizensnpcs.api.ai.*;
+import net.citizensnpcs.api.ai.event.*;
+import net.citizensnpcs.api.astar.pathfinder.BlockExaminer;
+import net.citizensnpcs.api.astar.pathfinder.BlockSource;
+import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
+import net.citizensnpcs.api.astar.pathfinder.PathPoint;
+import net.citizensnpcs.api.astar.pathfinder.PathPoint.PathCallback;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.util.DataKey;
+import net.poudlardcitizens.Settings.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,32 +24,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.material.Door;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Iterables;
-
-import net.poudlardcitizens.Settings.Setting;
-import net.citizensnpcs.api.ai.EntityTarget;
-import net.citizensnpcs.api.ai.Navigator;
-import net.citizensnpcs.api.ai.NavigatorParameters;
-import net.citizensnpcs.api.ai.PathStrategy;
-import net.citizensnpcs.api.ai.StuckAction;
-import net.citizensnpcs.api.ai.TargetType;
-import net.citizensnpcs.api.ai.TeleportStuckAction;
-import net.citizensnpcs.api.ai.event.CancelReason;
-import net.citizensnpcs.api.ai.event.NavigationBeginEvent;
-import net.citizensnpcs.api.ai.event.NavigationCancelEvent;
-import net.citizensnpcs.api.ai.event.NavigationCompleteEvent;
-import net.citizensnpcs.api.ai.event.NavigationReplaceEvent;
-import net.citizensnpcs.api.ai.event.NavigationStuckEvent;
-import net.citizensnpcs.api.ai.event.NavigatorCallback;
-import net.citizensnpcs.api.astar.pathfinder.BlockExaminer;
-import net.citizensnpcs.api.astar.pathfinder.BlockSource;
-import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
-import net.citizensnpcs.api.astar.pathfinder.PathPoint;
-import net.citizensnpcs.api.astar.pathfinder.PathPoint.PathCallback;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.util.DataKey;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 public class CitizensNavigator implements Navigator, Runnable {
+    private static final Location STATIONARY_LOCATION = new Location(null, 0, 0, 0);
+    private static int UNINITIALISED_SPEED = Integer.MIN_VALUE;
     private final NavigatorParameters defaultParams = new NavigatorParameters().baseSpeed(UNINITIALISED_SPEED)
             .range(Setting.DEFAULT_PATHFINDING_RANGE.asFloat()).debug(Setting.DEBUG_PATHFINDING.asBoolean())
             .defaultAttackStrategy(MCTargetStrategy.DEFAULT_ATTACK_STRATEGY)
@@ -50,10 +38,10 @@ public class CitizensNavigator implements Navigator, Runnable {
             .distanceMargin(Setting.DEFAULT_DISTANCE_MARGIN.asDouble())
             .stationaryTicks(Setting.DEFAULT_STATIONARY_TICKS.asInt()).stuckAction(TeleportStuckAction.INSTANCE)
             .examiner(new MinecraftBlockExaminer()).useNewPathfinder(Setting.USE_NEW_PATHFINDER.asBoolean());
+    private final NPC npc;
     private PathStrategy executing;
     private int lastX, lastY, lastZ;
     private NavigatorParameters localParams = defaultParams;
-    private final NPC npc;
     private boolean paused;
     private int stationaryTicks;
 
@@ -115,6 +103,11 @@ public class CitizensNavigator implements Navigator, Runnable {
     @Override
     public boolean isPaused() {
         return paused;
+    }
+
+    @Override
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
     public void load(DataKey root) {
@@ -212,11 +205,6 @@ public class CitizensNavigator implements Navigator, Runnable {
         root.setDouble("speedmodifier", defaultParams.speedModifier());
         root.setBoolean("avoidwater", defaultParams.avoidWater());
         root.setBoolean("usedefaultstuckaction", defaultParams.stuckAction() == TeleportStuckAction.INSTANCE);
-    }
-
-    @Override
-    public void setPaused(boolean paused) {
-        this.paused = paused;
     }
 
     @Override
@@ -416,8 +404,4 @@ public class CitizensNavigator implements Navigator, Runnable {
             }
         }
     }
-
-    private static final Location STATIONARY_LOCATION = new Location(null, 0, 0, 0);
-
-    private static int UNINITIALISED_SPEED = Integer.MIN_VALUE;
 }

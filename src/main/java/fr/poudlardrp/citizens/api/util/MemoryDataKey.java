@@ -1,18 +1,17 @@
 package fr.poudlardrp.citizens.api.util;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-
 public class MemoryDataKey extends DataKey {
-    private String name;
     private final ConfigurationSection root;
+    private String name;
 
     public MemoryDataKey() {
         super("");

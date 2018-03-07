@@ -1,18 +1,16 @@
-package net.poudlardcitizens.trait.waypoint.triggers;
+package fr.poudlardrp.citizens.trait.waypoint.triggers;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.util.Messaging;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+import java.util.Collection;
+import java.util.List;
 
 public class ChatTrigger implements WaypointTrigger {
     @Persist(required = true)

@@ -11,6 +11,7 @@ import net.citizensnpcs.api.trait.TraitName;
  */
 @TraitName("speech")
 public class Speech extends Trait {
+    public static final String DEFAULT_VOCAL_CHORD = "chat";
     @Persist("")
     private String defaultVocalChord = DEFAULT_VOCAL_CHORD;
 
@@ -40,6 +41,4 @@ public class Speech extends Trait {
     public String toString() {
         return "DefaultVocalChord{" + defaultVocalChord + "}";
     }
-
-    public static final String DEFAULT_VOCAL_CHORD = "chat";
 }

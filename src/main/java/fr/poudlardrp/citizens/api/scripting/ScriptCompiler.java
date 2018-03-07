@@ -1,46 +1,46 @@
 package fr.poudlardrp.citizens.api.scripting;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.Invocable;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-import javax.script.SimpleScriptContext;
-
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.io.Closeables;
-
 import net.citizensnpcs.api.util.Messaging;
+
+import javax.script.*;
+import java.io.*;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * Compiles files into {@link ScriptFactory}s. Intended for use as a separate thread - {@link ScriptCompiler#run()} will
  * block while waiting for new tasks to compile.
  */
 public class ScriptCompiler {
+    private static final Map<String, ScriptFactory> CACHE = new MapMaker().weakValues().makeMap();
+    private static boolean CLASSLOADER_OVERRIDE_ENABLED;
+    private static Method GET_APPLICATION_CLASS_LOADER, GET_GLOBAL, INIT_APPLICATION_CLASS_LOADER;
+
+    static {
+        try {
+            Class<?> CONTEXT_FACTORY = Class.forName("sun.org.mozilla.javascript.internal.ContextFactory");
+            GET_APPLICATION_CLASS_LOADER = CONTEXT_FACTORY.getDeclaredMethod("getApplicationClassLoader");
+            GET_APPLICATION_CLASS_LOADER.setAccessible(true);
+            GET_GLOBAL = CONTEXT_FACTORY.getDeclaredMethod("getGlobal");
+            GET_GLOBAL.setAccessible(true);
+            INIT_APPLICATION_CLASS_LOADER = CONTEXT_FACTORY.getDeclaredMethod("initApplicationClassLoader",
+                    ClassLoader.class);
+            INIT_APPLICATION_CLASS_LOADER.setAccessible(true);
+            CLASSLOADER_OVERRIDE_ENABLED = true;
+        } catch (Exception e) {
+            Messaging.debug("Unable to find Rhino classes - javascript scripts won't see non-CraftBukkit classes");
+        }
+    }
+
     private final WeakReference<ClassLoader> classLoader;
     private final ScriptEngineManager engineManager;
     private final Map<String, ScriptEngine> engines = Maps.newHashMap();
@@ -80,8 +80,7 @@ public class ScriptCompiler {
     /**
      * Create a builder to compile the given files.
      *
-     * @param files
-     *            The files to compile
+     * @param files The files to compile
      * @return The {@link CompileTaskBuilder}
      */
     public CompileTaskBuilder compile(File file) {
@@ -96,12 +95,9 @@ public class ScriptCompiler {
     /**
      * Create a builder to compile the given source code.
      *
-     * @param src
-     *            The source code to compile
-     * @param identifier
-     *            A unique identifier of the source code
-     * @param extension
-     *            The source code externsion
+     * @param src        The source code to compile
+     * @param identifier A unique identifier of the source code
+     * @param extension  The source code externsion
      * @return The {@link CompileTaskBuilder}
      */
     public CompileTaskBuilder compile(String src, String identifier, String extension) {
@@ -141,8 +137,7 @@ public class ScriptCompiler {
     /**
      * Registers a global {@link ContextProvider}, which will be invoked on all scripts created by this ScriptCompiler.
      *
-     * @param provider
-     *            The global provider
+     * @param provider The global provider
      */
     public void registerGlobalContextProvider(ContextProvider provider) {
         if (!globalContextProviders.contains(provider)) {
@@ -190,6 +185,35 @@ public class ScriptCompiler {
             e.printStackTrace();
         }
 
+    }
+
+    private static class ScriptSource {
+        private final ScriptEngine engine;
+        private final File file;
+        private final String identifier;
+        private final String src;
+
+        private ScriptSource(File file, ScriptEngine engine) {
+            this.file = file;
+            this.identifier = file.getAbsolutePath();
+            this.engine = engine;
+            this.src = null;
+        }
+
+        private ScriptSource(String src, String identifier, ScriptEngine engine) {
+            this.src = src;
+            this.identifier = identifier;
+            this.engine = engine;
+            this.file = null;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public Reader getReader() throws FileNotFoundException {
+            return file == null ? new StringReader(src) : new FileReader(file);
+        }
     }
 
     private class CompileTask implements Callable<ScriptFactory> {
@@ -240,10 +264,10 @@ public class ScriptCompiler {
     }
 
     public class CompileTaskBuilder {
-        private boolean cache;
         private final List<CompileCallback> callbacks = Lists.newArrayList();
         private final List<ContextProvider> contextProviders = Lists.newArrayList();
         private final ScriptSource engine;
+        private boolean cache;
 
         private CompileTaskBuilder(ScriptSource engine) {
             this.engine = engine;
@@ -267,56 +291,6 @@ public class ScriptCompiler {
         public CompileTaskBuilder withContextProvider(ContextProvider provider) {
             contextProviders.add(provider);
             return this;
-        }
-    }
-
-    private static class ScriptSource {
-        private final ScriptEngine engine;
-        private final File file;
-        private final String identifier;
-        private final String src;
-
-        private ScriptSource(File file, ScriptEngine engine) {
-            this.file = file;
-            this.identifier = file.getAbsolutePath();
-            this.engine = engine;
-            this.src = null;
-        }
-
-        private ScriptSource(String src, String identifier, ScriptEngine engine) {
-            this.src = src;
-            this.identifier = identifier;
-            this.engine = engine;
-            this.file = null;
-        }
-
-        public String getIdentifier() {
-            return identifier;
-        }
-
-        public Reader getReader() throws FileNotFoundException {
-            return file == null ? new StringReader(src) : new FileReader(file);
-        }
-    }
-
-    private static final Map<String, ScriptFactory> CACHE = new MapMaker().weakValues().makeMap();
-    private static boolean CLASSLOADER_OVERRIDE_ENABLED;
-
-    private static Method GET_APPLICATION_CLASS_LOADER, GET_GLOBAL, INIT_APPLICATION_CLASS_LOADER;
-
-    static {
-        try {
-            Class<?> CONTEXT_FACTORY = Class.forName("sun.org.mozilla.javascript.internal.ContextFactory");
-            GET_APPLICATION_CLASS_LOADER = CONTEXT_FACTORY.getDeclaredMethod("getApplicationClassLoader");
-            GET_APPLICATION_CLASS_LOADER.setAccessible(true);
-            GET_GLOBAL = CONTEXT_FACTORY.getDeclaredMethod("getGlobal");
-            GET_GLOBAL.setAccessible(true);
-            INIT_APPLICATION_CLASS_LOADER = CONTEXT_FACTORY.getDeclaredMethod("initApplicationClassLoader",
-                    ClassLoader.class);
-            INIT_APPLICATION_CLASS_LOADER.setAccessible(true);
-            CLASSLOADER_OVERRIDE_ENABLED = true;
-        } catch (Exception e) {
-            Messaging.debug("Unable to find Rhino classes - javascript scripts won't see non-CraftBukkit classes");
         }
     }
 }

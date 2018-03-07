@@ -1,17 +1,16 @@
-package net.poudlardcitizens.npc.ai.speech;
+package fr.poudlardrp.citizens.npc.ai.speech;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.poudlardcitizens.Settings.Setting;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.speech.SpeechContext;
 import net.citizensnpcs.api.ai.speech.Talkable;
 import net.citizensnpcs.api.ai.speech.VocalChord;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.util.Messaging;
-
+import net.poudlardcitizens.Settings.Setting;
 import org.bukkit.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chat implements VocalChord {
     public final String VOCAL_CHORD_NAME = "chat";
@@ -55,9 +54,7 @@ public class Chat implements VocalChord {
                     .replace("<target>", targetName).replace("<text>", context.getMessage());
             talkToBystanders(npc, bystanderText, context);
             return;
-        }
-
-        else { // Multiple recipients
+        } else { // Multiple recipients
             String text = Setting.CHAT_FORMAT_TO_TARGET.asString().replace("<npc>", npc.getName()).replace("<text>",
                     context.getMessage());
             List<String> targetNames = new ArrayList<String>();

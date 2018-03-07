@@ -1,13 +1,14 @@
 package fr.poudlardrp.citizens.api.astar.pathfinder;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Lists;
+import java.util.List;
 
 public class FlyingBlockExaminer implements NeighbourGeneratorBlockExaminer {
+    private static final Vector UP = new Vector(0, 1, 0);
+
     @Override
     public float getCost(BlockSource source, PathPoint point) {
         Vector pos = point.getVector();
@@ -44,6 +45,4 @@ public class FlyingBlockExaminer implements NeighbourGeneratorBlockExaminer {
         }
         return PassableState.fromBoolean(MinecraftBlockExaminer.canStandIn(above, in));
     }
-
-    private static final Vector UP = new Vector(0, 1, 0);
 }

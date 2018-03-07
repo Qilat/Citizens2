@@ -1,27 +1,11 @@
-package net.poudlardcitizens.nms.v1_10_R1.util;
+package fr.poudlardrp.citizens.nms.v1_10_R1.util;
+
+import fr.poudlardrp.citizens.nms.v1_10_R1.entity.EntityHumanNPC;
+import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_10_R1.BlockPosition.MutableBlockPosition;
 
 import java.util.EnumSet;
 import java.util.HashSet;
-
-import net.poudlardcitizens.nms.v1_10_R1.entity.EntityHumanNPC;
-import net.minecraft.server.v1_10_R1.AxisAlignedBB;
-import net.minecraft.server.v1_10_R1.Block;
-import net.minecraft.server.v1_10_R1.BlockCobbleWall;
-import net.minecraft.server.v1_10_R1.BlockDoor;
-import net.minecraft.server.v1_10_R1.BlockFence;
-import net.minecraft.server.v1_10_R1.BlockFenceGate;
-import net.minecraft.server.v1_10_R1.BlockMinecartTrackAbstract;
-import net.minecraft.server.v1_10_R1.BlockPosition;
-import net.minecraft.server.v1_10_R1.BlockPosition.MutableBlockPosition;
-import net.minecraft.server.v1_10_R1.Blocks;
-import net.minecraft.server.v1_10_R1.EntityInsentient;
-import net.minecraft.server.v1_10_R1.EnumDirection;
-import net.minecraft.server.v1_10_R1.IBlockAccess;
-import net.minecraft.server.v1_10_R1.IBlockData;
-import net.minecraft.server.v1_10_R1.Material;
-import net.minecraft.server.v1_10_R1.MathHelper;
-import net.minecraft.server.v1_10_R1.PathPoint;
-import net.minecraft.server.v1_10_R1.PathType;
 
 public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
     private float j;
@@ -63,7 +47,7 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
             }
             localPathType1 = (localPathType2 == PathType.WALKABLE) || (localPathType2 == PathType.OPEN)
                     || (localPathType2 == PathType.WATER) || (localPathType2 == PathType.LAVA) ? PathType.OPEN
-                            : PathType.WALKABLE;
+                    : PathType.WALKABLE;
         }
         if (localPathType1 == PathType.WALKABLE) {
             for (int i = paramInt1 - 1; i <= paramInt1 + 1; i++) {
@@ -84,8 +68,8 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
 
     @Override
     public PathType a(IBlockAccess paramIBlockAccess, int paramInt1, int paramInt2, int paramInt3,
-            EntityHumanNPC paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
-            boolean paramBoolean2) {
+                      EntityHumanNPC paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
+                      boolean paramBoolean2) {
         EnumSet<PathType> localEnumSet = EnumSet.noneOf(PathType.class);
         Object localObject1 = PathType.BLOCKED;
 
@@ -103,9 +87,9 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
                     }
                     if ((localPathType2 == PathType.RAIL)
                             && (!(paramIBlockAccess.getType(localBlockPosition)
-                                    .getBlock() instanceof BlockMinecartTrackAbstract))
+                            .getBlock() instanceof BlockMinecartTrackAbstract))
                             && (!(paramIBlockAccess.getType(localBlockPosition.down())
-                                    .getBlock() instanceof BlockMinecartTrackAbstract))) {
+                            .getBlock() instanceof BlockMinecartTrackAbstract))) {
                         localPathType2 = PathType.FENCE;
                     }
                     if ((i == paramInt1) && (k == paramInt2) && (m == paramInt3)) {
@@ -142,8 +126,8 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
 
     @Override
     public PathType a(IBlockAccess paramIBlockAccess, int paramInt1, int paramInt2, int paramInt3,
-            EntityInsentient paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
-            boolean paramBoolean2) {
+                      EntityInsentient paramEntityInsentient, int paramInt4, int paramInt5, int paramInt6, boolean paramBoolean1,
+                      boolean paramBoolean2) {
         EnumSet<PathType> localEnumSet = EnumSet.noneOf(PathType.class);
         Object localObject1 = PathType.BLOCKED;
 
@@ -161,9 +145,9 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
                     }
                     if ((localPathType2 == PathType.RAIL)
                             && (!(paramIBlockAccess.getType(localBlockPosition)
-                                    .getBlock() instanceof BlockMinecartTrackAbstract))
+                            .getBlock() instanceof BlockMinecartTrackAbstract))
                             && (!(paramIBlockAccess.getType(localBlockPosition.down())
-                                    .getBlock() instanceof BlockMinecartTrackAbstract))) {
+                            .getBlock() instanceof BlockMinecartTrackAbstract))) {
                         localPathType2 = PathType.FENCE;
                     }
                     if ((i == paramInt1) && (k == paramInt2) && (m == paramInt3)) {
@@ -199,7 +183,7 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
     }
 
     private PathPoint a(int paramInt1, int paramInt2, int paramInt3, int paramInt4, double paramDouble,
-            EnumDirection paramEnumDirection) {
+                        EnumDirection paramEnumDirection) {
         PathPoint localPathPoint = null;
 
         BlockPosition localBlockPosition1 = new BlockPosition(paramInt1, paramInt2, paramInt3);
@@ -265,7 +249,7 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
 
     @Override
     public int a(PathPoint[] paramArrayOfPathPoint, PathPoint paramPathPoint1, PathPoint paramPathPoint2,
-            float paramFloat) {
+                 float paramFloat) {
         int i = 0;
 
         int k = 0;
@@ -418,7 +402,7 @@ public class PlayerPathfinderNormal extends PlayerPathfinderAbstract {
         }
         if (((localBlock1 instanceof BlockFence)) || ((localBlock1 instanceof BlockCobbleWall))
                 || (((localBlock1 instanceof BlockFenceGate))
-                        && (!localIBlockData.get(BlockFenceGate.OPEN).booleanValue()))) {
+                && (!localIBlockData.get(BlockFenceGate.OPEN).booleanValue()))) {
             return PathType.FENCE;
         }
         if (localMaterial == Material.AIR) {

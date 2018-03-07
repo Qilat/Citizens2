@@ -1,14 +1,17 @@
 package fr.poudlardrp.citizens.api.ai;
 
+import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import net.citizensnpcs.api.astar.pathfinder.MinecraftBlockExaminer;
-import net.citizensnpcs.api.npc.NPC;
-
 public class TeleportStuckAction implements StuckAction {
+    private static final int MAX_ITERATIONS = 10;
+    private static final double RANGE = 10;
+    public static TeleportStuckAction INSTANCE = new TeleportStuckAction();
+
     private TeleportStuckAction() {
         // singleton
     }
@@ -38,8 +41,4 @@ public class TeleportStuckAction implements StuckAction {
         npc.teleport(block.getLocation(), TeleportCause.PLUGIN);
         return false;
     }
-
-    public static TeleportStuckAction INSTANCE = new TeleportStuckAction();
-    private static final int MAX_ITERATIONS = 10;
-    private static final double RANGE = 10;
 }

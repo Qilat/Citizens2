@@ -1,12 +1,6 @@
-package net.poudlardcitizens.nms.v1_10_R1.network;
+package fr.poudlardrp.citizens.nms.v1_10_R1.network;
 
-import io.netty.channel.AbstractChannel;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelConfig;
-import io.netty.channel.ChannelMetadata;
-import io.netty.channel.ChannelOutboundBuffer;
-import io.netty.channel.DefaultChannelConfig;
-import io.netty.channel.EventLoop;
+import io.netty.channel.*;
 
 import java.net.SocketAddress;
 
