@@ -1,0 +1,29 @@
+package fr.poudlardrp.citizens;
+
+import net.citizensnpcs.api.event.NPCEvent;
+import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.Location;
+import org.bukkit.event.HandlerList;
+
+public class NPCNeedsRespawnEvent extends NPCEvent {
+    private static final HandlerList handlers = new HandlerList();
+    private final Location spawn;
+
+    public NPCNeedsRespawnEvent(NPC npc, Location at) {
+        super(npc);
+        this.spawn = at;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public Location getSpawnLocation() {
+        return spawn;
+    }
+}

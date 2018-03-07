@@ -1,0 +1,26 @@
+def spigotVersion = '1.9.4-R0.1-SNAPSHOT'
+def citizensVersion = '2.0.18-SNAPSHOT'
+def protocolVersion = '4.1.0-SNAPSHOT'
+def jacksonVersion = '2.6.3'
+def lombokVersion = '1.16.10'
+
+dependencies {
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+    compileOnly group: 'fr.poudlardrp', name: 'spigot', version: spigotVersion
+    compileOnly group: 'net.citizensnpcs', name: 'citizens', version: citizensVersion
+    compileOnly group: 'com.comphenix.protocol', name: 'ProtocolLib', version: protocolVersion
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
+
+    shaded(project(':poudlardapi')) {
+        transitive false
+    }
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+jar.setArchiveName("PoudlardCore.jar")
