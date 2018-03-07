@@ -18,15 +18,15 @@ import fr.poudlardrp.citizens.api.event.NPCPushEvent;
 import fr.poudlardrp.citizens.api.npc.MetadataStore;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.trait.trait.Inventory;
-import net.minecraft.server.v1_10_R1.*;
-import net.poudlardcitizens.Settings.Setting;
-import net.poudlardcitizens.nms.v1_10_R1.util.*;
-import net.poudlardcitizens.trait.Gravity;
+import net.minecraft.server.v1_9_R2.*;
+import fr.poudlardrp.citizens.Settings.Setting;
+import fr.poudlardrp.citizens.nms.v1_10_R1.util.*;
+import fr.poudlardrp.citizens.trait.Gravity;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
@@ -58,7 +58,7 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
         this.npc = (CitizensNPC) npc;
         if (npc != null) {
             skinTracker = new SkinPacketTracker(this);
-            playerInteractManager.setGameMode(EnumGamemode.SURVIVAL);
+            playerInteractManager.setGameMode(WorldSettings.EnumGamemode.SURVIVAL);
             initialise(minecraftServer);
         } else {
             skinTracker = null;
@@ -81,7 +81,7 @@ public class EntityHumanNPC extends EntityPlayer implements NPCHolder, Skinnable
     }
 
     @Override
-    public void collide(net.minecraft.server.v1_10_R1.Entity entity) {
+    public void collide(net.minecraft.server.v1_9_R2.Entity entity) {
         // this method is called by both the entities involved - cancelling
         // it will not stop the NPC from moving.
         super.collide(entity);

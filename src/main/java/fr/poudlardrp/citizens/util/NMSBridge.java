@@ -8,10 +8,10 @@ import fr.poudlardrp.citizens.api.npc.BlockBreaker;
 import fr.poudlardrp.citizens.api.npc.BlockBreaker.BlockBreakerConfiguration;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.npc.NPCRegistry;
+import fr.poudlardrp.citizens.npc.ai.MCNavigationStrategy;
+import fr.poudlardrp.citizens.npc.ai.MCTargetStrategy;
+import fr.poudlardrp.citizens.npc.skin.SkinnableEntity;
 import net.minecraft.server.v1_9_R2.CommandException;
-import net.poudlardcitizens.npc.ai.MCNavigationStrategy.MCNavigator;
-import net.poudlardcitizens.npc.ai.MCTargetStrategy.TargetNavigator;
-import net.poudlardcitizens.npc.skin.SkinnableEntity;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -57,11 +57,11 @@ public interface NMSBridge {
 
     public float getStepHeight(Entity entity);
 
-    public TargetNavigator getTargetNavigator(Entity handle, Entity target, NavigatorParameters parameters);
+    public MCTargetStrategy.TargetNavigator getTargetNavigator(Entity handle, Entity target, NavigatorParameters parameters);
 
-    public MCNavigator getTargetNavigator(Entity entity, Iterable<Vector> dest, NavigatorParameters params);
+    public MCNavigationStrategy.MCNavigator getTargetNavigator(Entity entity, Iterable<Vector> dest, NavigatorParameters params);
 
-    public MCNavigator getTargetNavigator(Entity entity, Location dest, NavigatorParameters params);
+    public MCNavigationStrategy.MCNavigator getTargetNavigator(Entity entity, Location dest, NavigatorParameters params);
 
     public Entity getVehicle(Entity entity);
 

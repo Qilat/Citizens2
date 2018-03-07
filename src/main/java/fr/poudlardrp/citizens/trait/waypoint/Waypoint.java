@@ -7,7 +7,7 @@ import fr.poudlardrp.citizens.api.CitizensAPI;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.persistence.Persist;
 import fr.poudlardrp.citizens.api.persistence.PersistenceLoader;
-import net.poudlardcitizens.trait.waypoint.triggers.WaypointTriggerRegistry;
+import fr.poudlardrp.citizens.trait.waypoint.triggers.WaypointTriggerRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 

@@ -57,7 +57,6 @@ public class XORShiftRNG extends Random {
     /**
      * Creates an RNG and seeds it with the specified seed data.
      *
-     * @param seed The seed data used to initialise the RNG.
      */
     public XORShiftRNG() {
         this.seed = new byte[SEED_SIZE_BYTES];

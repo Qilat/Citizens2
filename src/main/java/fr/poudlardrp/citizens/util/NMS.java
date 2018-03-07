@@ -10,9 +10,9 @@ import fr.poudlardrp.citizens.api.npc.BlockBreaker.BlockBreakerConfiguration;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.npc.NPCRegistry;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.npc.ai.MCNavigationStrategy.MCNavigator;
-import net.poudlardcitizens.npc.ai.MCTargetStrategy.TargetNavigator;
-import net.poudlardcitizens.npc.skin.SkinnableEntity;
+import fr.poudlardrp.citizens.npc.ai.MCNavigationStrategy;
+import fr.poudlardrp.citizens.npc.ai.MCTargetStrategy;
+import fr.poudlardrp.citizens.npc.skin.SkinnableEntity;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
@@ -117,7 +117,7 @@ public class NMS {
         return BRIDGE.getProfile(meta);
     }
 
-    public static String getSound(String flag) throws CommandException {
+    public static String getSound(String flag) throws CommandException, net.minecraft.server.v1_9_R2.CommandException {
         return BRIDGE.getSound(flag);
     }
 
@@ -129,16 +129,16 @@ public class NMS {
         return BRIDGE.getStepHeight(entity);
     }
 
-    public static MCNavigator getTargetNavigator(Entity entity, Iterable<Vector> dest, NavigatorParameters params) {
+    public static MCNavigationStrategy.MCNavigator getTargetNavigator(Entity entity, Iterable<Vector> dest, NavigatorParameters params) {
         return BRIDGE.getTargetNavigator(entity, dest, params);
     }
 
-    public static MCNavigator getTargetNavigator(Entity entity, Location dest, NavigatorParameters params) {
+    public static MCNavigationStrategy.MCNavigator getTargetNavigator(Entity entity, Location dest, NavigatorParameters params) {
         return BRIDGE.getTargetNavigator(entity, dest, params);
     }
 
-    public static TargetNavigator getTargetNavigator(Entity entity, Entity target,
-                                                     NavigatorParameters parameters) {
+    public static MCTargetStrategy.TargetNavigator getTargetNavigator(Entity entity, Entity target,
+                                                                      NavigatorParameters parameters) {
         return BRIDGE.getTargetNavigator(entity, target, parameters);
     }
 

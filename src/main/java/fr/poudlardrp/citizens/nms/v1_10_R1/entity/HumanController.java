@@ -10,7 +10,7 @@ import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.util.Colorizer;
 import net.minecraft.server.v1_10_R1.PlayerInteractManager;
 import net.minecraft.server.v1_10_R1.WorldServer;
-import net.poudlardcitizens.Settings.Setting;
+import fr.poudlardrp.citizens.Settings.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

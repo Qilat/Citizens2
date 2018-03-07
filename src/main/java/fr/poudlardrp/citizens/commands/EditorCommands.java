@@ -8,7 +8,7 @@ import fr.poudlardrp.citizens.api.command.Command;
 import fr.poudlardrp.citizens.api.command.CommandContext;
 import fr.poudlardrp.citizens.api.command.Requirements;
 import fr.poudlardrp.citizens.api.npc.NPC;
-import net.poudlardcitizens.trait.waypoint.Waypoints;
+import fr.poudlardrp.citizens.trait.waypoint.Waypoints;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

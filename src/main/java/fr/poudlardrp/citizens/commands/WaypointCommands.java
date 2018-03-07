@@ -8,7 +8,7 @@ import fr.poudlardrp.citizens.api.command.Requirements;
 import fr.poudlardrp.citizens.api.command.exception.CommandException;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.trait.waypoint.Waypoints;
+import fr.poudlardrp.citizens.trait.waypoint.Waypoints;
 import org.bukkit.command.CommandSender;
 
 @Requirements(ownership = true, selected = true)

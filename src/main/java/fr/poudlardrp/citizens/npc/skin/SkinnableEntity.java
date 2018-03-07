@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.npc.skin;
 
 import com.mojang.authlib.GameProfile;
-import net.poudlardcitizens.npc.ai.NPCHolder;
+import fr.poudlardrp.citizens.npc.ai.NPCHolder;
 import org.bukkit.entity.Player;
 
 /**

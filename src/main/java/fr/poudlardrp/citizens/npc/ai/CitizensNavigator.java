@@ -12,7 +12,7 @@ import fr.poudlardrp.citizens.api.astar.pathfinder.PathPoint;
 import fr.poudlardrp.citizens.api.astar.pathfinder.PathPoint.PathCallback;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.util.DataKey;
-import net.poudlardcitizens.Settings.Setting;
+import fr.poudlardrp.citizens.Settings.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

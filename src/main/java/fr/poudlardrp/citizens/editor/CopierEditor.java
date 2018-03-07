@@ -3,7 +3,7 @@ package fr.poudlardrp.citizens.editor;
 import fr.poudlardrp.citizens.util.Messages;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.trait.CurrentLocation;
+import fr.poudlardrp.citizens.trait.CurrentLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

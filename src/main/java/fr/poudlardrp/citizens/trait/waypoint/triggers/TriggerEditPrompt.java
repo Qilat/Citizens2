@@ -4,7 +4,7 @@ import fr.poudlardrp.citizens.trait.waypoint.WaypointEditor;
 import fr.poudlardrp.citizens.util.Messages;
 import fr.poudlardrp.citizens.api.CitizensAPI;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.trait.waypoint.Waypoint;
+import fr.poudlardrp.citizens.trait.waypoint.Waypoint;
 import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.*;
 import org.bukkit.entity.Player;

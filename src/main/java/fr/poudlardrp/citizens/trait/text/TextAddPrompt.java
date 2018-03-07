@@ -1,7 +1,7 @@
 package fr.poudlardrp.citizens.trait.text;
 
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.util.Messages;
+import fr.poudlardrp.citizens.util.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

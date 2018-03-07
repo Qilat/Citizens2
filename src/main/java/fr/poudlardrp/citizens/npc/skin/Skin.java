@@ -8,10 +8,10 @@ import fr.poudlardrp.citizens.api.CitizensAPI;
 import fr.poudlardrp.citizens.api.event.DespawnReason;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.Settings.Setting;
-import net.poudlardcitizens.npc.profile.ProfileFetchHandler;
-import net.poudlardcitizens.npc.profile.ProfileFetcher;
-import net.poudlardcitizens.npc.profile.ProfileRequest;
+import fr.poudlardrp.citizens.Settings.Setting;
+import fr.poudlardrp.citizens.npc.profile.ProfileFetchHandler;
+import fr.poudlardrp.citizens.npc.profile.ProfileFetcher;
+import fr.poudlardrp.citizens.npc.profile.ProfileRequest;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -39,7 +39,6 @@ public class Skin {
      * Constructor.
      *
      * @param skinName    The name of the player the skin belongs to.
-     * @param forceUpdate
      */
     Skin(String skinName) {
         this.skinName = skinName.toLowerCase();

@@ -9,7 +9,7 @@ import fr.poudlardrp.citizens.api.npc.NPC;
 import net.minecraft.server.v1_10_R1.EntityLargeFireball;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.World;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
+import fr.poudlardrp.citizens.nms.v1_10_R1.util.NMSImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftEntity;

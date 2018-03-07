@@ -4,7 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import fr.poudlardrp.citizens.trait.Age;
+import fr.poudlardrp.citizens.Metrics;
+import fr.poudlardrp.citizens.trait.*;
 import fr.poudlardrp.citizens.trait.text.Text;
 import fr.poudlardrp.citizens.api.CitizensAPI;
 import fr.poudlardrp.citizens.api.npc.NPC;
@@ -12,10 +13,7 @@ import fr.poudlardrp.citizens.api.trait.Trait;
 import fr.poudlardrp.citizens.api.trait.TraitFactory;
 import fr.poudlardrp.citizens.api.trait.TraitInfo;
 import fr.poudlardrp.citizens.api.trait.trait.*;
-import net.poudlardcitizens.Metrics;
-import net.poudlardcitizens.Metrics.Graph;
-import net.poudlardcitizens.trait.*;
-import net.poudlardcitizens.trait.waypoint.Waypoints;
+import fr.poudlardrp.citizens.trait.waypoint.Waypoints;
 
 import java.util.List;
 import java.util.Map;
@@ -72,7 +70,7 @@ public class CitizensTraitFactory implements TraitFactory {
         }
     }
 
-    public void addPlotters(Graph graph) {
+    public void addPlotters(Metrics.Graph graph) {
         for (Map.Entry<String, TraitInfo> entry : registered.entrySet()) {
             if (INTERNAL_TRAITS.contains(entry.getKey()))
                 continue;

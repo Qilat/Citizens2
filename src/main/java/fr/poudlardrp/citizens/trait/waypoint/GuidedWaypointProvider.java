@@ -20,7 +20,7 @@ import fr.poudlardrp.citizens.api.util.prtree.DistanceResult;
 import fr.poudlardrp.citizens.api.util.prtree.PRTree;
 import fr.poudlardrp.citizens.api.util.prtree.Region3D;
 import fr.poudlardrp.citizens.api.util.prtree.SimplePointND;
-import net.poudlardcitizens.trait.waypoint.WaypointProvider.EnumerableWaypointProvider;
+import fr.poudlardrp.citizens.trait.waypoint.WaypointProvider.EnumerableWaypointProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;

@@ -2,17 +2,25 @@ package fr.poudlardrp.citizens;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import fr.poudlardrp.citizens.api.CitizensAPI;
 import fr.poudlardrp.citizens.api.CitizensPlugin;
+import fr.poudlardrp.citizens.api.ai.speech.SpeechFactory;
+import fr.poudlardrp.citizens.api.command.CommandContext;
 import fr.poudlardrp.citizens.api.command.CommandManager;
-import fr.poudlardrp.citizens.api.event.DespawnReason;
+import fr.poudlardrp.citizens.api.command.Injector;
+import fr.poudlardrp.citizens.api.event.*;
+import fr.poudlardrp.citizens.api.exception.NPCLoadException;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.npc.NPCDataStore;
 import fr.poudlardrp.citizens.api.npc.NPCRegistry;
 import fr.poudlardrp.citizens.api.npc.SimpleNPCDataStore;
-import fr.poudlardrp.citizens.api.util.Messaging;
-import fr.poudlardrp.citizens.api.util.NBTStorage;
-import fr.poudlardrp.citizens.api.util.Storage;
-import fr.poudlardrp.citizens.api.util.YamlStorage;
+import fr.poudlardrp.citizens.api.scripting.EventRegistrar;
+import fr.poudlardrp.citizens.api.scripting.ObjectProvider;
+import fr.poudlardrp.citizens.api.scripting.ScriptCompiler;
+import fr.poudlardrp.citizens.api.trait.TraitFactory;
+import fr.poudlardrp.citizens.api.util.*;
+import fr.poudlardrp.citizens.commands.*;
+import fr.poudlardrp.citizens.editor.Editor;
 import fr.poudlardrp.citizens.npc.CitizensNPCRegistry;
 import fr.poudlardrp.citizens.npc.CitizensTraitFactory;
 import fr.poudlardrp.citizens.npc.NPCSelector;
@@ -258,10 +266,6 @@ public class Citizens extends JavaPlugin implements CitizensPlugin {
 
         getServer().getPluginManager().registerEvents(new EventListen(storedRegistries), this);
 
-        if (Settings.Setting.NPC_COST.asDouble() > 0) {
-            setupEconomy();
-        }
-
         registerCommands();
         enableSubPlugins();
         NMS.load(commands);
@@ -343,18 +347,6 @@ public class Citizens extends JavaPlugin implements CitizensPlugin {
                 saves.saveToDisk();
             }
         }, delay, delay);
-    }
-
-    private void setupEconomy() {
-        try {
-            RegisteredServiceProvider<Economy> provider = Bukkit.getServicesManager().getRegistration(Economy.class);
-            if (provider != null && provider.getProvider() != null) {
-                Economy economy = provider.getProvider();
-                Bukkit.getPluginManager().registerEvents(new PaymentListener(economy), this);
-            }
-        } catch (NoClassDefFoundError e) {
-            Messaging.logTr(Messages.ERROR_LOADING_ECONOMY);
-        }
     }
 
     private void setupTranslator() {

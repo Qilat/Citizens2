@@ -6,7 +6,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import fr.poudlardrp.citizens.editor.Editor;
 import fr.poudlardrp.citizens.npc.skin.SkinUpdateTracker;
+import fr.poudlardrp.citizens.trait.Controllable;
+import fr.poudlardrp.citizens.trait.CurrentLocation;
 import fr.poudlardrp.citizens.util.Messages;
 import fr.poudlardrp.citizens.util.NMS;
 import fr.poudlardrp.citizens.api.CitizensAPI;
@@ -18,10 +21,7 @@ import fr.poudlardrp.citizens.api.npc.NPCRegistry;
 import fr.poudlardrp.citizens.api.trait.trait.Owner;
 import fr.poudlardrp.citizens.api.util.DataKey;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.Settings.Setting;
-import net.poudlardcitizens.editor.Editor;
-import net.poudlardcitizens.trait.Controllable;
-import net.poudlardcitizens.trait.CurrentLocation;
+import fr.poudlardrp.citizens.Settings.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -65,8 +65,8 @@ public class EventListen implements Listener {
     private void checkCreationEvent(CommandSenderCreateNPCEvent event) {
         if (event.getCreator().hasPermission("citizens.admin.avoid-limits"))
             return;
-        int limit = Setting.DEFAULT_NPC_LIMIT.asInt();
-        int maxChecks = Setting.MAX_NPC_LIMIT_CHECKS.asInt();
+        int limit = Settings.Setting.DEFAULT_NPC_LIMIT.asInt();
+        int maxChecks = Settings.Setting.MAX_NPC_LIMIT_CHECKS.asInt();
         for (int i = maxChecks; i >= 0; i--) {
             if (!event.getCreator().hasPermission("citizens.npc.limit." + i))
                 continue;
@@ -464,7 +464,7 @@ public class EventListen implements Listener {
         if (!npcRegistry.isNPC(event.getEntered()))
             return;
         NPC npc = npcRegistry.getNPC(event.getEntered());
-        if ((npc.getEntity() instanceof AbstractHorse || npc.getEntity().getType() == EntityType.BOAT
+        if ((npc.getEntity() instanceof org.bukkit.entity.Horse || npc.getEntity().getType() == EntityType.BOAT
                 || npc.getEntity() instanceof Minecart) && !npc.getTrait(Controllable.class).isEnabled()) {
             event.setCancelled(true);
         }

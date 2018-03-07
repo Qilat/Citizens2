@@ -1,7 +1,8 @@
 package fr.poudlardrp.citizens.util;
 
+import fr.poudlardrp.citizens.Settings;
+import fr.poudlardrp.citizens.Settings.Setting;
 import fr.poudlardrp.citizens.api.util.Colorizer;
-import net.poudlardcitizens.Settings.Setting;
 import org.bukkit.ChatColor;
 
 public class StringHelper {

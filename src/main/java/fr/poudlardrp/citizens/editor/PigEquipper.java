@@ -3,7 +3,7 @@ package fr.poudlardrp.citizens.editor;
 import fr.poudlardrp.citizens.util.Messages;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import fr.poudlardrp.citizens.api.util.Messaging;
-import net.poudlardcitizens.trait.Saddle;
+import fr.poudlardrp.citizens.trait.Saddle;
 import org.bukkit.Material;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;

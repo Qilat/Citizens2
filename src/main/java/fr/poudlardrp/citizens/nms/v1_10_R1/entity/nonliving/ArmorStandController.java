@@ -7,7 +7,7 @@ import fr.poudlardrp.citizens.util.Util;
 import fr.poudlardrp.citizens.api.event.NPCPushEvent;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import net.minecraft.server.v1_10_R1.*;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
+import fr.poudlardrp.citizens.nms.v1_10_R1.util.NMSImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;

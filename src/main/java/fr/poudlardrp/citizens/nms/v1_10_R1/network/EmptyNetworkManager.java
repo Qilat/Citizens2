@@ -2,7 +2,7 @@ package fr.poudlardrp.citizens.nms.v1_10_R1.network;
 
 import net.minecraft.server.v1_10_R1.EnumProtocolDirection;
 import net.minecraft.server.v1_10_R1.NetworkManager;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
+import fr.poudlardrp.citizens.nms.v1_10_R1.util.NMSImpl;
 
 import java.io.IOException;
 

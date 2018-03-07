@@ -7,7 +7,7 @@ import fr.poudlardrp.citizens.util.PlayerAnimation;
 import fr.poudlardrp.citizens.api.CitizensAPI;
 import fr.poudlardrp.citizens.api.npc.NPC;
 import net.minecraft.server.v1_10_R1.*;
-import net.poudlardcitizens.trait.ArmorStandTrait;
+import fr.poudlardrp.citizens.trait.ArmorStandTrait;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;

@@ -10,7 +10,7 @@ import net.minecraft.server.v1_10_R1.DamageSource;
 import net.minecraft.server.v1_10_R1.EntityMinecartTNT;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
 import net.minecraft.server.v1_10_R1.World;
-import net.poudlardcitizens.nms.v1_10_R1.util.NMSImpl;
+import fr.poudlardrp.citizens.nms.v1_10_R1.util.NMSImpl;
 import org.bukkit.entity.Minecart;
 import org.bukkit.util.Vector;
 
